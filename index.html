@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Koushole | কৌশলে - Adaptive Learning</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Chart.js for Analytics -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Canvas Confetti for Gamification -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- Caveat (English Title), Galada (Bangla Title), Noto Sans Bengali (Bangla Body), Open Sans (English Body) -->
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&family=Galada&family=Noto+Sans+Bengali:wght@400;600;700&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* CSS Variables for Dynamic Theming */
+        :root {
+            /* Light Mode Colors (Default logic, overridden by .dark class) */
+            --bg-main: #FFFDF9;       /* Light Background */
+            --bg-surface: #F9F7F2;    /* Light Surface */
+            --text-main: #1A1A1A;     /* Dark Text */
+            --text-sub: #6B7280;      /* Slate Text */
+            --border-div: #E5E7EB;    /* Light Border */
+            --nav-glass: rgba(249, 247, 242, 0.85);
+        }
+
+        .dark {
+            /* Midnight Amber Dark Mode Colors */
+            --bg-main: #000000;       /* True Black */
+            --bg-surface: #121212;    /* Dark Surface */
+            --text-main: #E5E7EB;     /* Off-White Text */
+            --text-sub: #9CA3AF;      /* Grey Text */
+            --border-div: #262626;    /* Dark Border */
+            --nav-glass: rgba(18, 18, 18, 0.85);
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            transition: background-color 0.3s ease, color 0.3s ease, font-family 0.3s ease;
+            overflow-x: hidden;
+        }
+
+        /* Scrollbar hiding */
+        ::-webkit-scrollbar {
+            width: 0px;
+            background: transparent;
+        }
+
+        /* Typography */
+        body.lang-en .title-font { font-family: 'Caveat', cursive; }
+        body.lang-en .body-font { font-family: 'Open Sans', sans-serif; }
+        
+        body.lang-bn .title-font { 
+            font-family: 'Galada', cursive; 
+            line-height: 1.5; 
+            font-weight: 400 !important; 
+        }
+        body.lang-bn .body-font { font-family: 'Noto Sans Bengali', sans-serif; }
+
+        /* Navigation */
+        .glass-nav {
+            background: var(--nav-glass);
+            backdrop-filter: blur(12px);
+            border-top: 1px solid var(--border-div);
+            transition: background 0.3s ease, border-color 0.3s ease;
+        }
+        
+        .nav-item {
+            color: var(--text-sub);
+            transition: all 0.3s ease;
+        }
+        .nav-item.active {
+            color: #F59E0B;
+        }
+        .nav-item.active i {
+            filter: drop-shadow(0 0 5px rgba(245, 158, 11, 0.5));
+        }
+
+        /* Cards & Inputs */
+        .theme-surface {
+            background-color: var(--bg-surface);
+            border-color: var(--border-div);
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+        
+        .theme-text-primary { color: var(--text-main); }
+        .theme-text-secondary { color: var(--text-sub); }
+
+        .logo-filter {
+            transition: filter 0.3s ease;
+        }
+
+        .topic-card {
+            transition: transform 0.2s;
+        }
+        .topic-card:active {
+            transform: scale(0.98);
+        }
+    </style>
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        midnight: 'var(--bg-main)',       
+                        surface: 'var(--bg-surface)',      
+                        'text-primary': 'var(--text-main)', 
+                        'text-secondary': 'var(--text-sub)', 
+                        divider: 'var(--border-div)',
+                        
+                        // Static Colors (Same in both modes)
+                        amber: {
+                            DEFAULT: '#F59E0B',   
+                            glow: 'rgba(245, 158, 11, 0.4)',
+                            deep: '#D97706',      
+                        },
+                        emerald: '#10B981',       
+                        rose: '#F87171',          
+                        orange: '#FB923C',        
+                        sky: '#38BDF8',           
+                        ghost: '#F9FAFB',         
+                    },
+                    boxShadow: {
+                        'amber-glow': '0 4px 14px 0 rgba(245, 158, 11, 0.3)',
+                    },
+                    animation: {
+                        'shake': 'shake 0.5s cubic-bezier(.36,.07,.19,.97) both',
+                        'pulse-glow': 'pulse-glow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'float': 'float 3s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        shake: {
+                            '10%, 90%': { transform: 'translate3d(-1px, 0, 0)' },
+                            '20%, 80%': { transform: 'translate3d(2px, 0, 0)' },
+                            '30%, 50%, 70%': { transform: 'translate3d(-4px, 0, 0)' },
+                            '40%, 60%': { transform: 'translate3d(4px, 0, 0)' }
+                        },
+                        'pulse-glow': {
+                            '0%, 100%': { opacity: 1, boxShadow: '0 0 10px rgba(245, 158, 11, 0.4)' },
+                            '50%': { opacity: .8, boxShadow: '0 0 25px rgba(245, 158, 11, 0.7)' },
+                        },
+                        'float': {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-5px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="h-screen flex flex-col justify-between selection:bg-amber selection:text-black lang-en body-font">
+
+    <!-- TOP HEADER -->
+    <header class="px-3 sm:px-5 py-3 sm:py-4 flex justify-between items-center sticky top-0 z-20 bg-midnight/90 backdrop-blur-md border-b border-divider transition-colors duration-300">
+        <div class="flex items-center gap-2 sm:gap-3">
+            <!-- Logo Image: Default is White (for Dark Mode) -->
+            <img id="app-logo" src="Koushole_White.svg" alt="Koushole Logo" class="h-8 object-contain transition-opacity duration-300 hover:scale-105 transition-transform">
+            <div class="flex flex-col">
+                <span class="title-font font-bold text-2xl sm:text-3xl tracking-wide text-amber leading-tight" data-key="appName">Koushole</span>
+                <span class="text-[10px] sm:text-xs text-text-secondary font-medium tracking-wider body-font leading-none" data-key="appSubtitle">Study Smarter</span>
+            </div>
+        </div>
+        
+        <div class="flex items-center gap-2 sm:gap-4">
+            <!-- Language Switcher -->
+            <div class="flex items-center gap-1 sm:gap-2">
+                <button onclick="setLanguage('en')" class="text-[10px] sm:text-xs font-bold transition-colors text-amber hover:scale-110 active:scale-90 transition-transform" id="btn-en">EN</button>
+                <div class="h-3 sm:h-4 w-[1px] bg-divider"></div>
+                <button onclick="setLanguage('bn')" class="text-[10px] sm:text-xs font-bold text-text-secondary transition-colors hover:scale-110 active:scale-90 transition-transform" id="btn-bn">বাংলা</button>
+            </div>
+
+            <!-- Theme Toggle -->
+            <button onclick="toggleTheme()" class="w-8 h-8 rounded-full bg-surface border border-divider flex items-center justify-center text-text-secondary hover:text-amber transition-colors hover:scale-110 active:scale-90 transition-transform">
+                <i id="theme-icon" class="fas fa-sun"></i>
+            </button>
+
+            <!-- Streak (Click to toggle text on mobile) -->
+            <div onclick="toggleStreak()" class="flex items-center gap-1 sm:gap-1.5 bg-surface border border-divider rounded-full px-2 sm:px-3 py-1 cursor-pointer transition-colors hover:border-amber/50 select-none hover:scale-105 active:scale-95 transition-transform">
+                <i class="fas fa-fire text-orange animate-pulse text-xs sm:text-sm"></i>
+                <!-- Text hidden on mobile by default, shown on desktop -->
+                <span id="streak-text" class="hidden sm:block text-xs sm:text-sm font-bold text-orange body-font whitespace-nowrap" data-key="streak">12 Days</span>
+            </div>
+            
+            <!-- Profile -->
+            <div onclick="switchTab('profile')" class="w-8 h-8 rounded-full bg-gradient-to-tr from-amber to-amber-deep flex items-center justify-center text-midnight font-bold text-xs cursor-pointer shrink-0 hover:scale-110 active:scale-90 transition-transform shadow-amber-glow">
+                KM
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT AREA -->
+    <main id="app-content" class="flex-1 overflow-y-auto pb-24 relative">
+        
+        <!-- View 1: DASHBOARD -->
+        <div id="view-dashboard" class="p-5 space-y-8 fade-in">
+            
+            <!-- Greeting -->
+            <div>
+                <h1 class="text-3xl font-bold text-text-primary title-font transition-colors" data-key="greeting">Good Evening, Junyed! 🚀</h1>
+                <p class="text-text-secondary text-sm mt-1 body-font transition-colors" data-key="subtitle">Ready to crush Physics today?</p>
+            </div>
+
+            <!-- Chart Section -->
+            <div class="bg-surface rounded-2xl p-4 border border-divider shadow-lg transition-colors duration-300">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-text-primary font-semibold title-font text-2xl transition-colors" data-key="chartTitle">Learning Velocity</h3>
+                    <span class="text-xs text-amber bg-amber/10 px-2 py-1 rounded body-font" data-key="chartTime">Last 7 Days</span>
+                </div>
+                <div class="h-48 w-full">
+                    <canvas id="growthChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Current Course -->
+            <div class="space-y-3">
+                <h2 class="text-text-secondary uppercase text-xs font-bold tracking-widest body-font transition-colors" data-key="continueLearning">Continue Learning</h2>
+                <div onclick="switchTab('quiz')" class="topic-card bg-surface rounded-2xl p-5 border border-divider relative overflow-hidden cursor-pointer group transition-colors duration-300 hover:scale-[1.01] transition-transform active:scale-[0.99]">
+                    <div class="absolute top-0 right-0 w-24 h-24 bg-amber/10 rounded-bl-full -mr-4 -mt-4 transition-all group-hover:bg-amber/20"></div>
+                    
+                    <div class="flex justify-between items-start relative z-10">
+                        <div>
+                            <span class="text-xs font-bold text-sky mb-1 block body-font" data-key="courseChapter">PHYSICS • CHAPTER 2</span>
+                            <h3 class="text-3xl font-bold text-text-primary mb-1 title-font transition-colors" data-key="courseTitle">Motion</h3>
+                            <p class="text-text-secondary text-xs body-font transition-colors" data-key="courseDesc">Newton's Laws of Motion</p>
+                        </div>
+                        <div class="h-10 w-10 rounded-full bg-amber flex items-center justify-center text-black shadow-amber-glow animate-pulse">
+                            <i class="fas fa-play ml-1"></i>
+                        </div>
+                    </div>
+
+                    <!-- Progress Bar -->
+                    <div class="mt-6">
+                        <div class="flex justify-between text-xs mb-2 body-font">
+                            <span class="text-text-secondary transition-colors" data-key="progressLabel">Progress</span>
+                            <span class="text-amber font-bold">75%</span>
+                        </div>
+                        <div class="w-full bg-divider rounded-full h-2 transition-colors">
+                            <div class="bg-amber h-2 rounded-full w-3/4 shadow-[0_0_10px_rgba(245,158,11,0.5)]"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Weak Topics -->
+            <div class="space-y-3">
+                <h2 class="text-rose uppercase text-xs font-bold tracking-widest flex items-center gap-2 body-font">
+                    <i class="fas fa-exclamation-triangle"></i> <span data-key="weakTopicsHeader">Needs Attention</span>
+                </h2>
+                
+                <div class="bg-surface rounded-xl p-4 border border-divider flex items-center justify-between transition-colors duration-300">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-lg bg-surface border border-rose/30 flex items-center justify-center text-rose transition-colors">
+                            <i class="fas fa-flask"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-text-primary text-xl font-semibold title-font transition-colors" data-key="weakTopic1">Organic Chemistry</h4>
+                            <p class="text-text-secondary text-xs body-font transition-colors" data-key="accuracyLabel1">Accuracy: 42%</p>
+                        </div>
+                    </div>
+                    <button onclick="switchTab('quiz')" class="px-4 py-2 rounded-full border border-amber text-amber text-xs font-bold hover:bg-amber hover:text-black transition-colors body-font hover:scale-105 active:scale-95 transition-transform" data-key="retryBtn">
+                        Retry
+                    </button>
+                </div>
+                
+                <div class="bg-surface rounded-xl p-4 border border-divider flex items-center justify-between transition-colors duration-300">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-lg bg-surface border border-rose/30 flex items-center justify-center text-rose transition-colors">
+                            <i class="fas fa-square-root-variable"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-text-primary text-xl font-semibold title-font transition-colors" data-key="weakTopic2">Trigonometry</h4>
+                            <p class="text-text-secondary text-xs body-font transition-colors" data-key="accuracyLabel2">Accuracy: 55%</p>
+                        </div>
+                    </div>
+                    <button onclick="switchTab('quiz')" class="px-4 py-2 rounded-full border border-divider text-text-secondary text-xs font-bold hover:border-text-primary hover:text-text-primary transition-colors body-font hover:scale-105 active:scale-95 transition-transform" data-key="practiceBtn">
+                        Practice
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- View 2: QUIZ INTERFACE -->
+        <div id="view-quiz" class="hidden h-full flex flex-col p-5">
+            <div class="mb-6">
+                <div class="flex justify-between text-xs text-text-secondary mb-2 uppercase tracking-wider body-font transition-colors">
+                    <span data-key="questionCount">Question 3/10</span>
+                    <span id="streak-badge" class="hidden text-orange animate-pulse" data-key="streakRisk">🔥 Streak at risk!</span>
+                </div>
+                <div class="w-full bg-divider rounded-full h-1.5 overflow-hidden transition-colors">
+                    <div id="quiz-progress" class="bg-amber h-full w-[30%] transition-all duration-500 ease-out"></div>
+                </div>
+            </div>
+
+            <div class="flex-1 flex flex-col justify-center gap-6">
+                <div class="bg-surface border border-divider p-6 rounded-2xl shadow-lg transition-colors duration-300">
+                    <span class="text-sky text-xs font-bold uppercase tracking-wide mb-2 block body-font" data-key="quizTopic">Physics • Velocity</span>
+                    <h2 class="text-2xl md:text-3xl font-bold text-text-primary leading-relaxed title-font transition-colors" data-key="quizQuestion">
+                        If a car accelerates from rest at 5 m/s² for 10 seconds, what is its final velocity?
+                    </h2>
+                    <p class="text-text-secondary text-sm mt-4 italic border-l-2 border-divider pl-3 body-font transition-colors" data-key="quizHint">
+                        (Recall: v = u + at)
+                    </p>
+                </div>
+
+                <div class="grid gap-3 body-font" id="options-container">
+                    <button onclick="checkAnswer(this, false)" class="quiz-option w-full text-left p-4 rounded-xl bg-surface border border-divider text-text-primary font-medium hover:border-amber transition-all active:scale-[0.98] hover:scale-[1.01] transition-transform">
+                        A. 25 m/s
+                    </button>
+                    <button onclick="checkAnswer(this, true)" class="quiz-option w-full text-left p-4 rounded-xl bg-surface border border-divider text-text-primary font-medium hover:border-amber transition-all active:scale-[0.98] hover:scale-[1.01] transition-transform">
+                        B. 50 m/s
+                    </button>
+                    <button onclick="checkAnswer(this, false)" class="quiz-option w-full text-left p-4 rounded-xl bg-surface border border-divider text-text-primary font-medium hover:border-amber transition-all active:scale-[0.98] hover:scale-[1.01] transition-transform">
+                        C. 100 m/s
+                    </button>
+                    <button onclick="checkAnswer(this, false)" class="quiz-option w-full text-left p-4 rounded-xl bg-surface border border-divider text-text-primary font-medium hover:border-amber transition-all active:scale-[0.98] hover:scale-[1.01] transition-transform">
+                        D. 15 m/s
+                    </button>
+                </div>
+            </div>
+
+            <div id="feedback-area" class="mt-4 hidden animate-fade-in-up">
+                <div class="bg-sky/10 border border-sky/30 rounded-xl p-4 flex gap-3">
+                    <i class="fas fa-lightbulb text-sky mt-1"></i>
+                    <div>
+                        <h4 class="text-sky font-bold text-lg title-font" data-key="didYouKnow">Did you know?</h4>
+                        <p class="text-text-secondary text-xs mt-1 body-font transition-colors" data-key="feedbackText">
+                            Acceleration is the rate of change of velocity. Since initial velocity (u) is 0, v = 0 + (5 × 10).
+                        </p>
+                    </div>
+                </div>
+                <button onclick="nextQuestion()" class="w-full mt-4 bg-amber text-black font-bold py-3.5 rounded-xl shadow-amber-glow active:scale-95 transition-transform body-font hover:scale-105">
+                    <span data-key="nextQBtn">Next Question</span> <i class="fas fa-arrow-right ml-2"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- View 3: AI CHAT -->
+        <div id="view-chat" class="hidden h-full flex flex-col relative">
+            <div class="p-4 border-b border-divider bg-surface/50 backdrop-blur sticky top-0 z-10 text-center transition-colors">
+                <p class="text-amber font-bold text-lg title-font" data-key="chatHeader">Koushole AI Tutor</p>
+                <p class="text-text-secondary text-[10px] body-font transition-colors" data-key="chatSub">Context: NCTB Physics Grade 9-10</p>
+            </div>
+
+            <div id="chat-messages" class="flex-1 overflow-y-auto p-4 space-y-4 body-font">
+                <!-- AI Message -->
+                <div class="flex gap-3">
+                    <div class="w-8 h-8 rounded-full bg-amber/20 border border-amber/50 flex items-center justify-center text-amber text-xs">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div class="bg-surface border border-divider text-text-primary p-3 rounded-2xl rounded-tl-none max-w-[85%] text-sm leading-relaxed shadow-sm transition-colors">
+                        <span data-key="aiMsg1">Hello Junyed! I noticed you struggled with <strong>Kinetic Energy</strong> in the last quiz. Would you like a quick example from the NCTB book?</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-4 bg-surface border-t border-divider pb-24 sm:pb-4 transition-colors">
+                <div class="relative flex items-center gap-2">
+                    <!-- Image and Voice Inputs -->
+                    <button class="w-10 h-10 rounded-full bg-surface border border-divider flex items-center justify-center text-text-secondary hover:text-amber transition-colors hover:scale-110 active:scale-90 transition-transform">
+                        <i class="fas fa-image"></i>
+                    </button>
+                    
+                    <div class="relative flex-1">
+                        <input type="text" id="chat-input" placeholder="Ask about Physics, Math..." 
+                            class="w-full bg-midnight border border-divider rounded-full py-3 pl-5 pr-12 text-text-primary focus:outline-none focus:border-amber focus:ring-1 focus:ring-amber transition-all placeholder:text-text-secondary/50 body-font">
+                        
+                        <!-- Voice Mic Icon inside Input -->
+                        <button class="absolute right-3 top-1/2 -translate-y-1/2 text-text-secondary hover:text-amber transition-colors hover:scale-110 active:scale-90 transition-transform">
+                            <i class="fas fa-microphone"></i>
+                        </button>
+                    </div>
+
+                    <button onclick="sendMessage()" class="h-10 w-10 bg-amber rounded-full flex items-center justify-center text-black hover:bg-amber-deep transition-colors shadow-lg hover:scale-110 active:scale-90 transition-transform">
+                        <i class="fas fa-paper-plane text-xs"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- View 4: PROFILE PAGE -->
+        <div id="view-profile" class="hidden h-full flex flex-col p-5 overflow-y-auto fade-in pb-24">
+            <!-- Profile Header -->
+            <div class="flex flex-col items-center mb-8">
+                <div class="w-24 h-24 rounded-full bg-gradient-to-tr from-amber to-amber-deep flex items-center justify-center text-midnight font-bold text-3xl mb-4 shadow-amber-glow relative animate-float">
+                    KM
+                    <div class="absolute bottom-0 right-0 w-8 h-8 bg-surface border-4 border-midnight rounded-full flex items-center justify-center">
+                        <i class="fas fa-camera text-xs text-text-secondary"></i>
+                    </div>
+                </div>
+                <h2 class="text-2xl font-bold text-text-primary title-font">Kawser Mahamud Junyed</h2>
+                <p class="text-text-secondary text-sm body-font">Class 10 • Science Group</p>
+            </div>
+
+            <!-- Stats Grid -->
+            <div class="grid grid-cols-3 gap-3 mb-8">
+                <div class="bg-surface border border-divider rounded-xl p-3 text-center transition-colors hover:scale-105 transition-transform duration-200">
+                    <p class="text-amber font-bold text-xl title-font">1,250</p>
+                    <p class="text-[10px] text-text-secondary uppercase tracking-widest mt-1">Total XP</p>
+                </div>
+                <div class="bg-surface border border-divider rounded-xl p-3 text-center transition-colors hover:scale-105 transition-transform duration-200">
+                    <p class="text-emerald font-bold text-xl title-font">85%</p>
+                    <p class="text-[10px] text-text-secondary uppercase tracking-widest mt-1">Accuracy</p>
+                </div>
+                <div class="bg-surface border border-divider rounded-xl p-3 text-center transition-colors hover:scale-105 transition-transform duration-200">
+                    <p class="text-orange font-bold text-xl title-font">12</p>
+                    <p class="text-[10px] text-text-secondary uppercase tracking-widest mt-1">Day Streak</p>
+                </div>
+            </div>
+
+            <!-- Badges Section -->
+            <div class="mb-8">
+                <div class="flex justify-between items-center mb-3">
+                    <h3 class="text-text-primary font-bold title-font text-lg">Achievements</h3>
+                    <span class="text-amber text-xs font-bold cursor-pointer hover:underline">View All</span>
+                </div>
+                <div class="flex gap-4 overflow-x-auto pb-2 no-scrollbar">
+                    <div class="flex flex-col items-center min-w-[80px] hover:scale-110 transition-transform duration-200">
+                        <div class="w-16 h-16 rounded-full bg-amber/20 flex items-center justify-center text-amber text-2xl mb-2 border border-amber/50">
+                            <i class="fas fa-bolt"></i>
+                        </div>
+                        <span class="text-[10px] text-text-primary font-medium text-center">Fast Learner</span>
+                    </div>
+                    <div class="flex flex-col items-center min-w-[80px] hover:scale-110 transition-transform duration-200">
+                        <div class="w-16 h-16 rounded-full bg-sky/20 flex items-center justify-center text-sky text-2xl mb-2 border border-sky/50">
+                            <i class="fas fa-brain"></i>
+                        </div>
+                        <span class="text-[10px] text-text-primary font-medium text-center">Quiz Master</span>
+                    </div>
+                    <div class="flex flex-col items-center min-w-[80px] opacity-70">
+                        <div class="w-16 h-16 rounded-full bg-surface border border-divider flex items-center justify-center text-text-secondary text-2xl mb-2 grayscale opacity-50">
+                            <i class="fas fa-medal"></i>
+                        </div>
+                        <span class="text-[10px] text-text-secondary font-medium text-center">Locked</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Settings Menu -->
+            <div class="space-y-2">
+                <h3 class="text-text-secondary uppercase text-xs font-bold tracking-widest mb-2 pl-1">Account</h3>
+                
+                <div class="bg-surface border border-divider rounded-xl overflow-hidden transition-colors">
+                    <div class="p-4 flex items-center justify-between border-b border-divider cursor-pointer hover:bg-white/5 active:bg-white/10 transition-colors">
+                        <div class="flex items-center gap-3">
+                            <i class="fas fa-user-circle text-text-secondary w-5"></i>
+                            <span class="text-text-primary text-sm font-medium">Personal Details</span>
+                        </div>
+                        <i class="fas fa-chevron-right text-text-secondary text-xs"></i>
+                    </div>
+                    <div class="p-4 flex items-center justify-between border-b border-divider cursor-pointer hover:bg-white/5 active:bg-white/10 transition-colors">
+                        <div class="flex items-center gap-3">
+                            <i class="fas fa-bell text-text-secondary w-5"></i>
+                            <span class="text-text-primary text-sm font-medium">Notifications</span>
+                        </div>
+                        <i class="fas fa-chevron-right text-text-secondary text-xs"></i>
+                    </div>
+                    <div class="p-4 flex items-center justify-between cursor-pointer hover:bg-white/5 active:bg-white/10 transition-colors">
+                        <div class="flex items-center gap-3">
+                            <i class="fas fa-shield-alt text-text-secondary w-5"></i>
+                            <span class="text-text-primary text-sm font-medium">Privacy & Security</span>
+                        </div>
+                        <i class="fas fa-chevron-right text-text-secondary text-xs"></i>
+                    </div>
+                </div>
+
+                <button class="w-full mt-6 py-3 rounded-xl border border-rose/30 text-rose text-sm font-bold bg-rose/5 hover:bg-rose/10 transition-colors hover:scale-[1.02] active:scale-[0.98] transition-transform">
+                    Log Out
+                </button>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- BOTTOM NAVIGATION -->
+    <nav class="glass-nav fixed bottom-0 w-full z-30 pb-safe">
+        <div class="flex justify-around items-center h-16 max-w-md mx-auto body-font">
+            <button onclick="switchTab('dashboard')" class="nav-item active flex flex-col items-center justify-center w-full h-full gap-1 active:scale-90 transition-transform duration-200" id="nav-dashboard">
+                <i class="fas fa-home text-lg"></i>
+                <span class="text-[10px] font-medium" data-key="navHome">Home</span>
+            </button>
+            
+            <button onclick="switchTab('quiz')" class="nav-item flex flex-col items-center justify-center w-full h-full gap-1 active:scale-90 transition-transform duration-200" id="nav-quiz">
+                <i class="fas fa-gamepad text-lg"></i>
+                <span class="text-[10px] font-medium" data-key="navQuiz">Quiz</span>
+            </button>
+            
+            <button onclick="switchTab('chat')" class="nav-item flex flex-col items-center justify-center w-full h-full gap-1 active:scale-90 transition-transform duration-200" id="nav-chat">
+                <i class="fas fa-comment-dots text-lg"></i>
+                <span class="text-[10px] font-medium" data-key="navChat">AI Chat</span>
+            </button>
+            
+            <button onclick="switchTab('profile')" class="nav-item flex flex-col items-center justify-center w-full h-full gap-1 active:scale-90 transition-transform duration-200" id="nav-profile">
+                <i class="fas fa-user text-lg"></i>
+                <span class="text-[10px] font-medium" data-key="navProfile">Profile</span>
+            </button>
+        </div>
+    </nav>
+
+    <script>
+        // --- TRANSLATION DATA ---
+        const translations = {
+            en: {
+                appName: "Koushole",
+                appSubtitle: "Study Smarter",
+                streak: "12 Days",
+                greeting: "Good Evening, Junyed! 🚀",
+                subtitle: "Ready to crush Physics today?",
+                chartTitle: "Learning Velocity",
+                chartTime: "Last 7 Days",
+                continueLearning: "Continue Learning",
+                courseChapter: "PHYSICS • CHAPTER 2",
+                courseTitle: "Motion",
+                courseDesc: "Newton's Laws of Motion",
+                progressLabel: "Progress",
+                weakTopicsHeader: "Needs Attention",
+                weakTopic1: "Organic Chemistry",
+                accuracyLabel1: "Accuracy: 42%",
+                retryBtn: "Retry",
+                weakTopic2: "Trigonometry",
+                accuracyLabel2: "Accuracy: 55%",
+                practiceBtn: "Practice",
+                questionCount: "Question 3/10",
+                streakRisk: "🔥 Streak at risk!",
+                quizTopic: "Physics • Velocity",
+                quizQuestion: "If a car accelerates from rest at 5 m/s² for 10 seconds, what is its final velocity?",
+                quizHint: "(Recall: v = u + at)",
+                didYouKnow: "Did you know?",
+                feedbackText: "Acceleration is the rate of change of velocity. Since initial velocity (u) is 0, v = 0 + (5 × 10).",
+                nextQBtn: "Next Question",
+                chatHeader: "Koushole AI Tutor",
+                chatSub: "Context: NCTB Physics Grade 9-10",
+                aiMsg1: "Hello Junyed! I noticed you struggled with <strong>Kinetic Energy</strong> in the last quiz. Would you like a quick example from the NCTB book?",
+                navHome: "Home",
+                navQuiz: "Quiz",
+                navChat: "AI Chat",
+                navProfile: "Profile",
+                inputPlaceholder: "Ask about Physics, Math..."
+            },
+            bn: {
+                appName: "কৌশলে",
+                appSubtitle: "পড়া হবে কৌশলে",
+                streak: "১২ দিন",
+                greeting: "শুভ সন্ধ্যা, জুনায়েদ! 🚀",
+                subtitle: "আজকে পদার্থবিজ্ঞান আয়ত্ত করতে প্রস্তুত?",
+                chartTitle: "শেখার গতি",
+                chartTime: "গত ৭ দিন",
+                continueLearning: "পড়া চালিয়ে যান",
+                courseChapter: "পদার্থবিজ্ঞান • অধ্যায় ২",
+                courseTitle: "গতি",
+                courseDesc: "নিউটনের গতিসূত্র",
+                progressLabel: "অগ্রগতি",
+                weakTopicsHeader: "মনোযোগ প্রয়োজন",
+                weakTopic1: "জৈব রসায়ন",
+                accuracyLabel1: "নির্ভুলতা: ৪২%",
+                retryBtn: "আবার চেষ্টা করুন",
+                weakTopic2: "ত্রিকোণমিতি",
+                accuracyLabel2: "নির্ভুলতা: ৫৫%",
+                practiceBtn: "অনুশীলন",
+                questionCount: "প্রশ্ন ৩/১০",
+                streakRisk: "🔥 স্ট্রিক ঝুঁকিতে আছে!",
+                quizTopic: "পদার্থবিজ্ঞান • বেগ",
+                quizQuestion: "যদি একটি গাড়ি স্থির অবস্থান থেকে ৫ মি/সে² ত্বরণে ১০ সেকেন্ড চলে, তবে তার শেষ বেগ কত?",
+                quizHint: "(সূত্র: v = u + at)",
+                didYouKnow: "আপনি কি জানেন?",
+                feedbackText: "ত্বরণ হলো বেগের পরিবর্তনের হার। যেহেতু আদি বেগ (u) ০, তাই v = ০ + (৫ × ১০)।",
+                nextQBtn: "পরবর্তী প্রশ্ন",
+                chatHeader: "কৌশলে এআই টিউটর",
+                chatSub: "প্রসঙ্গ: এনসিটিবি পদার্থবিজ্ঞান ৯ম-১০ম শ্রেণী",
+                aiMsg1: "হ্যালো জুনায়েদ! আমি লক্ষ্য করেছি গত কুইজে তুমি <strong>গতিশক্তি (Kinetic Energy)</strong> নিয়ে সমস্যায় ছিলে। তুমি কি এনসিটিবি বই থেকে একটি উদাহরণ চাও?",
+                navHome: "হোম",
+                navQuiz: "কুইজ",
+                navChat: "চ্যাট",
+                navProfile: "প্রোফাইল",
+                inputPlaceholder: "পদার্থবিজ্ঞান বা গণিত নিয়ে প্রশ্ন করুন..."
+            }
+        };
+
+        // --- THEME LOGIC ---
+        function toggleTheme() {
+            const html = document.documentElement;
+            const logo = document.getElementById('app-logo');
+            const icon = document.getElementById('theme-icon');
+            
+            if (html.classList.contains('dark')) {
+                // Currently Dark, Switch to Light
+                html.classList.remove('dark');
+                logo.src = 'Koushole_Black.svg'; // Light background -> Black Logo
+                
+                // Fallback filter removal if needed
+                if(logo.src.includes('FreeSample')) {
+                    logo.classList.remove('logo-white');
+                }
+                
+                // Switch icon to Moon (to go back to dark)
+                icon.classList.remove('fa-sun');
+                icon.classList.add('fa-moon');
+            } else {
+                // Currently Light, Switch to Dark
+                html.classList.add('dark');
+                logo.src = 'Koushole_White.svg'; // Dark background -> White Logo
+                
+                if(logo.src.includes('FreeSample')) {
+                    logo.classList.add('logo-white');
+                }
+                
+                // Switch icon to Sun (to go back to light)
+                icon.classList.remove('fa-moon');
+                icon.classList.add('fa-sun');
+            }
+        }
+
+        // --- STREAK TOGGLE LOGIC ---
+        function toggleStreak() {
+            const streakText = document.getElementById('streak-text');
+            // Toggle visibility on mobile (where it defaults to hidden)
+            streakText.classList.toggle('hidden');
+        }
+
+        // --- LANGUAGE LOGIC ---
+        let currentLang = 'en';
+
+        function setLanguage(lang) {
+            currentLang = lang;
+            const body = document.body;
+            
+            // Update Body Classes for Fonts
+            if (lang === 'en') {
+                body.classList.remove('lang-bn');
+                body.classList.add('lang-en');
+                document.getElementById('btn-en').classList.add('text-amber');
+                document.getElementById('btn-en').classList.remove('text-text-secondary');
+                document.getElementById('btn-bn').classList.remove('text-amber');
+                document.getElementById('btn-bn').classList.add('text-text-secondary');
+            } else {
+                body.classList.remove('lang-en');
+                body.classList.add('lang-bn');
+                document.getElementById('btn-bn').classList.add('text-amber');
+                document.getElementById('btn-bn').classList.remove('text-text-secondary');
+                document.getElementById('btn-en').classList.remove('text-amber');
+                document.getElementById('btn-en').classList.add('text-text-secondary');
+            }
+
+            // Update Text Content
+            const elements = document.querySelectorAll('[data-key]');
+            elements.forEach(el => {
+                const key = el.getAttribute('data-key');
+                if (translations[lang][key]) {
+                    // Handle HTML content safely (for bold tags in chat)
+                    if(el.innerHTML.includes('<') && key.startsWith('aiMsg')) {
+                        el.innerHTML = translations[lang][key];
+                    } else {
+                        el.textContent = translations[lang][key];
+                    }
+                }
+            });
+
+            // Update Input Placeholder
+            document.getElementById('chat-input').placeholder = translations[lang].inputPlaceholder;
+
+            // Update Quiz Options (Demo Logic)
+            updateQuizOptions(lang);
+        }
+
+        function updateQuizOptions(lang) {
+            const container = document.getElementById('options-container');
+            if(lang === 'bn') {
+                container.innerHTML = `
+                    <button onclick="checkAnswer(this, false)" class="quiz-option w-full text-left p-4 rounded-xl theme-surface border border-divider theme-text-primary font-medium hover:border-amber transition-all active:scale-[0.98] hover:scale-[1.01] transition-transform">ক. ২৫ মি/সে</button>
+                    <button onclick="checkAnswer(this, true)" class="quiz-option w-full text-left p-4 rounded-xl theme-surface border border-divider theme-text-primary font-medium hover:border-amber transition-all active:scale-[0.98] hover:scale-[1.01] transition-transform">খ. ৫০ মি/সে</button>
+                    <button onclick="checkAnswer(this, false)" class="quiz-option w-full text-left p-4 rounded-xl theme-surface border border-divider theme-text-primary font-medium hover:border-amber transition-all active:scale-[0.98] hover:scale-[1.01] transition-transform">গ. ১০০ মি/সে</button>
+                    <button onclick="checkAnswer(this, false)" class="quiz-option w-full text-left p-4 rounded-xl theme-surface border border-divider theme-text-primary font-medium hover:border-amber transition-all active:scale-[0.98] hover:scale-[1.01] transition-transform">ঘ. ১৫ মি/সে</button>
+                `;
+            } else {
+                container.innerHTML = `
+                    <button onclick="checkAnswer(this, false)" class="quiz-option w-full text-left p-4 rounded-xl theme-surface border border-divider theme-text-primary font-medium hover:border-amber transition-all active:scale-[0.98] hover:scale-[1.01] transition-transform">A. 25 m/s</button>
+                    <button onclick="checkAnswer(this, true)" class="quiz-option w-full text-left p-4 rounded-xl theme-surface border border-divider theme-text-primary font-medium hover:border-amber transition-all active:scale-[0.98] hover:scale-[1.01] transition-transform">B. 50 m/s</button>
+                    <button onclick="checkAnswer(this, false)" class="quiz-option w-full text-left p-4 rounded-xl theme-surface border border-divider theme-text-primary font-medium hover:border-amber transition-all active:scale-[0.98] hover:scale-[1.01] transition-transform">C. 100 m/s</button>
+                    <button onclick="checkAnswer(this, false)" class="quiz-option w-full text-left p-4 rounded-xl theme-surface border border-divider theme-text-primary font-medium hover:border-amber transition-all active:scale-[0.98] hover:scale-[1.01] transition-transform">D. 15 m/s</button>
+                `;
+            }
+        }
+
+        // --- INIT ---
+        // Set default logo (Dark Mode -> White Logo)
+        document.getElementById('app-logo').src = 'Koushole_White.svg';
+        document.getElementById('btn-en').classList.add('text-amber');
+
+        // --- CHART CONFIGURATION (Midnight Amber Style) ---
+        const ctx = document.getElementById('growthChart').getContext('2d');
+        const gradient = ctx.createLinearGradient(0, 0, 0, 400);
+        gradient.addColorStop(0, 'rgba(245, 158, 11, 0.5)'); 
+        gradient.addColorStop(1, 'rgba(245, 158, 11, 0.0)'); 
+
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                datasets: [{
+                    label: 'Focus Score',
+                    data: [45, 59, 80, 81, 56, 95, 100],
+                    borderColor: '#F59E0B',
+                    backgroundColor: gradient,
+                    borderWidth: 2,
+                    pointBackgroundColor: '#F59E0B', // Matched to amber
+                    pointBorderColor: '#FFF',
+                    fill: true,
+                    tension: 0.4
+                },
+                {
+                    label: 'Goal',
+                    data: [70, 70, 70, 70, 70, 70, 70],
+                    borderColor: '#9CA3AF',
+                    borderDash: [5, 5],
+                    borderWidth: 1,
+                    pointRadius: 0,
+                    fill: false
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    y: { 
+                        beginAtZero: true, 
+                        grid: { color: 'rgba(156, 163, 175, 0.2)' }, 
+                        ticks: { color: '#9CA3AF' } 
+                    },
+                    x: { 
+                        grid: { display: false }, 
+                        ticks: { color: '#9CA3AF' } 
+                    }
+                }
+            }
+        });
+
+        // --- NAVIGATION LOGIC ---
+        function switchTab(viewName) {
+            ['dashboard', 'quiz', 'chat', 'profile'].forEach(v => {
+                document.getElementById('view-' + v).classList.add('hidden');
+                document.getElementById('nav-' + v).classList.remove('active', 'text-amber');
+            });
+            document.getElementById('view-' + viewName).classList.remove('hidden');
+            const navBtn = document.getElementById('nav-' + viewName);
+            navBtn.classList.add('active', 'text-amber');
+            if(viewName === 'quiz') resetQuiz();
+        }
+
+        // --- QUIZ LOGIC ---
+        function resetQuiz() {
+            const options = document.querySelectorAll('.quiz-option');
+            options.forEach(opt => {
+                opt.classList.remove('bg-rose/10', 'border-rose', 'text-rose', 'bg-emerald/10', 'border-emerald', 'text-emerald');
+                opt.disabled = false;
+            });
+            document.getElementById('feedback-area').classList.add('hidden');
+            document.getElementById('quiz-progress').style.width = '30%';
+            document.getElementById('quiz-progress').classList.remove('animate-pulse-glow', 'bg-orange');
+            document.getElementById('quiz-progress').classList.add('bg-amber');
+            
+            updateQuizOptions(currentLang);
+        }
+
+        function checkAnswer(btn, isCorrect) {
+            const options = document.querySelectorAll('.quiz-option');
+            options.forEach(opt => opt.disabled = true);
+
+            if (isCorrect) {
+                btn.classList.add('bg-emerald/10', 'border-emerald', 'text-emerald');
+                btn.innerHTML += ` <i class="fas fa-check-circle float-right mt-1"></i>`;
+                confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 }, colors: ['#10B981', '#F59E0B', '#FFFFFF'] });
+                const bar = document.getElementById('quiz-progress');
+                bar.style.width = '80%';
+                setTimeout(() => { bar.classList.remove('bg-amber'); bar.classList.add('bg-orange', 'animate-pulse-glow'); }, 300);
+            } else {
+                btn.classList.add('bg-rose/10', 'border-rose', 'text-rose');
+                btn.classList.add('animate-shake');
+                btn.innerHTML += ` <i class="fas fa-times-circle float-right mt-1"></i>`;
+                options[1].classList.add('bg-emerald/10', 'border-emerald', 'text-emerald');
+                document.getElementById('feedback-area').classList.remove('hidden');
+                if (navigator.vibrate) navigator.vibrate(200);
+            }
+        }
+
+        function nextQuestion() {
+            alert(currentLang === 'en' ? "Great job! Moving to the next question..." : "চমৎকার! পরের প্রশ্নে যাচ্ছি...");
+            resetQuiz();
+        }
+
+        // --- CHAT LOGIC ---
+        function sendMessage() {
+            const input = document.getElementById('chat-input');
+            const text = input.value.trim();
+            if(!text) return;
+            const chatContainer = document.getElementById('chat-messages');
+
+            // User Message
+            const userHTML = `
+                <div class="flex gap-3 flex-row-reverse animate-fade-in-up">
+                    <div class="w-8 h-8 rounded-full bg-divider flex items-center justify-center text-text-secondary text-xs">KM</div>
+                    <div class="bg-amber text-black font-medium p-3 rounded-2xl rounded-tr-none max-w-[85%] text-sm shadow-amber-glow body-font">
+                        ${text}
+                    </div>
+                </div>`;
+            chatContainer.insertAdjacentHTML('beforeend', userHTML);
+            input.value = '';
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+
+            // AI Reply Mock
+            setTimeout(() => {
+                const reply = currentLang === 'en' 
+                    ? "That's a good question! Based on <strong>Chapter 3: Force</strong>, remember that F = ma." 
+                    : "খুব ভালো প্রশ্ন! <strong>অধ্যায় ৩: বল</strong> অনুযায়ী মনে রাখবে, F = ma।";
+
+                const aiHTML = `
+                <div class="flex gap-3 animate-fade-in-up">
+                    <div class="w-8 h-8 rounded-full bg-amber/20 border border-amber/50 flex items-center justify-center text-amber text-xs"><i class="fas fa-robot"></i></div>
+                    <div class="bg-surface border border-divider text-text-primary p-3 rounded-2xl rounded-tl-none max-w-[85%] text-sm leading-relaxed shadow-sm transition-colors">
+                        ${reply}
+                    </div>
+                </div>`;
+                chatContainer.insertAdjacentHTML('beforeend', aiHTML);
+                chatContainer.scrollTop = chatContainer.scrollHeight;
+            }, 1000);
+        }
+
+        document.getElementById('chat-input').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') sendMessage();
+        });
+
+    </script>
+
+    <style>
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translate3d(0, 20px, 0); }
+            to { opacity: 1; transform: translate3d(0, 0, 0); }
+        }
+        .animate-fade-in-up {
+            animation: fadeInUp 0.4s ease-out forwards;
+        }
+        .pb-safe {
+            padding-bottom: env(safe-area-inset-bottom);
+        }
+        /* Hide scrollbar in badges section */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</body>
+</html>
