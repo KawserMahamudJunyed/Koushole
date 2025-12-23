@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Koushole | কৌশলে - Adaptive Learning</title>
+    <title>কৌশলে - Koushole | পড়া হবে কৌশলে</title>
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -191,7 +191,14 @@
 
             <!-- Theme Toggle -->
             <button onclick="toggleTheme()" class="w-8 h-8 rounded-full bg-surface border border-divider flex items-center justify-center text-text-secondary hover:text-amber transition-colors hover:rotate-[360deg] duration-700 transition-transform">
-                <i id="theme-icon" class="fas fa-sun"></i>
+                <!-- Sun SVG (for switching to Light mode) -->
+                <svg id="theme-icon-sun" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
+                    <path d="M12 2.25a.75.75 0 01.75.75v2.25a.75.75 0 01-1.5 0V3a.75.75 0 01.75-.75zM7.5 12a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM18.894 6.166a.75.75 0 00-1.06-1.06l-1.591 1.59a.75.75 0 101.06 1.061l1.591-1.59zM21.75 12a.75.75 0 01-.75.75h-2.25a.75.75 0 010-1.5H21a.75.75 0 01.75.75zM17.834 18.894a.75.75 0 001.06-1.06l-1.59-1.591a.75.75 0 10-1.061 1.06l1.59 1.591zM12 18a.75.75 0 01.75.75V21a.75.75 0 01-1.5 0v-2.25A.75.75 0 0112 18zM7.758 17.303a.75.75 0 00-1.061-1.06l-1.591 1.59a.75.75 0 001.06 1.061l1.591-1.59zM6 12a.75.75 0 01-.75.75H3a.75.75 0 010-1.5h2.25A.75.75 0 016 12zM6.697 7.757a.75.75 0 001.06-1.06l-1.59-1.591a.75.75 0 00-1.061 1.06l1.59 1.591z" />
+                </svg>
+                <!-- Moon SVG (for switching to Dark mode, hidden by default) -->
+                <svg id="theme-icon-moon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 hidden">
+                    <path fill-rule="evenodd" d="M9.528 1.718a.75.75 0 01.162.819A8.97 8.97 0 009 6a9 9 0 009 9 8.97 8.97 0 003.463-.69.75.75 0 01.981.98 10.503 10.503 0 01-9.694 6.46c-5.799 0-10.5-4.7-10.5-10.5 0-4.368 2.667-8.112 6.46-9.694a.75.75 0 01.818.162z" clip-rule="evenodd" />
+                </svg>
             </button>
 
             <!-- Streak (Click to toggle text on mobile) -->
@@ -373,10 +380,13 @@
                 </div>
             </div>
 
-            <div class="p-4 bg-surface border-t border-divider pb-24 sm:pb-4 transition-colors">
-                <div class="relative flex items-center gap-2">
+            <div class="w-full pb-24 sm:pb-6 px-5 pt-2 bg-transparent"> <!-- Margins via padding, bg-transparent -->
+                <div class="bg-surface border border-divider rounded-2xl p-2 flex items-center gap-2 shadow-xl transition-colors relative">
                     <!-- Image and Voice Inputs -->
-                    <button class="w-10 h-10 rounded-full bg-surface border border-divider flex items-center justify-center text-text-secondary hover:text-amber transition-colors hover:scale-110 active:scale-90 transition-transform">
+                    <button class="w-10 h-10 rounded-full bg-surface border border-divider flex items-center justify-center text-text-secondary hover:text-amber transition-colors hover:scale-110 active:scale-90 transition-transform shrink-0">
+                        <i class="fas fa-paperclip hover:rotate-12 transition-transform"></i>
+                    </button>
+                    <button class="w-10 h-10 rounded-full bg-surface border border-divider flex items-center justify-center text-text-secondary hover:text-amber transition-colors hover:scale-110 active:scale-90 transition-transform shrink-0">
                         <i class="fas fa-image hover:rotate-12 transition-transform"></i>
                     </button>
                     
@@ -390,14 +400,68 @@
                         </button>
                     </div>
 
-                    <button onclick="sendMessage()" class="group h-10 w-10 bg-amber rounded-full flex items-center justify-center text-black hover:bg-amber-deep transition-colors shadow-lg hover:-translate-y-1 hover:translate-x-1 transition-transform">
+                    <button onclick="sendMessage()" class="group h-10 w-10 bg-amber rounded-full flex items-center justify-center text-black hover:bg-amber-deep transition-colors shadow-lg hover:-translate-y-1 hover:translate-x-1 transition-transform shrink-0">
                         <i class="fas fa-paper-plane text-xs"></i>
                     </button>
                 </div>
             </div>
         </div>
 
-        <!-- View 4: PROFILE PAGE -->
+        <!-- View 4: LIBRARY PAGE -->
+        <div id="view-library" class="hidden h-full flex flex-col p-5 fade-in overflow-y-auto pb-24">
+            <!-- Header -->
+            <div class="mb-6">
+                 <h1 class="text-3xl font-bold text-text-primary title-font transition-colors" data-key="libraryTitle">Custom Library</h1>
+                 <p class="text-text-secondary text-sm mt-1 body-font transition-colors" data-key="librarySubtitle">Upload books to create your own quizzes.</p>
+            </div>
+    
+            <!-- Upload Box -->
+            <div class="border-2 border-dashed border-divider rounded-2xl p-8 flex flex-col items-center justify-center mb-8 hover:border-amber transition-colors cursor-pointer group bg-surface/50">
+                <div class="w-16 h-16 rounded-full bg-amber/10 flex items-center justify-center text-amber text-2xl mb-3 group-hover:scale-110 transition-transform">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                </div>
+                <p class="text-text-primary font-bold text-sm">Tap to Upload Book</p>
+                <p class="text-text-secondary text-xs mt-1">PDF, EPUB (Max 50MB)</p>
+            </div>
+    
+            <!-- Recent Files -->
+            <h3 class="text-text-secondary uppercase text-xs font-bold tracking-widest mb-4">Your Books</h3>
+            <div class="space-y-3">
+                <!-- Mock Item -->
+                <div class="bg-surface border border-divider rounded-xl p-4 flex items-center justify-between group hover:border-amber/50 transition-colors">
+                    <div class="flex items-center gap-4">
+                        <div class="w-10 h-10 rounded-lg bg-rose/10 text-rose flex items-center justify-center">
+                            <i class="fas fa-file-pdf"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-text-primary font-bold text-sm">Higher Math_Ch3.pdf</h4>
+                            <p class="text-text-secondary text-[10px]">Added 2 days ago</p>
+                        </div>
+                    </div>
+                    <button class="w-8 h-8 rounded-full bg-amber text-black flex items-center justify-center hover:scale-110 transition-transform shadow-amber-glow" onclick="alert('Generating Custom Quiz from Higher Math_Ch3.pdf...')">
+                        <i class="fas fa-play text-xs"></i>
+                    </button>
+                </div>
+                
+                <!-- Mock Item 2 -->
+                <div class="bg-surface border border-divider rounded-xl p-4 flex items-center justify-between group hover:border-amber/50 transition-colors">
+                    <div class="flex items-center gap-4">
+                        <div class="w-10 h-10 rounded-lg bg-sky/10 text-sky flex items-center justify-center">
+                            <i class="fas fa-file-pdf"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-text-primary font-bold text-sm">Physics_Optics.pdf</h4>
+                            <p class="text-text-secondary text-[10px]">Added 5 days ago</p>
+                        </div>
+                    </div>
+                    <button class="w-8 h-8 rounded-full bg-amber text-black flex items-center justify-center hover:scale-110 transition-transform shadow-amber-glow" onclick="alert('Generating Custom Quiz from Physics_Optics.pdf...')">
+                        <i class="fas fa-play text-xs"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- View 5: PROFILE PAGE -->
         <div id="view-profile" class="hidden h-full flex flex-col p-5 overflow-y-auto fade-in pb-24">
             <!-- Profile Header -->
             <div class="flex flex-col items-center mb-8">
@@ -504,6 +568,11 @@
                 <span class="text-[10px] font-medium" data-key="navQuiz">Quiz</span>
             </button>
             
+            <button onclick="switchTab('library')" class="nav-item flex flex-col items-center justify-center w-full h-full gap-1 active:scale-90 transition-transform duration-200" id="nav-library">
+                <i class="fas fa-book text-lg"></i>
+                <span class="text-[10px] font-medium" data-key="navLibrary">Library</span>
+            </button>
+
             <button onclick="switchTab('chat')" class="nav-item flex flex-col items-center justify-center w-full h-full gap-1 active:scale-90 transition-transform duration-200" id="nav-chat">
                 <i class="fas fa-comment-dots text-lg"></i>
                 <span class="text-[10px] font-medium" data-key="navChat">AI Chat</span>
@@ -554,7 +623,10 @@
                 navQuiz: "Quiz",
                 navChat: "AI Chat",
                 navProfile: "Profile",
-                inputPlaceholder: "Ask about Physics, Math..."
+                navLibrary: "Library",
+                inputPlaceholder: "Ask about Physics, Math...",
+                libraryTitle: "Custom Library",
+                librarySubtitle: "Upload books to create your own quizzes."
             },
             bn: {
                 appName: "কৌশলে",
@@ -591,7 +663,10 @@
                 navQuiz: "কুইজ",
                 navChat: "চ্যাট",
                 navProfile: "প্রোফাইল",
-                inputPlaceholder: "পদার্থবিজ্ঞান বা গণিত নিয়ে প্রশ্ন করুন..."
+                navLibrary: "লাইব্রেরি",
+                inputPlaceholder: "পদার্থবিজ্ঞান বা গণিত নিয়ে প্রশ্ন করুন...",
+                libraryTitle: "কাস্টম লাইব্রেরি",
+                librarySubtitle: "কুইজ তৈরি করতে বই আপলোড করুন।"
             }
         };
 
@@ -599,7 +674,8 @@
         function toggleTheme() {
             const html = document.documentElement;
             const logo = document.getElementById('app-logo');
-            const icon = document.getElementById('theme-icon');
+            const sunIcon = document.getElementById('theme-icon-sun');
+            const moonIcon = document.getElementById('theme-icon-moon');
             
             if (html.classList.contains('dark')) {
                 // Currently Dark, Switch to Light
@@ -611,9 +687,9 @@
                     logo.classList.remove('logo-white');
                 }
                 
-                // Switch icon to Moon (to go back to dark)
-                icon.classList.remove('fa-sun');
-                icon.classList.add('fa-moon');
+                // Switch icon: Hide Sun, Show Moon (to go back to dark)
+                sunIcon.classList.add('hidden');
+                moonIcon.classList.remove('hidden');
             } else {
                 // Currently Light, Switch to Dark
                 html.classList.add('dark');
@@ -623,9 +699,9 @@
                     logo.classList.add('logo-white');
                 }
                 
-                // Switch icon to Sun (to go back to light)
-                icon.classList.remove('fa-moon');
-                icon.classList.add('fa-sun');
+                // Switch icon: Hide Moon, Show Sun (to go back to light)
+                moonIcon.classList.add('hidden');
+                sunIcon.classList.remove('hidden');
             }
         }
 
@@ -756,7 +832,7 @@
 
         // --- NAVIGATION LOGIC ---
         function switchTab(viewName) {
-            ['dashboard', 'quiz', 'chat', 'profile'].forEach(v => {
+            ['dashboard', 'quiz', 'chat', 'profile', 'library'].forEach(v => {
                 document.getElementById('view-' + v).classList.add('hidden');
                 document.getElementById('nav-' + v).classList.remove('active', 'text-amber');
             });
