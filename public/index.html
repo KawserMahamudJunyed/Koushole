@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>কৌশলে - Koushole | পড়া হবে কৌশলে</title>
+    <title>Koushole - কৌশলে | পড়া হবে কৌশলে</title>
     
     <script>
       window.va = window.va || function () { (window.va.q = window.va.q || []).push(arguments); };
@@ -29,20 +29,20 @@
         :root {
             /* Light Mode Colors */
             --bg-main: #FFFDF9;        
-            --bg-surface: #F9F7F2;     
-            --text-main: #1A1A1A;      
-            --text-sub: #6B7280;       
-            --border-div: #E5E7EB;     
+            --bg-surface: #F9F7F2;      
+            --text-main: #1A1A1A;       
+            --text-sub: #6B7280;        
+            --border-div: #E5E7EB;      
             --nav-glass: rgba(249, 247, 242, 0.85);
         }
 
         .dark {
             /* Midnight Amber Dark Mode Colors */
             --bg-main: #000000;        
-            --bg-surface: #121212;     
-            --text-main: #E5E7EB;      
-            --text-sub: #9CA3AF;       
-            --border-div: #262626;     
+            --bg-surface: #121212;      
+            --text-main: #E5E7EB;       
+            --text-sub: #9CA3AF;        
+            --border-div: #262626;      
             --nav-glass: rgba(18, 18, 18, 0.85);
         }
 
@@ -124,13 +124,16 @@
         /* Animations */
         @keyframes pulse-ring {
             0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(248, 113, 113, 0.7); }
-            70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(248, 113, 113, 0); }
+            70% { transform: scale(1); box-shadow: 0 0 0 15px rgba(248, 113, 113, 0); }
             100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(248, 113, 113, 0); }
         }
+        
+        /* UPDATED: Perfect Circular Pulse */
         .recording-pulse {
             animation: pulse-ring 1.5s cubic-bezier(0.25, 0.8, 0.25, 1) infinite;
             color: #F87171 !important;
             border-color: #F87171 !important;
+            border-radius: 9999px !important; /* Force full rounded */
         }
 
         /* Markdown Styles for AI Chat */
@@ -145,11 +148,15 @@
             transform: scale(1.02);
             box-shadow: 0 0 10px rgba(245, 158, 11, 0.2);
         }
+        /* New Classes for Color Connecting */
+        .match-paired {
+            opacity: 0.9;
+            pointer-events: none; /* Lock interaction after pairing */
+            font-weight: bold;
+        }
+        
         .match-correct {
-            background-color: rgba(16, 185, 129, 0.2) !important;
-            border-color: #10B981 !important;
-            opacity: 0.5;
-            pointer-events: none;
+            /* Handled dynamically via classes or overrides */
         }
         .match-wrong {
             background-color: rgba(244, 63, 94, 0.15) !important;
@@ -254,7 +261,7 @@
                             deep: '#D97706',      
                         },
                         emerald: '#10B981',        
-                        rose: '#F87171',           
+                        rose: '#F87171',            
                         orange: '#FB923C',        
                         sky: '#38BDF8',            
                         ghost: '#F9FAFB',          
@@ -448,11 +455,11 @@
                             Loading question...
                         </h2>
                         <p id="quiz-hint-text" class="text-text-secondary text-sm mt-4 italic border-l-2 border-divider pl-3 body-font transition-colors hidden">
-                            </p>
+                        </p>
                     </div>
 
                     <div class="flex flex-col gap-3 body-font w-full" id="input-container">
-                        </div>
+                    </div>
                 </div>
 
                 <div id="feedback-area" class="mt-4 hidden animate-fade-in-up pb-4">
@@ -461,7 +468,7 @@
                         <div>
                             <h4 class="text-sky font-bold text-lg title-font" data-key="didYouKnow">Explanation</h4>
                             <p id="explanation-text" class="text-text-secondary text-xs mt-1 body-font transition-colors">
-                                </p>
+                            </p>
                         </div>
                     </div>
                     <div class="flex gap-2 mt-4">
@@ -522,7 +529,7 @@
             </div>
 
             <div id="attachment-preview" class="hidden px-5 py-2 flex gap-2 overflow-x-auto">
-                </div>
+            </div>
 
             <div class="w-full pb-24 sm:pb-6 px-5 pt-2 bg-transparent"> 
                 <div class="bg-surface border border-divider rounded-2xl p-2 flex items-center gap-2 shadow-xl transition-colors relative">
@@ -537,7 +544,7 @@
                         <input type="text" id="chat-input" placeholder="Ask about Physics, Math..." 
                             class="w-full bg-midnight border border-divider rounded-full py-3 pl-5 pr-12 text-text-primary focus:outline-none focus:border-amber focus:ring-1 focus:ring-amber transition-all placeholder:text-text-secondary/50 body-font">
                         
-                        <button id="mic-btn" onclick="toggleVoiceRecording('chat-input')" class="absolute right-3 top-1/2 -translate-y-1/2 text-text-secondary hover:text-amber transition-colors hover:scale-110 active:scale-90 transition-transform">
+                        <button id="mic-btn" onclick="toggleVoiceRecording('chat-input')" class="absolute right-3 top-1/2 -translate-y-1/2 text-text-secondary hover:text-amber transition-colors hover:scale-110 active:scale-90 transition-transform rounded-full">
                             <i class="fas fa-microphone hover:rotate-12 transition-transform"></i>
                         </button>
                     </div>
@@ -565,7 +572,7 @@
     
             <h3 class="text-text-secondary uppercase text-xs font-bold tracking-widest mb-4">Your Books</h3>
             <div class="space-y-3" id="library-list">
-                </div>
+            </div>
         </div>
 
         <div id="quiz-setup-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center modal-overlay p-5 fade-in">
@@ -578,13 +585,13 @@
                     <div class="w-12 h-12 rounded-full bg-amber/10 text-amber flex items-center justify-center mx-auto mb-3">
                         <i class="fas fa-sliders-h text-xl"></i>
                     </div>
-                    <h3 class="text-text-primary font-bold text-xl title-font">Configure Quiz</h3>
+                    <h3 class="text-text-primary font-bold text-xl title-font" data-key="configQuizTitle">Configure Quiz</h3>
                     <p class="text-text-secondary text-xs mt-1" id="modal-book-title">Custom Setup</p>
                 </div>
 
                 <div class="space-y-4">
                     <div>
-                        <label class="text-text-secondary text-[10px] uppercase font-bold tracking-wider mb-1 block">Subject / Source</label>
+                        <label class="text-text-secondary text-[10px] uppercase font-bold tracking-wider mb-1 block" data-key="configSubject">Subject / Source</label>
                         <select id="config-subject" onchange="updateChapters()" class="w-full bg-midnight border border-divider rounded-lg p-3 text-text-primary text-sm focus:border-amber outline-none mb-2">
                             <option value="Physics">Physics</option>
                             <option value="Chemistry">Chemistry</option>
@@ -596,14 +603,14 @@
                     </div>
 
                     <div id="topic-container">
-                        <label class="text-text-secondary text-[10px] uppercase font-bold tracking-wider mb-1 block">Available Chapters</label>
+                        <label class="text-text-secondary text-[10px] uppercase font-bold tracking-wider mb-1 block" data-key="configChapters">Available Chapters</label>
                         <select id="config-topic" class="w-full bg-midnight border border-divider rounded-lg p-3 text-text-primary text-sm focus:border-amber outline-none">
-                            </select>
+                        </select>
                     </div>
                 </div>
 
                 <button onclick="startCustomQuiz()" class="w-full mt-6 bg-amber text-black font-bold py-3 rounded-xl shadow-amber-glow hover:scale-[1.02] active:scale-[0.98] transition-transform">
-                    Start Quiz <i class="fas fa-arrow-right ml-1"></i>
+                    <span data-key="startQuizBtn">Start Quiz</span> <i class="fas fa-arrow-right ml-1"></i>
                 </button>
             </div>
         </div>
@@ -743,9 +750,19 @@
         let currentBookName = '';
         let currentQuizScore = 0; // New: Track correct answers per session
         
-        // New: Temporary state for match/order questions
-        let selectedMatchLeft = null; // Stores index
-        let selectedMatchRight = null; // Stores index
+        // New: State for Color-Connect matching
+        let matchState = {
+            selectedItem: null, // { side: 'left'|'right', index: number, elementId: string }
+            pairedIndices: [],  // Array of {left: idx, right: idx}
+            colorIndex: 0
+        };
+        const matchColors = [
+            'border-sky-500 bg-sky-100/10 text-sky',       // Blue
+            'border-purple-500 bg-purple-100/10 text-purple-400', // Purple
+            'border-pink-500 bg-pink-100/10 text-pink-400',     // Pink
+            'border-indigo-500 bg-indigo-100/10 text-indigo-400'  // Indigo
+        ];
+        
         let orderedItems = [];
 
         // Mock Chapters Data
@@ -826,7 +843,6 @@
                 inputPlaceholder: "Ask about Physics, Math...",
                 libraryTitle: "Custom Library",
                 librarySubtitle: "Upload books to create your own quizzes.",
-                // Missing Keys Added
                 score: "Score",
                 xpEarned: "XP Earned",
                 quizComp: "Quiz Completed!",
@@ -844,7 +860,12 @@
                 bookProcessed: "Book processed! AI has generated quiz materials.",
                 connError: "Connection error. Please try again.",
                 listening: "Listening...",
-                checkMatches: "Check Matches"
+                checkMatches: "Check Matches",
+                // Modal Keys
+                configQuizTitle: "Configure Quiz",
+                configSubject: "Subject / Source",
+                configChapters: "Available Chapters",
+                startQuizBtn: "Start Quiz"
             },
             bn: {
                 appName: "কৌশলে",
@@ -885,7 +906,6 @@
                 inputPlaceholder: "পদার্থবিজ্ঞান বা গণিত নিয়ে প্রশ্ন করুন...",
                 libraryTitle: "কাস্টম লাইব্রেরি",
                 librarySubtitle: "কুইজ তৈরি করতে বই আপলোড করুন।",
-                // Missing Keys Added
                 score: "স্কোর",
                 xpEarned: "অর্জিত XP",
                 quizComp: "কুইজ সম্পন্ন!",
@@ -903,7 +923,12 @@
                 bookProcessed: "বই প্রসেস করা হয়েছে! কুইজ তৈরি।",
                 connError: "সংযোগ সমস্যা। আবার চেষ্টা করুন।",
                 listening: "শুনছি...",
-                checkMatches: "মিল যাচাই করুন"
+                checkMatches: "মিল যাচাই করুন",
+                // Modal Keys
+                configQuizTitle: "কুইজ কনফিগার",
+                configSubject: "বিষয় / উৎস",
+                configChapters: "অধ্যায় সমূহ",
+                startQuizBtn: "কুইজ শুরু করুন"
             }
         };
 
@@ -1077,7 +1102,7 @@
                 subjectSelect.disabled = true;
                 topicSelect.innerHTML = `<option value="All Chapters">All Chapters</option>`;
             } else {
-                modalTitle.innerText = "Custom Quiz Setup";
+                modalTitle.innerText = "Custom Setup";
                 // Restore generic subjects
                 subjectSelect.innerHTML = `
                     <option value="Physics">Physics</option>
@@ -1232,6 +1257,14 @@
                     explanation: "Newton's Third Law describes action-reaction pairs."
                 },
                 {
+                    type: "match",
+                    question: "Match the unit to the quantity:",
+                    topic: "Units",
+                    pairs: {"Force": "Newton", "Energy": "Joule", "Power": "Watt"},
+                    hint: "N is for Force",
+                    explanation: "Force is measured in Newtons, Energy in Joules."
+                },
+                {
                     type: "order",
                     question: "Arrange the formula for Force:",
                     topic: "Dynamics",
@@ -1241,12 +1274,12 @@
                     explanation: "F = ma is the mathematical representation of Newton's 2nd Law."
                 },
                 {
-                    type: "match",
-                    question: "Match the unit to the quantity:",
-                    topic: "Units",
-                    pairs: {"Force": "Newton", "Energy": "Joule"},
-                    hint: "N is for Force",
-                    explanation: "Force is measured in Newtons, Energy in Joules."
+                    type: "voice",
+                    question: "What is the unit of Current?",
+                    topic: "Electricity",
+                    answer: "Ampere",
+                    hint: "Starts with A",
+                    explanation: "The SI unit of electric current is the ampere."
                 }
             ];
         }
@@ -1314,15 +1347,28 @@
                     </div>
                 `;
             }
-            // --- MATCH RENDER (Improved Column Selection) ---
+            // --- NEW: MATCH RENDER (Color Connect) ---
             else if (q.type === 'match') {
-                selectedMatchLeft = null;
-                selectedMatchRight = null;
+                // Reset State
+                matchState = { selectedItem: null, pairedIndices: [], colorIndex: 0 };
+                
                 const lefts = Object.keys(q.pairs);
                 const rights = Object.values(q.pairs).sort(() => Math.random() - 0.5); // Shuffle right
                 
-                let leftHtml = lefts.map((l, idx) => `<button id="left-${idx}" onclick="selectMatch('left', ${idx})" class="match-item w-full p-3 bg-surface border border-divider rounded-lg text-sm font-bold mb-2 hover:border-sky text-left transition-all">${l}</button>`).join('');
-                let rightHtml = rights.map((r, idx) => `<button id="right-${idx}" onclick="selectMatch('right', ${idx})" class="match-item w-full p-3 bg-surface border border-divider rounded-lg text-sm font-bold mb-2 hover:border-sky text-right transition-all">${r}</button>`).join('');
+                // Store original right values for validation since shuffled
+                container.setAttribute('data-rights', JSON.stringify(rights));
+
+                let leftHtml = lefts.map((l, idx) => `
+                    <button id="left-${idx}" onclick="selectMatch('left', ${idx})" 
+                    class="match-item w-full p-3 bg-surface border border-divider rounded-lg text-sm font-bold mb-2 hover:border-sky text-left transition-all relative">
+                        ${l}
+                    </button>`).join('');
+                
+                let rightHtml = rights.map((r, idx) => `
+                    <button id="right-${idx}" onclick="selectMatch('right', ${idx})" 
+                    class="match-item w-full p-3 bg-surface border border-divider rounded-lg text-sm font-bold mb-2 hover:border-sky text-right transition-all relative">
+                        ${r}
+                    </button>`).join('');
 
                 container.innerHTML = `
                     <div class="grid grid-cols-2 gap-4">
@@ -1367,30 +1413,58 @@
             document.getElementById('quiz-progress').style.width = `${((currentQuestionIndex)/currentQuizQuestions.length)*100}%`;
         }
 
-        // --- MATCH & ORDER HELPERS ---
-        function selectMatch(column, idx) {
-            // Logic: You can select one from left, one from right. 
-            // Selecting another in same column deselects the previous one.
-            
-            if (column === 'left') {
-                selectedMatchLeft = idx;
-                // Remove selection from all left items
-                const leftItems = document.getElementById('col-left').children;
-                for (let i = 0; i < leftItems.length; i++) {
-                    leftItems[i].classList.remove('match-selected');
-                }
-                // Add to clicked
-                document.getElementById(`left-${idx}`).classList.add('match-selected');
-            } else {
-                selectedMatchRight = idx;
-                // Remove selection from all right items
-                const rightItems = document.getElementById('col-right').children;
-                for (let i = 0; i < rightItems.length; i++) {
-                    rightItems[i].classList.remove('match-selected');
-                }
-                // Add to clicked
-                document.getElementById(`right-${idx}`).classList.add('match-selected');
+        // --- NEW: COLOR-CONNECT LOGIC ---
+        function selectMatch(side, idx) {
+            const btnId = `${side}-${idx}`;
+            const btn = document.getElementById(btnId);
+
+            // Ignore if already paired
+            if (btn.classList.contains('match-paired')) return;
+
+            // Scenario 1: Nothing selected yet
+            if (!matchState.selectedItem) {
+                matchState.selectedItem = { side, index: idx, elementId: btnId };
+                btn.classList.add('match-selected');
+                return;
             }
+
+            // Scenario 2: Clicking same item -> Deselect
+            if (matchState.selectedItem.elementId === btnId) {
+                matchState.selectedItem = null;
+                btn.classList.remove('match-selected');
+                return;
+            }
+
+            // Scenario 3: Clicking same side (different item) -> Switch selection
+            if (matchState.selectedItem.side === side) {
+                document.getElementById(matchState.selectedItem.elementId).classList.remove('match-selected');
+                matchState.selectedItem = { side, index: idx, elementId: btnId };
+                btn.classList.add('match-selected');
+                return;
+            }
+
+            // Scenario 4: Clicking opposite side -> CONNECT!
+            const firstItem = matchState.selectedItem;
+            const secondItem = { side, index: idx, elementId: btnId };
+            
+            // Get color class based on current index (cycling through 4 colors)
+            const colorClass = matchColors[matchState.colorIndex % matchColors.length];
+            
+            // Apply styles to both
+            const firstBtn = document.getElementById(firstItem.elementId);
+            firstBtn.className = `match-item w-full p-3 rounded-lg text-sm font-bold mb-2 text-${side === 'left' ? 'left' : 'right'} transition-all relative match-paired ${colorClass}`;
+            
+            btn.className = `match-item w-full p-3 rounded-lg text-sm font-bold mb-2 text-${side === 'left' ? 'left' : 'right'} transition-all relative match-paired ${colorClass}`;
+            
+            // Store pairing
+            const leftIdx = side === 'left' ? idx : firstItem.index;
+            const rightIdx = side === 'right' ? idx : firstItem.index;
+            
+            matchState.pairedIndices.push({ left: leftIdx, right: rightIdx });
+            
+            // Increment color index & reset selection
+            matchState.colorIndex++;
+            matchState.selectedItem = null;
         }
 
         function addToOrder(item) {
@@ -1421,26 +1495,34 @@
                 }
 
             } else if (type === 'match') {
-                // STRICT VALIDATION
-                if (selectedMatchLeft !== null && selectedMatchRight !== null) {
-                    const leftText = document.getElementById(`left-${selectedMatchLeft}`).innerText;
-                    const rightText = document.getElementById(`right-${selectedMatchRight}`).innerText;
-                    
-                    if (q.pairs[leftText] === rightText) {
-                        isCorrect = true;
-                        // Visualize connection success
-                        document.getElementById(`left-${selectedMatchLeft}`).classList.add('match-correct', 'bg-emerald/10', 'border-emerald', 'text-emerald');
-                        document.getElementById(`right-${selectedMatchRight}`).classList.add('match-correct', 'bg-emerald/10', 'border-emerald', 'text-emerald');
-                    } else {
-                        // Visualize failure
-                        document.getElementById(`left-${selectedMatchLeft}`).classList.add('match-wrong');
-                        document.getElementById(`right-${selectedMatchRight}`).classList.add('match-wrong');
-                        setTimeout(() => {
-                             document.getElementById(`left-${selectedMatchLeft}`).classList.remove('match-wrong');
-                             document.getElementById(`right-${selectedMatchRight}`).classList.remove('match-wrong');
-                        }, 500);
-                    }
+                // Validate Pairs
+                const rightsData = JSON.parse(document.getElementById('input-container').getAttribute('data-rights'));
+                const leftKeys = Object.keys(q.pairs); // Array of left strings
+                
+                let allCorrect = true;
+                
+                // Check if all items are paired
+                if (matchState.pairedIndices.length !== leftKeys.length) {
+                    allCorrect = false;
+                } else {
+                    matchState.pairedIndices.forEach(pair => {
+                        const leftText = document.getElementById(`left-${pair.left}`).innerText.trim();
+                        // Get the text of the right button using the shuffled array index
+                        const rightText = rightsData[pair.right]; 
+                        
+                        if (q.pairs[leftText] !== rightText) {
+                            allCorrect = false;
+                            // Mark wrong pairs
+                            document.getElementById(`left-${pair.left}`).classList.add('match-wrong');
+                            document.getElementById(`right-${pair.right}`).classList.add('match-wrong');
+                        } else {
+                             // Mark correct visual (already colored, maybe add checkmark)
+                        }
+                    });
                 }
+                
+                if (allCorrect) isCorrect = true;
+                
             } else if (type === 'order') {
                 // Mock success for these types for demo smoothness
                 isCorrect = true; 
