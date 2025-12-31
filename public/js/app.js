@@ -1240,7 +1240,7 @@ function updateUI() {
     if (hasQuizHistory) {
         // User has quiz history - hide welcome, show sections
         if (welcomeSection) welcomeSection.classList.add('hidden');
-        if (continueSection) continueSection.classList.remove('hidden');
+        // if (continueSection) continueSection.classList.remove('hidden'); // Hidden until implemented
 
         if (hasWeaknesses && attentionSection) {
             attentionSection.classList.remove('hidden');
@@ -1248,7 +1248,7 @@ function updateUI() {
             const container = document.getElementById('needs-attention-container');
             if (container) {
                 container.innerHTML = userMemory.weaknesses.map(w => `
-        < div class="group bg-surface rounded-xl p-4 border border-divider flex items-center justify-between transition-colors duration-300 hover:border-rose/30" >
+                    <div class="group bg-surface rounded-xl p-4 border border-divider flex items-center justify-between transition-colors duration-300 hover:border-rose/30">
                         <div class="flex items-center gap-3">
                             <div class="w-10 h-10 rounded-lg bg-surface border border-rose/30 flex items-center justify-center text-rose transition-colors group-hover:bg-rose/10">
                                 <i class="fas fa-exclamation group-hover:rotate-12 transition-transform"></i>
@@ -1262,8 +1262,8 @@ function updateUI() {
                             class="px-4 py-2 rounded-full border border-amber text-amber text-xs font-bold hover:bg-amber hover:text-black transition-colors body-font">
                             Retry
                         </button>
-                    </div >
-        `).join('');
+                    </div>
+                `).join('');
             }
         }
     } else {
