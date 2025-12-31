@@ -28,7 +28,30 @@ async function saveQuizResultsToDatabase(earnedXP, accuracyPercent) {
             return;
         }
 
-        // First, try to get existing stats
+        const subject = document.getElementById('config-subject')?.value || 'General';
+        const topic = document.getElementById('config-topic')?.value || 'All';
+
+        // 1. Save to quiz_attempts table (for chart history)
+        const { error: attemptError } = await window.supabaseClient
+            .from('quiz_attempts')
+            .insert({
+                user_id: user.id,
+                subject: subject,
+                topic: topic,
+                difficulty: selectedDifficulty || 'Medium',
+                score_percentage: accuracyPercent,
+                correct_count: currentQuizScore,
+                total_questions: currentQuizQuestions.length,
+                xp_earned: earnedXP
+            });
+
+        if (attemptError) {
+            console.error("Error saving quiz attempt:", attemptError);
+        } else {
+            console.log("✅ Quiz attempt saved!");
+        }
+
+        // 2. Update learning_stats with correct field names
         const { data: existingStats, error: fetchError } = await window.supabaseClient
             .from('learning_stats')
             .select('*')
@@ -36,59 +59,138 @@ async function saveQuizResultsToDatabase(earnedXP, accuracyPercent) {
             .single();
 
         if (fetchError && fetchError.code !== 'PGRST116') {
-            // PGRST116 = no rows found (which is OK for new users)
             console.error("Error fetching stats:", fetchError);
         }
 
         const newTotalXP = (existingStats?.total_xp || 0) + earnedXP;
-        const newQuizCount = (existingStats?.quizzes_completed || 0) + 1;
-        const oldAccuracy = existingStats?.accuracy_percentage || 0;
-        const newAccuracy = oldAccuracy === 0 ? accuracyPercent : Math.round((oldAccuracy + accuracyPercent) / 2);
+        const newQuizCount = (existingStats?.total_quizzes_completed || 0) + 1;
+        const newQuestionsAnswered = (existingStats?.total_questions_answered || 0) + currentQuizQuestions.length;
+        const newCorrectAnswers = (existingStats?.total_correct_answers || 0) + currentQuizScore;
+        const newAccuracy = Math.round((newCorrectAnswers / newQuestionsAnswered) * 100);
 
-        if (existingStats) {
-            // Update existing record
-            const { error: updateError } = await window.supabaseClient
-                .from('learning_stats')
-                .update({
-                    total_xp: newTotalXP,
-                    accuracy_percentage: newAccuracy,
-                    quizzes_completed: newQuizCount,
-                    updated_at: new Date().toISOString()
-                })
-                .eq('user_id', user.id);
+        // Check streak
+        const today = new Date().toISOString().split('T')[0];
+        const lastQuizDate = existingStats?.last_quiz_date;
+        let newStreak = existingStats?.day_streak || 0;
+        let longestStreak = existingStats?.longest_streak || 0;
 
-            if (updateError) {
-                console.error("Error updating stats:", updateError);
-            } else {
-                console.log("✅ Quiz stats updated in database!");
+        if (lastQuizDate) {
+            const lastDate = new Date(lastQuizDate);
+            const todayDate = new Date(today);
+            const diffDays = Math.floor((todayDate - lastDate) / (1000 * 60 * 60 * 24));
+
+            if (diffDays === 1) {
+                newStreak++;
+            } else if (diffDays > 1) {
+                newStreak = 1;
             }
+            // Same day = no change
         } else {
-            // Insert new record
-            const { error: insertError } = await window.supabaseClient
-                .from('learning_stats')
-                .insert({
-                    user_id: user.id,
-                    total_xp: newTotalXP,
-                    accuracy_percentage: newAccuracy,
-                    quizzes_completed: newQuizCount,
-                    current_streak: 1
-                });
-
-            if (insertError) {
-                console.error("Error inserting stats:", insertError);
-            } else {
-                console.log("✅ Quiz stats saved to database!");
-            }
+            newStreak = 1;
         }
 
-        // Update the UI displays
-        if (typeof updateProfileUI === 'function') {
-            updateProfileUI();
+        if (newStreak > longestStreak) {
+            longestStreak = newStreak;
         }
+
+        // 3. Upsert learning_stats
+        const { error: statsError } = await window.supabaseClient
+            .from('learning_stats')
+            .upsert({
+                user_id: user.id,
+                total_xp: newTotalXP,
+                accuracy_percentage: newAccuracy,
+                total_quizzes_completed: newQuizCount,
+                total_questions_answered: newQuestionsAnswered,
+                total_correct_answers: newCorrectAnswers,
+                day_streak: newStreak,
+                longest_streak: longestStreak,
+                last_quiz_date: today
+            }, { onConflict: 'user_id' });
+
+        if (statsError) {
+            console.error("Error updating stats:", statsError);
+        } else {
+            console.log("✅ Learning stats updated!");
+            // Update local userMemory to match
+            userMemory.total_xp = newTotalXP;
+            userMemory.accuracy_percentage = newAccuracy;
+            userMemory.day_streak = newStreak;
+        }
+
+        // 4. Check and award badges
+        await checkAndAwardBadges(user.id, newQuizCount, newStreak, accuracyPercent);
 
     } catch (err) {
         console.error("Database save error:", err);
     }
+}
+
+// --- BADGE SYSTEM ---
+async function checkAndAwardBadges(userId, quizCount, streak, lastScore) {
+    if (!window.supabaseClient) return;
+
+    try {
+        // Fetch current badges
+        const { data: stats } = await window.supabaseClient
+            .from('learning_stats')
+            .select('badges')
+            .eq('user_id', userId)
+            .single();
+
+        const currentBadges = stats?.badges || [];
+        const newBadges = [...currentBadges];
+        let badgeAwarded = false;
+
+        // Check conditions
+        if (quizCount >= 1 && !currentBadges.includes('first_quiz')) {
+            newBadges.push('first_quiz');
+            badgeAwarded = true;
+            showBadgeNotification('🎯', 'First Step!');
+        }
+
+        if (streak >= 3 && !currentBadges.includes('streak_3')) {
+            newBadges.push('streak_3');
+            badgeAwarded = true;
+            showBadgeNotification('🔥', '3 Day Streak!');
+        }
+
+        if (streak >= 7 && !currentBadges.includes('streak_7')) {
+            newBadges.push('streak_7');
+            badgeAwarded = true;
+            showBadgeNotification('⚔️', 'Week Warrior!');
+        }
+
+        if (lastScore === 100 && !currentBadges.includes('perfect_quiz')) {
+            newBadges.push('perfect_quiz');
+            badgeAwarded = true;
+            showBadgeNotification('💯', 'Perfect Score!');
+        }
+
+        // Save new badges
+        if (badgeAwarded) {
+            await window.supabaseClient
+                .from('learning_stats')
+                .update({ badges: newBadges })
+                .eq('user_id', userId);
+
+            userMemory.badges = newBadges;
+            console.log("✅ Badges updated:", newBadges);
+        }
+
+    } catch (err) {
+        console.error("Badge check error:", err);
+    }
+}
+
+function showBadgeNotification(icon, title) {
+    // Create toast notification for badge
+    const toast = document.createElement('div');
+    toast.className = 'fixed top-20 left-1/2 -translate-x-1/2 bg-amber text-black px-6 py-3 rounded-xl shadow-lg z-50 flex items-center gap-3 animate-bounce';
+    toast.innerHTML = `<span class="text-2xl">${icon}</span><span class="font-bold">Badge Unlocked: ${title}</span>`;
+    document.body.appendChild(toast);
+
+    setTimeout(() => toast.remove(), 4000);
 }
 
 // --- QUIZ CONFIGURATION ---
@@ -371,8 +473,12 @@ function renderQuestion() {
 
         saveMemory();
 
-        // Save to Supabase Database
+        // Also save to Supabase for quizzes_completed tracking
         saveQuizResultsToDatabase(earnedXP, percentage);
+
+        // Update UI to reflect new stats
+        if (typeof updateUI === 'function') updateUI();
+        if (typeof updateProfileUI === 'function') updateProfileUI();
 
         confetti({ particleCount: 200, spread: 90, origin: { y: 0.6 } });
         return;

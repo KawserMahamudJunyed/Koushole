@@ -674,7 +674,7 @@ document.getElementById('book-upload-input').addEventListener('change', async fu
 
 function updateProfileUI() {
     // Update XP
-    document.getElementById('xp-display').innerText = userMemory.xp.toLocaleString();
+    document.getElementById('xp-display').innerText = (userMemory.total_xp || 0).toLocaleString();
 
     // Update Weakness Cloud
     const container = document.getElementById('weakness-cloud');
@@ -846,19 +846,48 @@ async function init() {
     updateProfileUI(); // Load memory
     updateChapters(); // Init chapter list
 
-    // Initialize Chart
+    // Initialize Dynamic Chart
+    initLearningChart();
+
+    document.getElementById('chat-input').addEventListener('keypress', function (e) {
+        if (e.key === 'Enter') sendMessage();
+    });
+
+    // Wire up Logout
+    const logoutBtn = document.querySelector('[data-key="logOut"]');
+    if (logoutBtn) logoutBtn.onclick = async () => {
+        await window.supabaseClient.auth.signOut();
+        window.location.reload(); // Force reload to clear memory
+    };
+}
+
+// Dynamic Learning Chart
+let learningChart = null;
+
+async function initLearningChart() {
     const ctx = document.getElementById('growthChart').getContext('2d');
     const gradient = ctx.createLinearGradient(0, 0, 0, 400);
     gradient.addColorStop(0, 'rgba(245, 158, 11, 0.5)');
     gradient.addColorStop(1, 'rgba(245, 158, 11, 0.0)');
 
-    new Chart(ctx, {
+    // Fetch last 7 days of quiz data
+    const chartData = await fetchQuizHistory();
+
+    // Toggle welcome overlay based on data
+    const welcomeOverlay = document.getElementById('new-user-welcome');
+    if (chartData.hasData && welcomeOverlay) {
+        welcomeOverlay.classList.add('hidden');
+    } else if (welcomeOverlay) {
+        welcomeOverlay.classList.remove('hidden');
+    }
+
+    learningChart = new Chart(ctx, {
         type: 'line',
         data: {
-            labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+            labels: chartData.labels,
             datasets: [{
-                label: 'Focus Score',
-                data: [45, 59, 80, 81, 56, 95, 100],
+                label: 'Quiz Score',
+                data: chartData.scores,
                 borderColor: '#F59E0B',
                 backgroundColor: gradient,
                 borderWidth: 2,
@@ -873,22 +902,89 @@ async function init() {
             maintainAspectRatio: false,
             plugins: { legend: { display: false } },
             scales: {
-                y: { beginAtZero: true, grid: { color: 'rgba(156, 163, 175, 0.2)' }, ticks: { color: '#9CA3AF' } },
+                y: {
+                    beginAtZero: true,
+                    max: 100,
+                    grid: { color: 'rgba(156, 163, 175, 0.2)' },
+                    ticks: { color: '#9CA3AF' }
+                },
                 x: { grid: { display: false }, ticks: { color: '#9CA3AF' } }
             }
         }
     });
+}
 
-    document.getElementById('chat-input').addEventListener('keypress', function (e) {
-        if (e.key === 'Enter') sendMessage();
-    });
-
-    // Wire up Logout
-    const logoutBtn = document.querySelector('[data-key="logOut"]');
-    if (logoutBtn) logoutBtn.onclick = async () => {
-        await window.supabaseClient.auth.signOut();
-        window.location.reload(); // Force reload to clear memory
+async function fetchQuizHistory() {
+    const defaultData = {
+        labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+        scores: [0, 0, 0, 0, 0, 0, 0],
+        hasData: false
     };
+
+    if (!window.supabaseClient || !currentUserId) {
+        return defaultData;
+    }
+
+    try {
+        // Get last 7 days
+        const today = new Date();
+        const sevenDaysAgo = new Date(today);
+        sevenDaysAgo.setDate(today.getDate() - 6);
+
+        const { data: attempts, error } = await window.supabaseClient
+            .from('quiz_attempts')
+            .select('score_percentage, created_at')
+            .eq('user_id', currentUserId)
+            .gte('created_at', sevenDaysAgo.toISOString())
+            .order('created_at', { ascending: true });
+
+        if (error) {
+            console.error("Error fetching quiz history:", error);
+            return defaultData;
+        }
+
+        if (!attempts || attempts.length === 0) {
+            return defaultData;
+        }
+
+        // Group by day and calculate average score
+        const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+        const dailyScores = {};
+
+        // Initialize last 7 days
+        for (let i = 6; i >= 0; i--) {
+            const date = new Date(today);
+            date.setDate(today.getDate() - i);
+            const key = date.toISOString().split('T')[0];
+            dailyScores[key] = { total: 0, count: 0, dayName: dayNames[date.getDay()] };
+        }
+
+        // Sum up scores per day
+        attempts.forEach(attempt => {
+            const dateKey = attempt.created_at.split('T')[0];
+            if (dailyScores[dateKey]) {
+                dailyScores[dateKey].total += attempt.score_percentage;
+                dailyScores[dateKey].count++;
+            }
+        });
+
+        // Convert to chart format
+        const labels = [];
+        const scores = [];
+        Object.keys(dailyScores).sort().forEach(key => {
+            labels.push(dailyScores[key].dayName);
+            const avg = dailyScores[key].count > 0
+                ? Math.round(dailyScores[key].total / dailyScores[key].count)
+                : 0;
+            scores.push(avg);
+        });
+
+        return { labels, scores, hasData: attempts.length > 0 };
+
+    } catch (err) {
+        console.error("fetchQuizHistory error:", err);
+        return defaultData;
+    }
 }
 
 // --- UI UPDATES (GLOBAL SCOPE) ---
