@@ -145,7 +145,6 @@ function toggleAuthMode(mode) {
         switchText.innerHTML = `${t('noAccount')} <b class="text-amber cursor-pointer" onclick="toggleAuthMode('signup')">${t('signupBtn')}</b>`;
     }
 }
-    }
 }
 
 async function handleAuth(e) {
