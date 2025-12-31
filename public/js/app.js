@@ -834,9 +834,10 @@ function appendAIMessage(markdownText) {
 }
 
 // --- INIT ---
-function init() {
+async function init() {
     document.getElementById('app-logo').src = 'Koushole_White.svg';
-    checkAuth(); // Check auth state on load
+    await checkAuth(); // Check auth state on load
+    updateUI(); // Force immediate UI update after auth check
 
     // Load Real Data
     fetchLibraryBooks();
@@ -899,7 +900,7 @@ function updateUI() {
 
     // 2. Streak (Header + Profile)
     const streakValue = userMemory.day_streak || 0;
-    const streakText = `${streakValue} ${currentLang === 'bn' ? 'দিন' : 'Days'}`;
+    const streakText = `${streakValue} ${currentLang === 'bn' ? 'দিন' : 'Days'} `;
 
     // Update all data-key="streak" elements
     document.querySelectorAll('[data-key="streak"]').forEach(el => el.innerText = streakText);
@@ -918,7 +919,7 @@ function updateUI() {
 
     // 4. Accuracy
     const accEl = document.getElementById('accuracy-display');
-    if (accEl) accEl.innerText = `${userMemory.accuracy_percentage || 0}%`;
+    if (accEl) accEl.innerText = `${userMemory.accuracy_percentage || 0}% `;
 
     // 5. Update Profile Info (with Bangla support - FULL NAME)
     const pName = document.querySelector('#view-profile h2');
@@ -944,7 +945,7 @@ function updateUI() {
     if (weaknessCloud) {
         if (userMemory.weaknesses && userMemory.weaknesses.length > 0) {
             weaknessCloud.innerHTML = userMemory.weaknesses.map(w =>
-                `<span class="px-2 py-1 rounded-full bg-rose/10 text-rose text-xs border border-rose/30">${w}</span>`
+                `< span class="px-2 py-1 rounded-full bg-rose/10 text-rose text-xs border border-rose/30" > ${w}</span > `
             ).join('');
         } else {
             weaknessCloud.innerHTML = '<span class="text-xs text-text-secondary italic">Keep learning to discover focus areas!</span>';
@@ -955,7 +956,7 @@ function updateUI() {
     const badgesContainer = document.getElementById('badges-container');
     if (badgesContainer && userMemory.badges) {
         badgesContainer.innerHTML = userMemory.badges.map(b =>
-            `<span class="px-3 py-1 rounded-full bg-amber/10 text-amber text-xs border border-amber/30">${b}</span>`
+            `< span class="px-3 py-1 rounded-full bg-amber/10 text-amber text-xs border border-amber/30" > ${b}</span > `
         ).join('') || '<span class="text-xs text-text-secondary italic">Earn badges by completing quizzes!</span>';
     }
 
@@ -978,7 +979,7 @@ function updateUI() {
             const container = document.getElementById('needs-attention-container');
             if (container) {
                 container.innerHTML = userMemory.weaknesses.map(w => `
-                    <div class="group bg-surface rounded-xl p-4 border border-divider flex items-center justify-between transition-colors duration-300 hover:border-rose/30">
+        < div class="group bg-surface rounded-xl p-4 border border-divider flex items-center justify-between transition-colors duration-300 hover:border-rose/30" >
                         <div class="flex items-center gap-3">
                             <div class="w-10 h-10 rounded-lg bg-surface border border-rose/30 flex items-center justify-center text-rose transition-colors group-hover:bg-rose/10">
                                 <i class="fas fa-exclamation group-hover:rotate-12 transition-transform"></i>
@@ -992,8 +993,8 @@ function updateUI() {
                             class="px-4 py-2 rounded-full border border-amber text-amber text-xs font-bold hover:bg-amber hover:text-black transition-colors body-font">
                             Retry
                         </button>
-                    </div>
-                `).join('');
+                    </div >
+        `).join('');
             }
         }
     } else {
@@ -1018,8 +1019,8 @@ function updateChapters() {
     chapterSelect.innerHTML = '<option value="all" data-key="allChapters">All Chapters</option>';
 
     // Determine Group
-    const group = (userProfile.group || 'Science').toLowerCase(); 
-    
+    const group = (userProfile.group || 'Science').toLowerCase();
+
     // Combine group-specific subjects and common subjects
     let subjects = [];
     if (nctbCurriculum[group]) {
@@ -1040,9 +1041,9 @@ function updateChapters() {
     subjectSelect.onchange = () => {
         const selectedSubId = subjectSelect.value;
         const subData = subjects.find(s => s.id === selectedSubId);
-        
+
         chapterSelect.innerHTML = '<option value="all" data-key="allChapters">All Chapters</option>'; // Reset
-        
+
         if (subData && subData.chapters) {
             subData.chapters.forEach(chap => {
                 const opt = document.createElement('option');
