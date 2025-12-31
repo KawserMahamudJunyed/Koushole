@@ -716,6 +716,91 @@ function updateProfileUI() {
     updateGreeting();
 }
 
+// Badge definitions with icons and colors
+const BADGE_STYLES = {
+    first_quiz: {
+        icon: '🎯',
+        name: 'First Step',
+        nameBn: 'প্রথম পদক্ষেপ',
+        gradient: 'from-emerald-500 to-teal-600',
+        bgColor: 'bg-gradient-to-br from-emerald-500/20 to-teal-600/20',
+        borderColor: 'border-emerald-500/50',
+        textColor: 'text-emerald-400'
+    },
+    streak_3: {
+        icon: '🔥',
+        name: '3 Day Streak',
+        nameBn: '৩ দিন স্ট্রিক',
+        gradient: 'from-orange-500 to-red-600',
+        bgColor: 'bg-gradient-to-br from-orange-500/20 to-red-600/20',
+        borderColor: 'border-orange-500/50',
+        textColor: 'text-orange-400'
+    },
+    streak_7: {
+        icon: '⚔️',
+        name: 'Week Warrior',
+        nameBn: 'সাপ্তাহিক যোদ্ধা',
+        gradient: 'from-purple-500 to-indigo-600',
+        bgColor: 'bg-gradient-to-br from-purple-500/20 to-indigo-600/20',
+        borderColor: 'border-purple-500/50',
+        textColor: 'text-purple-400'
+    },
+    streak_30: {
+        icon: '👑',
+        name: 'Monthly Master',
+        nameBn: 'মাসিক মাস্টার',
+        gradient: 'from-amber-500 to-yellow-600',
+        bgColor: 'bg-gradient-to-br from-amber-500/20 to-yellow-600/20',
+        borderColor: 'border-amber-500/50',
+        textColor: 'text-amber'
+    },
+    perfect_quiz: {
+        icon: '💯',
+        name: 'Perfect Score',
+        nameBn: 'নিখুঁত স্কোর',
+        gradient: 'from-pink-500 to-rose-600',
+        bgColor: 'bg-gradient-to-br from-pink-500/20 to-rose-600/20',
+        borderColor: 'border-pink-500/50',
+        textColor: 'text-pink-400'
+    },
+    topic_master: {
+        icon: '🏆',
+        name: 'Topic Master',
+        nameBn: 'টপিক মাস্টার',
+        gradient: 'from-cyan-500 to-blue-600',
+        bgColor: 'bg-gradient-to-br from-cyan-500/20 to-blue-600/20',
+        borderColor: 'border-cyan-500/50',
+        textColor: 'text-cyan-400'
+    }
+};
+
+function renderBadge(badgeId) {
+    const style = BADGE_STYLES[badgeId] || {
+        icon: '⭐',
+        name: badgeId,
+        nameBn: badgeId,
+        bgColor: 'bg-surface',
+        borderColor: 'border-divider',
+        textColor: 'text-text-primary'
+    };
+
+    const displayName = currentLang === 'bn' ? style.nameBn : style.name;
+
+    return `
+        <div class="flex-shrink-0 w-20 group cursor-pointer transform hover:scale-105 transition-all duration-300">
+            <div class="relative">
+                <div class="${style.bgColor} ${style.borderColor} border-2 rounded-2xl p-3 flex flex-col items-center gap-2 shadow-lg hover:shadow-xl transition-shadow">
+                    <span class="text-3xl group-hover:animate-bounce">${style.icon}</span>
+                    <span class="${style.textColor} text-[10px] font-bold text-center leading-tight">${displayName}</span>
+                </div>
+                <div class="absolute -top-1 -right-1 w-4 h-4 bg-emerald-500 rounded-full flex items-center justify-center">
+                    <i class="fas fa-check text-white text-[8px]"></i>
+                </div>
+            </div>
+        </div>
+    `;
+}
+
 
 // --- CHAT LOGIC ---
 
@@ -1073,8 +1158,8 @@ function updateUI() {
     if (weaknessCloud) {
         if (userMemory.weaknesses && userMemory.weaknesses.length > 0) {
             weaknessCloud.innerHTML = userMemory.weaknesses.map(w =>
-                `< span class="px-2 py-1 rounded-full bg-rose/10 text-rose text-xs border border-rose/30" > ${w}</span > `
-            ).join('');
+                `<span class="px-2 py-1 rounded-full bg-rose/10 text-rose text-xs border border-rose/30">${w}</span>`
+            ).join(' ');
         } else {
             weaknessCloud.innerHTML = '<span class="text-xs text-text-secondary italic">Keep learning to discover focus areas!</span>';
         }
@@ -1082,10 +1167,12 @@ function updateUI() {
 
     // 8. Badges/Achievements
     const badgesContainer = document.getElementById('badges-container');
-    if (badgesContainer && userMemory.badges) {
-        badgesContainer.innerHTML = userMemory.badges.map(b =>
-            `< span class="px-3 py-1 rounded-full bg-amber/10 text-amber text-xs border border-amber/30" > ${b}</span > `
-        ).join('') || '<span class="text-xs text-text-secondary italic">Earn badges by completing quizzes!</span>';
+    if (badgesContainer) {
+        if (userMemory.badges && userMemory.badges.length > 0) {
+            badgesContainer.innerHTML = userMemory.badges.map(b => renderBadge(b)).join('');
+        } else {
+            badgesContainer.innerHTML = '<span class="text-xs text-text-secondary italic">Earn badges by completing quizzes!</span>';
+        }
     }
 
     // 9. Dashboard Dynamic Sections (show only if user has data)
