@@ -395,10 +395,12 @@ async function handleAuth(e) {
 }
 
 async function logout() {
+    console.log("Logging out...");
     if (window.supabaseClient) {
         await window.supabaseClient.auth.signOut();
     }
-    // Listener handles state update
+    // Force reload to clear all state
+    window.location.reload();
 }
 
 function updateGreeting() {
@@ -725,16 +727,16 @@ function updateUI() {
     const accEl = document.getElementById('accuracy-display');
     if (accEl) accEl.innerText = `${userMemory.accuracy_percentage || 0}%`;
 
-    // 5. Update Profile Info (with Bangla support)
+    // 5. Update Profile Info (with Bangla support - FULL NAME)
     const pName = document.querySelector('#view-profile h2');
     const pDetails = document.querySelector('#view-profile p.body-font');
 
-    // Use Bangla nickname if in Bangla mode, otherwise English
-    const displayNickname = currentLang === 'bn'
-        ? (userProfile.nicknameBn || userProfile.nickname || 'শিক্ষার্থী')
-        : (userProfile.nickname || userProfile.name || 'Student');
+    // Use Bangla full name if in Bangla mode, otherwise English full name
+    const displayName = currentLang === 'bn'
+        ? (userProfile.nameBn || userProfile.name || 'শিক্ষার্থী')
+        : (userProfile.name || 'Student');
 
-    if (pName) pName.innerText = displayNickname;
+    if (pName) pName.innerText = displayName;
     if (pDetails) pDetails.innerText = `Class ${userProfile.class || '10'} • ${userProfile.group || 'Science'} Group`;
 
     // 6. Update Initials (based on FULL NAME, not nickname)
