@@ -657,11 +657,12 @@
                     class="w-16 h-16 rounded-full bg-amber/10 flex items-center justify-center text-amber text-2xl mb-3 group-hover:scale-110 transition-transform">
                     <i class="fas fa-cloud-upload-alt"></i>
                 </div>
-                <p class="text-text-primary font-bold text-sm">Tap to Upload Book</p>
-                <p class="text-text-secondary text-xs mt-1">PDF, EPUB (Max 50MB)</p>
+                <p class="text-text-primary font-bold text-sm" data-key="tapUpload">Tap to Upload Book</p>
+                <p class="text-text-secondary text-xs mt-1" data-key="fileTypes">PDF, EPUB (Max 50MB)</p>
             </div>
 
-            <h3 class="text-text-secondary uppercase text-xs font-bold tracking-widest mb-4">Your Books</h3>
+            <h3 class="text-text-secondary uppercase text-xs font-bold tracking-widest mb-4" data-key="yourBooks">Your
+                Books</h3>
             <div class="space-y-3" id="library-list">
             </div>
         </div>
@@ -733,39 +734,46 @@
                 <div
                     class="bg-surface border border-divider rounded-xl p-3 text-center transition-colors hover:scale-105 transition-transform duration-200">
                     <p class="text-amber font-bold text-xl title-font" id="xp-display">0</p>
-                    <p class="text-[10px] text-text-secondary uppercase tracking-widest mt-1">Total XP</p>
+                    <p class="text-[10px] text-text-secondary uppercase tracking-widest mt-1" data-key="totalXP">Total
+                        XP</p>
                 </div>
                 <div
                     class="bg-surface border border-divider rounded-xl p-3 text-center transition-colors hover:scale-105 transition-transform duration-200">
                     <p class="text-emerald font-bold text-xl title-font" id="accuracy-display">0%</p>
-                    <p class="text-[10px] text-text-secondary uppercase tracking-widest mt-1">Accuracy</p>
+                    <p class="text-[10px] text-text-secondary uppercase tracking-widest mt-1" data-key="accuracy">
+                        Accuracy</p>
                 </div>
                 <div
                     class="bg-surface border border-divider rounded-xl p-3 text-center transition-colors hover:scale-105 transition-transform duration-200">
                     <p class="text-orange font-bold text-xl title-font" id="streak-profile-display">0</p>
-                    <p class="text-[10px] text-text-secondary uppercase tracking-widest mt-1">Day Streak</p>
+                    <p class="text-[10px] text-text-secondary uppercase tracking-widest mt-1" data-key="dayStreak">Day
+                        Streak</p>
                 </div>
             </div>
 
             <div class="mb-8">
-                <h3 class="text-text-primary font-bold title-font text-lg mb-3">Focus Areas</h3>
+                <h3 class="text-text-primary font-bold title-font text-lg mb-3" data-key="focusAreas">Focus Areas</h3>
                 <div id="weakness-cloud" class="flex flex-wrap gap-2">
-                    <span class="text-xs text-text-secondary italic">No weaknesses detected yet. Keep learning!</span>
+                    <span class="text-xs text-text-secondary italic" data-key="noWeaknesses">No weaknesses detected yet.
+                        Keep learning!</span>
                 </div>
             </div>
 
             <div class="mb-8">
                 <div class="flex justify-between items-center mb-3">
-                    <h3 class="text-text-primary font-bold title-font text-lg">Achievements</h3>
-                    <span class="text-amber text-xs font-bold cursor-pointer hover:underline">View All</span>
+                    <h3 class="text-text-primary font-bold title-font text-lg" data-key="achievements">Achievements</h3>
+                    <span class="text-amber text-xs font-bold cursor-pointer hover:underline" data-key="viewAll">View
+                        All</span>
                 </div>
                 <div id="badges-container" class="flex gap-4 overflow-x-auto pb-2 no-scrollbar">
-                    <span class="text-xs text-text-secondary italic">Complete quizzes to earn badges!</span>
+                    <span class="text-xs text-text-secondary italic" data-key="earnBadges">Complete quizzes to earn
+                        badges!</span>
                 </div>
             </div>
 
             <div class="space-y-2">
-                <h3 class="text-text-secondary uppercase text-xs font-bold tracking-widest mb-2 pl-1">Account</h3>
+                <h3 class="text-text-secondary uppercase text-xs font-bold tracking-widest mb-2 pl-1"
+                    data-key="account">Account</h3>
 
                 <div class="bg-surface border border-divider rounded-xl overflow-hidden transition-colors">
                     <div

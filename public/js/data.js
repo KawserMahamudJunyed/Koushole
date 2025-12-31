@@ -89,7 +89,23 @@ const translations = {
         greetNight: "Good Night",
         // Remember Me & Forgot Password
         rememberMe: "Remember me",
-        forgotPassword: "Forgot Password?"
+        forgotPassword: "Forgot Password?",
+        // Profile Section
+        totalXP: "Total XP",
+        accuracy: "Accuracy",
+        dayStreak: "Day Streak",
+        focusAreas: "Focus Areas",
+        noWeaknesses: "No weaknesses detected yet. Keep learning!",
+        achievements: "Achievements",
+        viewAll: "View All",
+        earnBadges: "Complete quizzes to earn badges!",
+        account: "Account",
+        // Library Section
+        tapUpload: "Tap to Upload Book",
+        fileTypes: "PDF, EPUB (Max 50MB)",
+        yourBooks: "Your Books",
+        loading: "Loading...",
+        topic: "Topic"
     },
     bn: {
         appName: "কৌশলে",
@@ -180,7 +196,23 @@ const translations = {
         greetNight: "শুভ রাত্রি",
         // Remember Me & Forgot Password
         rememberMe: "মনে রাখুন",
-        forgotPassword: "পাসওয়ার্ড ভুলে গেছেন?"
+        forgotPassword: "পাসওয়ার্ড ভুলে গেছেন?",
+        // Profile Section
+        totalXP: "মোট XP",
+        accuracy: "নির্ভুলতা",
+        dayStreak: "দিন স্ট্রিক",
+        focusAreas: "ফোকাস এরিয়া",
+        noWeaknesses: "এখনও কোনো দুর্বলতা চিহ্নিত হয়নি। শেখা চালিয়ে যাও!",
+        achievements: "অর্জনসমূহ",
+        viewAll: "সব দেখুন",
+        earnBadges: "ব্যাজ পেতে কুইজ সম্পন্ন করুন!",
+        account: "একাউন্ট",
+        // Library Section
+        tapUpload: "বই আপলোড করতে ট্যাপ করুন",
+        fileTypes: "PDF, EPUB (সর্বোচ্চ ৫০MB)",
+        yourBooks: "আপনার বইগুলো",
+        loading: "লোড হচ্ছে...",
+        topic: "টপিক"
     }
 };
 
