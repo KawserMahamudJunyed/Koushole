@@ -443,228 +443,228 @@
                     </button>
                 </div>
             </div>
+        </div>
+        </div>
 
-            <div id="view-quiz" class="hidden min-h-full flex flex-col p-5 pb-24">
+        <div id="view-quiz" class="hidden min-h-full flex flex-col p-5 pb-24">
 
-                <!-- Quiz Empty State - shows when no quiz active -->
-                <div id="quiz-empty-state" class="flex-1 flex flex-col items-center justify-center text-center py-8">
-                    <div class="w-20 h-20 bg-amber/10 rounded-full flex items-center justify-center mb-4">
-                        <i class="fas fa-brain text-amber text-3xl"></i>
-                    </div>
-                    <h3 class="text-text-primary font-bold text-lg title-font mb-2" data-key="readyToLearn">Ready to
-                        Learn?</h3>
-                    <p class="text-text-secondary text-sm mb-4 body-font" data-key="selectTopic">Select a topic and
-                        start a quiz.</p>
-                    <button onclick="openQuizConfig()"
-                        class="px-6 py-3 bg-amber text-black font-bold rounded-xl shadow-amber-glow hover:scale-105 active:scale-95 transition-transform">
-                        <i class="fas fa-play mr-2"></i> <span data-key="startQuiz">Start Quiz</span>
-                    </button>
+            <!-- Quiz Empty State - shows when no quiz active -->
+            <div id="quiz-empty-state" class="flex-1 flex flex-col items-center justify-center text-center py-8">
+                <div class="w-20 h-20 bg-amber/10 rounded-full flex items-center justify-center mb-4">
+                    <i class="fas fa-brain text-amber text-3xl"></i>
                 </div>
+                <h3 class="text-text-primary font-bold text-lg title-font mb-2" data-key="readyToLearn">Ready to
+                    Learn?</h3>
+                <p class="text-text-secondary text-sm mb-4 body-font" data-key="selectTopic">Select a topic and
+                    start a quiz.</p>
+                <button onclick="openQuizConfig()"
+                    class="px-6 py-3 bg-amber text-black font-bold rounded-xl shadow-amber-glow hover:scale-105 active:scale-95 transition-transform">
+                    <i class="fas fa-play mr-2"></i> <span data-key="startQuiz">Start Quiz</span>
+                </button>
+            </div>
 
-                <div id="quiz-loading" class="hidden h-full flex flex-col items-center justify-center space-y-6">
-                    <div class="quiz-loader-container">
-                        <div class="open-book"></div>
-                        <div class="book-pages">
-                            <div class="page-sheet"></div>
-                            <div class="page-sheet"></div>
-                            <div class="page-sheet"></div>
-                        </div>
-                    </div>
-                    <div class="text-center mt-4">
-                        <h3 class="text-xl font-bold text-text-primary animate-pulse" data-key="designing">Designing
-                            Quiz...
-                        </h3>
-                        <p class="text-sm text-text-secondary" data-key="aiPrep">AI is preparing your materials...</p>
+            <div id="quiz-loading" class="hidden h-full flex flex-col items-center justify-center space-y-6">
+                <div class="quiz-loader-container">
+                    <div class="open-book"></div>
+                    <div class="book-pages">
+                        <div class="page-sheet"></div>
+                        <div class="page-sheet"></div>
+                        <div class="page-sheet"></div>
                     </div>
                 </div>
+                <div class="text-center mt-4">
+                    <h3 class="text-xl font-bold text-text-primary animate-pulse" data-key="designing">Designing
+                        Quiz...
+                    </h3>
+                    <p class="text-sm text-text-secondary" data-key="aiPrep">AI is preparing your materials...</p>
+                </div>
+            </div>
 
-                <div id="quiz-content" class="hidden flex-1 flex flex-col">
-                    <div class="mb-6">
-                        <div
-                            class="flex justify-between text-xs text-text-secondary mb-2 uppercase tracking-wider body-font transition-colors">
-                            <span id="quiz-counter">Question 1/5</span>
-                            <span id="streak-badge" class="hidden text-orange animate-pulse" data-key="streakRisk">🔥
-                                Streak
-                                at risk!</span>
-                        </div>
-                        <div class="w-full bg-divider rounded-full h-1.5 overflow-hidden transition-colors">
-                            <div id="quiz-progress"
-                                class="bg-amber h-full w-[20%] transition-all duration-500 ease-out">
-                            </div>
+            <div id="quiz-content" class="hidden flex-1 flex flex-col">
+                <div class="mb-6">
+                    <div
+                        class="flex justify-between text-xs text-text-secondary mb-2 uppercase tracking-wider body-font transition-colors">
+                        <span id="quiz-counter">Question 1/5</span>
+                        <span id="streak-badge" class="hidden text-orange animate-pulse" data-key="streakRisk">🔥
+                            Streak
+                            at risk!</span>
+                    </div>
+                    <div class="w-full bg-divider rounded-full h-1.5 overflow-hidden transition-colors">
+                        <div id="quiz-progress" class="bg-amber h-full w-[20%] transition-all duration-500 ease-out">
                         </div>
                     </div>
+                </div>
 
-                    <div class="flex-1 flex flex-col justify-center gap-6">
-                        <div
-                            class="bg-surface border border-divider p-6 rounded-2xl shadow-lg transition-colors duration-300 relative">
-                            <span id="question-type-badge"
-                                class="absolute top-4 right-4 text-[10px] bg-divider px-2 py-1 rounded-full text-text-secondary uppercase tracking-widest font-bold">MCQ</span>
+                <div class="flex-1 flex flex-col justify-center gap-6">
+                    <div
+                        class="bg-surface border border-divider p-6 rounded-2xl shadow-lg transition-colors duration-300 relative">
+                        <span id="question-type-badge"
+                            class="absolute top-4 right-4 text-[10px] bg-divider px-2 py-1 rounded-full text-text-secondary uppercase tracking-widest font-bold">MCQ</span>
 
-                            <span id="quiz-topic-display"
-                                class="text-sky text-xs font-bold uppercase tracking-wide mb-2 block body-font">Topic</span>
-                            <h2 id="quiz-question-text"
-                                class="text-2xl md:text-3xl font-bold text-text-primary leading-relaxed question-font transition-colors">
-                                Loading question...
-                            </h2>
-                            <p id="quiz-hint-text"
-                                class="text-text-secondary text-sm mt-4 italic border-l-2 border-divider pl-3 body-font transition-colors hidden">
+                        <span id="quiz-topic-display"
+                            class="text-sky text-xs font-bold uppercase tracking-wide mb-2 block body-font">Topic</span>
+                        <h2 id="quiz-question-text"
+                            class="text-2xl md:text-3xl font-bold text-text-primary leading-relaxed question-font transition-colors">
+                            Loading question...
+                        </h2>
+                        <p id="quiz-hint-text"
+                            class="text-text-secondary text-sm mt-4 italic border-l-2 border-divider pl-3 body-font transition-colors hidden">
+                        </p>
+                    </div>
+
+                    <div class="flex flex-col gap-3 body-font w-full" id="input-container">
+                    </div>
+                </div>
+
+                <div id="feedback-area" class="mt-4 hidden animate-fade-in-up pb-4">
+                    <div class="bg-sky/10 border border-sky/30 rounded-xl p-4 flex gap-3">
+                        <i class="fas fa-lightbulb text-sky mt-1"></i>
+                        <div>
+                            <h4 class="text-sky font-bold text-lg title-font" data-key="didYouKnow">Explanation</h4>
+                            <p id="explanation-text"
+                                class="text-text-secondary text-xs mt-1 body-font transition-colors">
                             </p>
                         </div>
-
-                        <div class="flex flex-col gap-3 body-font w-full" id="input-container">
-                        </div>
                     </div>
-
-                    <div id="feedback-area" class="mt-4 hidden animate-fade-in-up pb-4">
-                        <div class="bg-sky/10 border border-sky/30 rounded-xl p-4 flex gap-3">
-                            <i class="fas fa-lightbulb text-sky mt-1"></i>
-                            <div>
-                                <h4 class="text-sky font-bold text-lg title-font" data-key="didYouKnow">Explanation</h4>
-                                <p id="explanation-text"
-                                    class="text-text-secondary text-xs mt-1 body-font transition-colors">
-                                </p>
-                            </div>
-                        </div>
-                        <div class="flex gap-2 mt-4">
-                            <button onclick="nextQuestion()"
-                                class="w-full bg-amber text-black font-bold py-3.5 rounded-xl shadow-amber-glow active:scale-95 transition-transform body-font hover:scale-105">
-                                <span data-key="nextQBtn">Next Question</span> <i class="fas fa-arrow-right ml-2"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <div id="quiz-results"
-                    class="hidden h-full flex flex-col items-center justify-center fade-in text-center p-4">
-                    <div
-                        class="w-24 h-24 rounded-full bg-amber/20 flex items-center justify-center text-amber text-4xl mb-4 shadow-amber-glow animate-float">
-                        <i class="fas fa-trophy"></i>
-                    </div>
-                    <h2 class="text-3xl font-bold text-text-primary title-font mb-2" data-key="quizComp">Quiz Completed!
-                    </h2>
-                    <p class="text-text-secondary text-sm mb-6" data-key="quizCompSub">Great job! You've mastered some
-                        new
-                        concepts.</p>
-
-                    <div class="bg-surface border border-divider rounded-xl p-6 w-full max-w-xs mb-8">
-                        <div class="grid grid-cols-2 gap-4">
-                            <div class="text-center border-r border-divider">
-                                <div class="text-2xl font-bold text-emerald" id="result-score">80%</div>
-                                <div class="text-[10px] uppercase text-text-secondary tracking-widest" data-key="score">
-                                    Score</div>
-                            </div>
-                            <div class="text-center">
-                                <div class="text-2xl font-bold text-amber">+50</div>
-                                <div class="text-[10px] uppercase text-text-secondary tracking-widest"
-                                    data-key="xpEarned">
-                                    XP Earned</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="w-full max-w-xs space-y-3">
-                        <button onclick="openQuizConfig()"
-                            class="w-full bg-amber text-black font-bold py-3.5 rounded-xl shadow-amber-glow hover:scale-[1.02] active:scale-95 transition-transform flex items-center justify-center gap-2">
-                            <i class="fas fa-redo"></i> <span data-key="startNew">Start New Quiz</span>
-                        </button>
-                        <button onclick="switchTab('dashboard')"
-                            class="w-full bg-surface border border-divider text-text-primary font-bold py-3.5 rounded-xl hover:bg-divider/50 active:scale-95 transition-transform"
-                            data-key="backHome">
-                            Back to Home
+                    <div class="flex gap-2 mt-4">
+                        <button onclick="nextQuestion()"
+                            class="w-full bg-amber text-black font-bold py-3.5 rounded-xl shadow-amber-glow active:scale-95 transition-transform body-font hover:scale-105">
+                            <span data-key="nextQBtn">Next Question</span> <i class="fas fa-arrow-right ml-2"></i>
                         </button>
                     </div>
                 </div>
-
             </div>
 
-            <div id="view-chat" class="hidden h-full flex flex-col relative">
+            <div id="quiz-results"
+                class="hidden h-full flex flex-col items-center justify-center fade-in text-center p-4">
                 <div
-                    class="p-4 border-b border-divider bg-surface/50 backdrop-blur sticky top-0 z-10 text-center transition-colors">
-                    <p class="text-amber font-bold text-lg title-font" data-key="chatHeader">Koushole AI Tutor</p>
-                    <p class="text-text-secondary text-[10px] body-font transition-colors" data-key="chatSub">Powered by
-                        Koushole AI</p>
+                    class="w-24 h-24 rounded-full bg-amber/20 flex items-center justify-center text-amber text-4xl mb-4 shadow-amber-glow animate-float">
+                    <i class="fas fa-trophy"></i>
                 </div>
-
-                <div id="chat-messages" class="flex-1 overflow-y-auto p-4 space-y-4 body-font">
-                    <div class="flex gap-3 group">
-                        <div
-                            class="w-8 h-8 rounded-full bg-amber/20 border border-amber/50 flex items-center justify-center text-amber text-xs">
-                            <i class="fas fa-robot group-hover:animate-bounce"></i>
-                        </div>
-                        <div
-                            class="bg-surface border border-divider text-text-primary p-3 rounded-2xl rounded-tl-none max-w-[85%] text-sm leading-relaxed shadow-sm transition-colors prose prose-invert prose-sm">
-                            <span data-key="aiMsg1">Hello! I'm your AI Tutor. How can I help you learn today?</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div id="attachment-preview" class="hidden px-5 py-2 flex gap-2 overflow-x-auto">
-                </div>
-
-                <div class="w-full pb-24 sm:pb-6 px-5 pt-2 bg-transparent">
-                    <div
-                        class="bg-surface border border-divider rounded-2xl p-2 flex items-center gap-2 shadow-xl transition-colors relative">
-                        <button onclick="document.getElementById('file-upload-input').click()"
-                            class="w-10 h-10 rounded-full bg-surface border border-divider flex items-center justify-center text-text-secondary hover:text-amber transition-colors hover:scale-110 active:scale-90 transition-transform shrink-0"
-                            title="Attach File">
-                            <i class="fas fa-paperclip hover:rotate-12 transition-transform"></i>
-                        </button>
-                        <button onclick="document.getElementById('image-upload-input').click()"
-                            class="w-10 h-10 rounded-full bg-surface border border-divider flex items-center justify-center text-text-secondary hover:text-amber transition-colors hover:scale-110 active:scale-90 transition-transform shrink-0"
-                            title="Upload Image">
-                            <i class="fas fa-image hover:rotate-12 transition-transform"></i>
-                        </button>
-
-                        <div class="relative flex-1">
-                            <input type="text" id="chat-input" placeholder="Ask about Physics, Math..."
-                                class="w-full bg-midnight border border-divider rounded-full py-3 pl-5 pr-12 text-text-primary focus:outline-none focus:border-amber focus:ring-1 focus:ring-amber transition-all placeholder:text-text-secondary/50 body-font">
-
-                            <button id="mic-btn" onclick="toggleVoiceRecording('chat-input')"
-                                class="absolute right-3 top-1/2 -translate-y-1/2 text-text-secondary hover:text-amber transition-colors hover:scale-110 active:scale-90 transition-transform rounded-full">
-                                <i class="fas fa-microphone hover:rotate-12 transition-transform"></i>
-                            </button>
-                        </div>
-
-                        <button onclick="sendMessage()"
-                            class="group h-10 w-10 bg-amber rounded-full flex items-center justify-center text-black hover:bg-amber-deep transition-colors shadow-lg hover:-translate-y-1 hover:translate-x-1 transition-transform shrink-0">
-                            <i class="fas fa-paper-plane text-xs"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Quiz Results -->
-            <div id="quiz-results" class="hidden h-full flex flex-col items-center justify-center p-5 text-center">
-                <div class="w-24 h-24 bg-amber/10 rounded-full flex items-center justify-center mb-6">
-                    <i class="fas fa-trophy text-amber text-4xl animate-bounce"></i>
-                </div>
-                <h2 class="text-2xl font-bold text-text-primary mb-2 title-font" data-key="quizComplete">Quiz Complete!
+                <h2 class="text-3xl font-bold text-text-primary title-font mb-2" data-key="quizComp">Quiz Completed!
                 </h2>
-                <p class="text-text-secondary mb-6 body-font" id="results-message">Great job keeping up your streak!</p>
+                <p class="text-text-secondary text-sm mb-6" data-key="quizCompSub">Great job! You've mastered some
+                    new
+                    concepts.</p>
 
-                <div class="grid grid-cols-2 gap-4 w-full mb-8">
-                    <div class="bg-surface border border-divider rounded-xl p-4">
-                        <p class="text-text-secondary text-xs uppercase tracking-wider mb-1" data-key="score">Score</p>
-                        <p class="text-2xl font-bold text-amber title-font" id="results-score">0</p>
-                    </div>
-                    <div class="bg-surface border border-divider rounded-xl p-4">
-                        <p class="text-text-secondary text-xs uppercase tracking-wider mb-1" data-key="xpEarned">XP
-                            Earned</p>
-                        <p class="text-2xl font-bold text-emerald title-font" id="results-xp">+0</p>
+                <div class="bg-surface border border-divider rounded-xl p-6 w-full max-w-xs mb-8">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="text-center border-r border-divider">
+                            <div class="text-2xl font-bold text-emerald" id="result-score">80%</div>
+                            <div class="text-[10px] uppercase text-text-secondary tracking-widest" data-key="score">
+                                Score</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-2xl font-bold text-amber">+50</div>
+                            <div class="text-[10px] uppercase text-text-secondary tracking-widest" data-key="xpEarned">
+                                XP Earned</div>
+                        </div>
                     </div>
                 </div>
 
-                <div class="flex gap-4 w-full">
-                    <button onclick="switchTab('dashboard')"
-                        class="flex-1 py-3 rounded-xl border border-divider text-text-primary font-bold hover:bg-white/5 transition-colors">
-                        Home
-                    </button>
+                <div class="w-full max-w-xs space-y-3">
                     <button onclick="openQuizConfig()"
-                        class="flex-1 py-3 rounded-xl bg-amber text-black font-bold shadow-amber-glow hover:scale-[1.02] transition-transform">
-                        Another Quiz
+                        class="w-full bg-amber text-black font-bold py-3.5 rounded-xl shadow-amber-glow hover:scale-[1.02] active:scale-95 transition-transform flex items-center justify-center gap-2">
+                        <i class="fas fa-redo"></i> <span data-key="startNew">Start New Quiz</span>
+                    </button>
+                    <button onclick="switchTab('dashboard')"
+                        class="w-full bg-surface border border-divider text-text-primary font-bold py-3.5 rounded-xl hover:bg-divider/50 active:scale-95 transition-transform"
+                        data-key="backHome">
+                        Back to Home
                     </button>
                 </div>
             </div>
+
+        </div>
+
+        <div id="view-chat" class="hidden h-full flex flex-col relative">
+            <div
+                class="p-4 border-b border-divider bg-surface/50 backdrop-blur sticky top-0 z-10 text-center transition-colors">
+                <p class="text-amber font-bold text-lg title-font" data-key="chatHeader">Koushole AI Tutor</p>
+                <p class="text-text-secondary text-[10px] body-font transition-colors" data-key="chatSub">Powered by
+                    Koushole AI</p>
+            </div>
+
+            <div id="chat-messages" class="flex-1 overflow-y-auto p-4 space-y-4 body-font">
+                <div class="flex gap-3 group">
+                    <div
+                        class="w-8 h-8 rounded-full bg-amber/20 border border-amber/50 flex items-center justify-center text-amber text-xs">
+                        <i class="fas fa-robot group-hover:animate-bounce"></i>
+                    </div>
+                    <div
+                        class="bg-surface border border-divider text-text-primary p-3 rounded-2xl rounded-tl-none max-w-[85%] text-sm leading-relaxed shadow-sm transition-colors prose prose-invert prose-sm">
+                        <span data-key="aiMsg1">Hello! I'm your AI Tutor. How can I help you learn today?</span>
+                    </div>
+                </div>
+            </div>
+
+            <div id="attachment-preview" class="hidden px-5 py-2 flex gap-2 overflow-x-auto">
+            </div>
+
+            <div class="w-full pb-24 sm:pb-6 px-5 pt-2 bg-transparent">
+                <div
+                    class="bg-surface border border-divider rounded-2xl p-2 flex items-center gap-2 shadow-xl transition-colors relative">
+                    <button onclick="document.getElementById('file-upload-input').click()"
+                        class="w-10 h-10 rounded-full bg-surface border border-divider flex items-center justify-center text-text-secondary hover:text-amber transition-colors hover:scale-110 active:scale-90 transition-transform shrink-0"
+                        title="Attach File">
+                        <i class="fas fa-paperclip hover:rotate-12 transition-transform"></i>
+                    </button>
+                    <button onclick="document.getElementById('image-upload-input').click()"
+                        class="w-10 h-10 rounded-full bg-surface border border-divider flex items-center justify-center text-text-secondary hover:text-amber transition-colors hover:scale-110 active:scale-90 transition-transform shrink-0"
+                        title="Upload Image">
+                        <i class="fas fa-image hover:rotate-12 transition-transform"></i>
+                    </button>
+
+                    <div class="relative flex-1">
+                        <input type="text" id="chat-input" placeholder="Ask about Physics, Math..."
+                            class="w-full bg-midnight border border-divider rounded-full py-3 pl-5 pr-12 text-text-primary focus:outline-none focus:border-amber focus:ring-1 focus:ring-amber transition-all placeholder:text-text-secondary/50 body-font">
+
+                        <button id="mic-btn" onclick="toggleVoiceRecording('chat-input')"
+                            class="absolute right-3 top-1/2 -translate-y-1/2 text-text-secondary hover:text-amber transition-colors hover:scale-110 active:scale-90 transition-transform rounded-full">
+                            <i class="fas fa-microphone hover:rotate-12 transition-transform"></i>
+                        </button>
+                    </div>
+
+                    <button onclick="sendMessage()"
+                        class="group h-10 w-10 bg-amber rounded-full flex items-center justify-center text-black hover:bg-amber-deep transition-colors shadow-lg hover:-translate-y-1 hover:translate-x-1 transition-transform shrink-0">
+                        <i class="fas fa-paper-plane text-xs"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quiz Results -->
+        <div id="quiz-results" class="hidden h-full flex flex-col items-center justify-center p-5 text-center">
+            <div class="w-24 h-24 bg-amber/10 rounded-full flex items-center justify-center mb-6">
+                <i class="fas fa-trophy text-amber text-4xl animate-bounce"></i>
+            </div>
+            <h2 class="text-2xl font-bold text-text-primary mb-2 title-font" data-key="quizComplete">Quiz Complete!
+            </h2>
+            <p class="text-text-secondary mb-6 body-font" id="results-message">Great job keeping up your streak!</p>
+
+            <div class="grid grid-cols-2 gap-4 w-full mb-8">
+                <div class="bg-surface border border-divider rounded-xl p-4">
+                    <p class="text-text-secondary text-xs uppercase tracking-wider mb-1" data-key="score">Score</p>
+                    <p class="text-2xl font-bold text-amber title-font" id="results-score">0</p>
+                </div>
+                <div class="bg-surface border border-divider rounded-xl p-4">
+                    <p class="text-text-secondary text-xs uppercase tracking-wider mb-1" data-key="xpEarned">XP
+                        Earned</p>
+                    <p class="text-2xl font-bold text-emerald title-font" id="results-xp">+0</p>
+                </div>
+            </div>
+
+            <div class="flex gap-4 w-full">
+                <button onclick="switchTab('dashboard')"
+                    class="flex-1 py-3 rounded-xl border border-divider text-text-primary font-bold hover:bg-white/5 transition-colors">
+                    Home
+                </button>
+                <button onclick="openQuizConfig()"
+                    class="flex-1 py-3 rounded-xl bg-amber text-black font-bold shadow-amber-glow hover:scale-[1.02] transition-transform">
+                    Another Quiz
+                </button>
+            </div>
+        </div>
         </div>
 
         <div id="view-library" class="hidden h-full flex flex-col p-5 fade-in overflow-y-auto pb-24">
