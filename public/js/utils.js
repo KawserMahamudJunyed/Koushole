@@ -144,22 +144,66 @@ function setLanguage(lang) {
 }
 
 // --- VIEW NAVIGATION ---
+// --- VIEW NAVIGATION ---
 function switchTab(viewName) {
-    // Special handling for Quiz Tab: Show Config if no quiz running
-    if (viewName === 'quiz') {
-        const quizContent = document.getElementById('quiz-content');
-        const quizResults = document.getElementById('quiz-results');
-        // Check if hidden or empty and NO results showing
-        if ((quizContent.classList.contains('hidden') || quizContent.innerHTML.trim() === '') && quizResults.classList.contains('hidden')) {
-            openQuizConfig();
-            return;
-        }
-    }
+    try {
+        console.log(`Switching to tab: ${viewName}`);
 
-    ['dashboard', 'quiz', 'chat', 'profile', 'library'].forEach(v => {
-        document.getElementById('view-' + v).classList.add('hidden');
-        document.getElementById('nav-' + v).classList.remove('active', 'text-amber');
-    });
-    document.getElementById('view-' + viewName).classList.remove('hidden');
-    document.getElementById('nav-' + viewName).classList.add('active', 'text-amber');
+        // Special handling for Quiz Tab: Show Config if no quiz running
+        if (viewName === 'quiz') {
+            const quizContent = document.getElementById('quiz-content');
+            const quizResults = document.getElementById('quiz-results');
+
+            // Check if ANY required element is missing
+            if (!quizContent) {
+                console.error("Critical: #quiz-content not found!");
+                return;
+            }
+            // If quiz results missing, just log but continue if possible (or stop if critical)
+            if (!quizResults) {
+                console.error("Critical: #quiz-results not found!");
+                // Assuming we fixed HTML, this shouldn't happen, but safety first
+            }
+
+            // Check if hidden or empty and NO results showing
+            if (quizContent && quizResults) {
+                if ((quizContent.classList.contains('hidden') || quizContent.innerHTML.trim() === '') && quizResults.classList.contains('hidden')) {
+                    if (typeof openQuizConfig === 'function') {
+                        openQuizConfig();
+                    } else {
+                        console.error("openQuizConfig function not found!");
+                    }
+                    return;
+                }
+            }
+        }
+
+        const tabs = ['dashboard', 'quiz', 'chat', 'profile', 'library'];
+        tabs.forEach(v => {
+            const viewEl = document.getElementById('view-' + v);
+            const navEl = document.getElementById('nav-' + v);
+
+            if (viewEl) viewEl.classList.add('hidden');
+            if (navEl) navEl.classList.remove('active', 'text-amber');
+        });
+
+        const targetView = document.getElementById('view-' + viewName);
+        const targetNav = document.getElementById('nav-' + viewName);
+
+        if (targetView) {
+            targetView.classList.remove('hidden');
+            // Force display style if needed, but Tailwind 'hidden' is usually enough
+        } else {
+            console.error(`View element #view-${viewName} not found!`);
+        }
+
+        if (targetNav) {
+            targetNav.classList.add('active', 'text-amber');
+        } else {
+            console.error(`Nav element #nav-${viewName} not found!`);
+        }
+
+    } catch (e) {
+        console.error("Error in switchTab:", e);
+    }
 }

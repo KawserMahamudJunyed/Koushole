@@ -634,224 +634,256 @@
                 </div>
             </div>
 
-            <div id="view-library" class="hidden h-full flex flex-col p-5 fade-in overflow-y-auto pb-24">
-                <div class="mb-6">
-                    <h1 class="text-3xl font-bold text-text-primary title-font transition-colors"
-                        data-key="libraryTitle">
-                        Custom Library</h1>
-                    <p class="text-text-secondary text-sm mt-1 body-font transition-colors" data-key="librarySubtitle">
-                        Upload books to create your own quizzes.</p>
+            <!-- Quiz Results -->
+            <div id="quiz-results" class="hidden h-full flex flex-col items-center justify-center p-5 text-center">
+                <div class="w-24 h-24 bg-amber/10 rounded-full flex items-center justify-center mb-6">
+                    <i class="fas fa-trophy text-amber text-4xl animate-bounce"></i>
                 </div>
+                <h2 class="text-2xl font-bold text-text-primary mb-2 title-font" data-key="quizComplete">Quiz Complete!
+                </h2>
+                <p class="text-text-secondary mb-6 body-font" id="results-message">Great job keeping up your streak!</p>
 
-                <div onclick="document.getElementById('book-upload-input').click()"
-                    class="border-2 border-dashed border-divider rounded-2xl p-8 flex flex-col items-center justify-center mb-8 hover:border-amber transition-colors cursor-pointer group bg-surface/50">
-                    <div
-                        class="w-16 h-16 rounded-full bg-amber/10 flex items-center justify-center text-amber text-2xl mb-3 group-hover:scale-110 transition-transform">
-                        <i class="fas fa-cloud-upload-alt"></i>
+                <div class="grid grid-cols-2 gap-4 w-full mb-8">
+                    <div class="bg-surface border border-divider rounded-xl p-4">
+                        <p class="text-text-secondary text-xs uppercase tracking-wider mb-1" data-key="score">Score</p>
+                        <p class="text-2xl font-bold text-amber title-font" id="results-score">0</p>
                     </div>
-                    <p class="text-text-primary font-bold text-sm" data-key="tapUpload">Tap to Upload Book</p>
-                    <p class="text-text-secondary text-xs mt-1" data-key="fileTypes">PDF, EPUB (Max 50MB)</p>
-                </div>
-
-                <h3 class="text-text-secondary uppercase text-xs font-bold tracking-widest mb-4" data-key="yourBooks">
-                    Your
-                    Books</h3>
-                <div class="space-y-3" id="library-list">
-                    <div class="text-center text-text-secondary text-sm py-8">
-                        <i class="fas fa-book-open text-4xl mb-4 opacity-50"></i>
-                        <p data-key="noBooksYet">No books uploaded yet. Upload a book above to get started!</p>
+                    <div class="bg-surface border border-divider rounded-xl p-4">
+                        <p class="text-text-secondary text-xs uppercase tracking-wider mb-1" data-key="xpEarned">XP
+                            Earned</p>
+                        <p class="text-2xl font-bold text-emerald title-font" id="results-xp">+0</p>
                     </div>
                 </div>
-            </div>
 
-            <div id="quiz-setup-modal"
-                class="fixed inset-0 z-50 hidden flex items-center justify-center modal-overlay p-5 fade-in">
-                <div class="bg-surface border border-divider rounded-2xl w-full max-w-sm p-6 relative shadow-2xl">
-                    <button onclick="closeQuizConfig()"
-                        class="absolute top-4 right-4 text-text-secondary hover:text-amber transition-colors">
-                        <i class="fas fa-times text-lg"></i>
+                <div class="flex gap-4 w-full">
+                    <button onclick="switchTab('dashboard')"
+                        class="flex-1 py-3 rounded-xl border border-divider text-text-primary font-bold hover:bg-white/5 transition-colors">
+                        Home
                     </button>
-
-                    <div class="text-center mb-6">
-                        <div
-                            class="w-12 h-12 rounded-full bg-amber/10 text-amber flex items-center justify-center mx-auto mb-3">
-                            <i class="fas fa-sliders-h text-xl"></i>
-                        </div>
-                        <h3 class="text-text-primary font-bold text-xl title-font" data-key="configQuizTitle">Configure
-                            Quiz
-                        </h3>
-                        <p class="text-text-secondary text-xs mt-1" id="modal-book-title">Custom Setup</p>
-                    </div>
-
-                    <div class="space-y-4">
-                        <div>
-                            <label class="text-text-secondary text-[10px] uppercase font-bold tracking-wider mb-1 block"
-                                data-key="configSubject">Subject / Source</label>
-                            <select id="config-subject" onchange="updateChapters()"
-                                class="w-full bg-midnight border border-divider rounded-lg p-3 text-text-primary text-sm focus:border-amber outline-none mb-2">
-                                <option value="Physics">Physics</option>
-                                <option value="Chemistry">Chemistry</option>
-                                <option value="Biology">Biology</option>
-                                <option value="Mathematics">Mathematics</option>
-                                <option value="English">English</option>
-                                <option value="General Knowledge">General Knowledge</option>
-                            </select>
-                        </div>
-
-                        <div id="topic-container">
-                            <label class="text-text-secondary text-[10px] uppercase font-bold tracking-wider mb-1 block"
-                                data-key="configChapters">Available Chapters</label>
-                            <select id="config-topic"
-                                class="w-full bg-midnight border border-divider rounded-lg p-3 text-text-primary text-sm focus:border-amber outline-none">
-                            </select>
-                        </div>
-                    </div>
-
-                    <button onclick="startCustomQuiz()"
-                        class="w-full mt-6 bg-amber text-black font-bold py-3 rounded-xl shadow-amber-glow hover:scale-[1.02] active:scale-[0.98] transition-transform">
-                        <span data-key="startQuizBtn">Start Quiz</span> <i class="fas fa-arrow-right ml-1"></i>
+                    <button onclick="openQuizConfig()"
+                        class="flex-1 py-3 rounded-xl bg-amber text-black font-bold shadow-amber-glow hover:scale-[1.02] transition-transform">
+                        Another Quiz
                     </button>
                 </div>
             </div>
+        </div>
 
-            <div id="view-profile" class="hidden h-full flex flex-col p-5 overflow-y-auto fade-in pb-24">
-                <div class="flex flex-col items-center mb-8">
-                    <div
-                        class="w-24 h-24 rounded-full bg-gradient-to-tr from-amber to-amber-deep flex items-center justify-center text-midnight font-bold text-3xl mb-4 shadow-amber-glow relative animate-float">
-                        <span id="profile-initials">S</span>
-                        <div
-                            class="absolute bottom-0 right-0 w-8 h-8 bg-surface border-4 border-midnight rounded-full flex items-center justify-center group hover:rotate-90 transition-transform duration-500 cursor-pointer">
-                            <i class="fas fa-camera text-xs text-text-secondary"></i>
-                        </div>
-                    </div>
-                    <h2 class="text-2xl font-bold text-text-primary title-font" data-key="studentPlaceholder">Student
-                    </h2>
-                    <p class="text-text-secondary text-sm body-font" data-key="classGroupPlaceholder">Class 10 • Science
-                        Group</p>
+        <div id="view-library" class="hidden h-full flex flex-col p-5 fade-in overflow-y-auto pb-24">
+            <div class="mb-6">
+                <h1 class="text-3xl font-bold text-text-primary title-font transition-colors" data-key="libraryTitle">
+                    Custom Library</h1>
+                <p class="text-text-secondary text-sm mt-1 body-font transition-colors" data-key="librarySubtitle">
+                    Upload books to create your own quizzes.</p>
+            </div>
+
+            <div onclick="document.getElementById('book-upload-input').click()"
+                class="border-2 border-dashed border-divider rounded-2xl p-8 flex flex-col items-center justify-center mb-8 hover:border-amber transition-colors cursor-pointer group bg-surface/50">
+                <div
+                    class="w-16 h-16 rounded-full bg-amber/10 flex items-center justify-center text-amber text-2xl mb-3 group-hover:scale-110 transition-transform">
+                    <i class="fas fa-cloud-upload-alt"></i>
                 </div>
+                <p class="text-text-primary font-bold text-sm" data-key="tapUpload">Tap to Upload Book</p>
+                <p class="text-text-secondary text-xs mt-1" data-key="fileTypes">PDF, EPUB (Max 50MB)</p>
+            </div>
 
-                <div class="grid grid-cols-3 gap-3 mb-8">
-                    <div
-                        class="bg-surface border border-divider rounded-xl p-3 text-center transition-colors hover:scale-105 transition-transform duration-200">
-                        <p class="text-amber font-bold text-xl title-font" id="xp-display">0</p>
-                        <p class="text-[10px] text-text-secondary uppercase tracking-widest mt-1" data-key="totalXP">
-                            Total
-                            XP</p>
-                    </div>
-                    <div
-                        class="bg-surface border border-divider rounded-xl p-3 text-center transition-colors hover:scale-105 transition-transform duration-200">
-                        <p class="text-emerald font-bold text-xl title-font" id="accuracy-display">0%</p>
-                        <p class="text-[10px] text-text-secondary uppercase tracking-widest mt-1" data-key="accuracy">
-                            Accuracy</p>
-                    </div>
-                    <div
-                        class="bg-surface border border-divider rounded-xl p-3 text-center transition-colors hover:scale-105 transition-transform duration-200">
-                        <p class="text-orange font-bold text-xl title-font" id="streak-profile-display">0</p>
-                        <p class="text-[10px] text-text-secondary uppercase tracking-widest mt-1" data-key="dayStreak">
-                            Day
-                            Streak</p>
-                    </div>
+            <h3 class="text-text-secondary uppercase text-xs font-bold tracking-widest mb-4" data-key="yourBooks">
+                Your
+                Books</h3>
+            <div class="space-y-3" id="library-list">
+                <div class="text-center text-text-secondary text-sm py-8">
+                    <i class="fas fa-book-open text-4xl mb-4 opacity-50"></i>
+                    <p data-key="noBooksYet">No books uploaded yet. Upload a book above to get started!</p>
                 </div>
+            </div>
+        </div>
 
-                <div class="mb-8">
-                    <h3 class="text-text-primary font-bold title-font text-lg mb-3" data-key="focusAreas">Focus Areas
+        <div id="quiz-setup-modal"
+            class="fixed inset-0 z-50 hidden flex items-center justify-center modal-overlay p-5 fade-in">
+            <div class="bg-surface border border-divider rounded-2xl w-full max-w-sm p-6 relative shadow-2xl">
+                <button onclick="closeQuizConfig()"
+                    class="absolute top-4 right-4 text-text-secondary hover:text-amber transition-colors">
+                    <i class="fas fa-times text-lg"></i>
+                </button>
+
+                <div class="text-center mb-6">
+                    <div
+                        class="w-12 h-12 rounded-full bg-amber/10 text-amber flex items-center justify-center mx-auto mb-3">
+                        <i class="fas fa-sliders-h text-xl"></i>
+                    </div>
+                    <h3 class="text-text-primary font-bold text-xl title-font" data-key="configQuizTitle">Configure
+                        Quiz
                     </h3>
-                    <div id="weakness-cloud" class="flex flex-wrap gap-2">
-                        <span class="text-xs text-text-secondary italic" data-key="noWeaknesses">No weaknesses detected
-                            yet.
-                            Keep learning!</span>
+                    <p class="text-text-secondary text-xs mt-1" id="modal-book-title">Custom Setup</p>
+                </div>
+
+                <div class="space-y-4">
+                    <div>
+                        <label class="text-text-secondary text-[10px] uppercase font-bold tracking-wider mb-1 block"
+                            data-key="configSubject">Subject / Source</label>
+                        <select id="config-subject" onchange="updateChapters()"
+                            class="w-full bg-midnight border border-divider rounded-lg p-3 text-text-primary text-sm focus:border-amber outline-none mb-2">
+                            <option value="Physics">Physics</option>
+                            <option value="Chemistry">Chemistry</option>
+                            <option value="Biology">Biology</option>
+                            <option value="Mathematics">Mathematics</option>
+                            <option value="English">English</option>
+                            <option value="General Knowledge">General Knowledge</option>
+                        </select>
+                    </div>
+
+                    <div id="topic-container">
+                        <label class="text-text-secondary text-[10px] uppercase font-bold tracking-wider mb-1 block"
+                            data-key="configChapters">Available Chapters</label>
+                        <select id="config-topic"
+                            class="w-full bg-midnight border border-divider rounded-lg p-3 text-text-primary text-sm focus:border-amber outline-none">
+                        </select>
                     </div>
                 </div>
 
-                <div class="mb-8">
-                    <div class="flex justify-between items-center mb-3">
-                        <h3 class="text-text-primary font-bold title-font text-lg" data-key="achievements">Achievements
-                        </h3>
-                        <span class="text-amber text-xs font-bold cursor-pointer hover:underline"
-                            data-key="viewAll">View
-                            All</span>
-                    </div>
-                    <div id="badges-container" class="flex gap-4 overflow-x-auto pb-2 no-scrollbar">
-                        <span class="text-xs text-text-secondary italic" data-key="earnBadges">Complete quizzes to earn
-                            badges!</span>
+                <button onclick="startCustomQuiz()"
+                    class="w-full mt-6 bg-amber text-black font-bold py-3 rounded-xl shadow-amber-glow hover:scale-[1.02] active:scale-[0.98] transition-transform">
+                    <span data-key="startQuizBtn">Start Quiz</span> <i class="fas fa-arrow-right ml-1"></i>
+                </button>
+            </div>
+        </div>
+
+        <div id="view-profile" class="hidden h-full flex flex-col p-5 overflow-y-auto fade-in pb-24">
+            <div class="flex flex-col items-center mb-8">
+                <div
+                    class="w-24 h-24 rounded-full bg-gradient-to-tr from-amber to-amber-deep flex items-center justify-center text-midnight font-bold text-3xl mb-4 shadow-amber-glow relative animate-float">
+                    <span id="profile-initials">S</span>
+                    <div
+                        class="absolute bottom-0 right-0 w-8 h-8 bg-surface border-4 border-midnight rounded-full flex items-center justify-center group hover:rotate-90 transition-transform duration-500 cursor-pointer">
+                        <i class="fas fa-camera text-xs text-text-secondary"></i>
                     </div>
                 </div>
+                <h2 class="text-2xl font-bold text-text-primary title-font" data-key="studentPlaceholder">Student
+                </h2>
+                <p class="text-text-secondary text-sm body-font" data-key="classGroupPlaceholder">Class 10 • Science
+                    Group</p>
+            </div>
 
-                <div class="space-y-2">
-                    <h3 class="text-text-secondary uppercase text-xs font-bold tracking-widest mb-2 pl-1"
-                        data-key="account">Account</h3>
-
-                    <div class="bg-surface border border-divider rounded-xl overflow-hidden transition-colors">
-                        <!-- Personal Details - Expandable -->
-                        <div id="personal-details-header" onclick="togglePersonalDetails()"
-                            class="p-4 flex items-center justify-between border-b border-divider cursor-pointer hover:bg-white/5 active:bg-white/10 transition-colors">
-                            <div class="flex items-center gap-3">
-                                <i class="fas fa-user-circle text-text-secondary w-5"></i>
-                                <span class="text-text-primary text-sm font-medium" data-key="personalDetails">Personal
-                                    Details</span>
-                            </div>
-                            <i id="personal-details-arrow"
-                                class="fas fa-chevron-down text-text-secondary text-xs transition-transform"></i>
-                        </div>
-                        <!-- Personal Details Content -->
-                        <div id="personal-details-content"
-                            class="hidden bg-midnight/50 p-4 space-y-3 border-b border-divider">
-                            <div class="flex justify-between items-center">
-                                <span class="text-text-secondary text-xs" data-key="nameLabel">Full Name (EN)</span>
-                                <span class="text-text-primary text-sm font-medium" id="profile-fullname-en">-</span>
-                            </div>
-                            <div class="flex justify-between items-center">
-                                <span class="text-text-secondary text-xs" data-key="nameBnLabel">Full Name (BN)</span>
-                                <span class="text-text-primary text-sm font-medium" id="profile-fullname-bn">-</span>
-                            </div>
-                            <div class="flex justify-between items-center">
-                                <span class="text-text-secondary text-xs" data-key="nickLabel">Nickname (EN)</span>
-                                <span class="text-text-primary text-sm font-medium" id="profile-nickname-en">-</span>
-                            </div>
-                            <div class="flex justify-between items-center">
-                                <span class="text-text-secondary text-xs" data-key="nickBnLabel">Nickname (BN)</span>
-                                <span class="text-text-primary text-sm font-medium" id="profile-nickname-bn">-</span>
-                            </div>
-                            <div class="flex justify-between items-center">
-                                <span class="text-text-secondary text-xs" data-key="emailLabel">Email</span>
-                                <span class="text-text-primary text-sm font-medium" id="profile-email">-</span>
-                            </div>
-                            <div class="flex justify-between items-center">
-                                <span class="text-text-secondary text-xs" data-key="classLabel">Class</span>
-                                <span class="text-text-primary text-sm font-medium" id="profile-class">-</span>
-                            </div>
-                            <div class="flex justify-between items-center">
-                                <span class="text-text-secondary text-xs" data-key="groupLabel">Group</span>
-                                <span class="text-text-primary text-sm font-medium" id="profile-group">-</span>
-                            </div>
-                        </div>
-                        <div
-                            class="p-4 flex items-center justify-between border-b border-divider cursor-pointer hover:bg-white/5 active:bg-white/10 transition-colors">
-                            <div class="flex items-center gap-3">
-                                <i class="fas fa-bell text-text-secondary w-5"></i>
-                                <span class="text-text-primary text-sm font-medium"
-                                    data-key="notifications">Notifications</span>
-                            </div>
-                            <i class="fas fa-chevron-right text-text-secondary text-xs"></i>
-                        </div>
-                        <div
-                            class="p-4 flex items-center justify-between cursor-pointer hover:bg-white/5 active:bg-white/10 transition-colors">
-                            <div class="flex items-center gap-3">
-                                <i class="fas fa-shield-alt text-text-secondary w-5"></i>
-                                <span class="text-text-primary text-sm font-medium" data-key="privacy">Privacy &
-                                    Security</span>
-                            </div>
-                            <i class="fas fa-chevron-right text-text-secondary text-xs"></i>
-                        </div>
-                    </div>
-
-                    <button onclick="logout()"
-                        class="w-full mt-6 py-3 rounded-xl border border-rose/30 text-rose text-sm font-bold bg-rose/5 hover:bg-rose/10 transition-colors hover:scale-[1.02] active:scale-[0.98] transition-transform"
-                        data-key="logOut">
-                        Log Out
-                    </button>
+            <div class="grid grid-cols-3 gap-3 mb-8">
+                <div
+                    class="bg-surface border border-divider rounded-xl p-3 text-center transition-colors hover:scale-105 transition-transform duration-200">
+                    <p class="text-amber font-bold text-xl title-font" id="xp-display">0</p>
+                    <p class="text-[10px] text-text-secondary uppercase tracking-widest mt-1" data-key="totalXP">
+                        Total
+                        XP</p>
+                </div>
+                <div
+                    class="bg-surface border border-divider rounded-xl p-3 text-center transition-colors hover:scale-105 transition-transform duration-200">
+                    <p class="text-emerald font-bold text-xl title-font" id="accuracy-display">0%</p>
+                    <p class="text-[10px] text-text-secondary uppercase tracking-widest mt-1" data-key="accuracy">
+                        Accuracy</p>
+                </div>
+                <div
+                    class="bg-surface border border-divider rounded-xl p-3 text-center transition-colors hover:scale-105 transition-transform duration-200">
+                    <p class="text-orange font-bold text-xl title-font" id="streak-profile-display">0</p>
+                    <p class="text-[10px] text-text-secondary uppercase tracking-widest mt-1" data-key="dayStreak">
+                        Day
+                        Streak</p>
                 </div>
             </div>
+
+            <div class="mb-8">
+                <h3 class="text-text-primary font-bold title-font text-lg mb-3" data-key="focusAreas">Focus Areas
+                </h3>
+                <div id="weakness-cloud" class="flex flex-wrap gap-2">
+                    <span class="text-xs text-text-secondary italic" data-key="noWeaknesses">No weaknesses detected
+                        yet.
+                        Keep learning!</span>
+                </div>
+            </div>
+
+            <div class="mb-8">
+                <div class="flex justify-between items-center mb-3">
+                    <h3 class="text-text-primary font-bold title-font text-lg" data-key="achievements">Achievements
+                    </h3>
+                    <span class="text-amber text-xs font-bold cursor-pointer hover:underline" data-key="viewAll">View
+                        All</span>
+                </div>
+                <div id="badges-container" class="flex gap-4 overflow-x-auto pb-2 no-scrollbar">
+                    <span class="text-xs text-text-secondary italic" data-key="earnBadges">Complete quizzes to earn
+                        badges!</span>
+                </div>
+            </div>
+
+            <div class="space-y-2">
+                <h3 class="text-text-secondary uppercase text-xs font-bold tracking-widest mb-2 pl-1"
+                    data-key="account">Account</h3>
+
+                <div class="bg-surface border border-divider rounded-xl overflow-hidden transition-colors">
+                    <!-- Personal Details - Expandable -->
+                    <div id="personal-details-header" onclick="togglePersonalDetails()"
+                        class="p-4 flex items-center justify-between border-b border-divider cursor-pointer hover:bg-white/5 active:bg-white/10 transition-colors">
+                        <div class="flex items-center gap-3">
+                            <i class="fas fa-user-circle text-text-secondary w-5"></i>
+                            <span class="text-text-primary text-sm font-medium" data-key="personalDetails">Personal
+                                Details</span>
+                        </div>
+                        <i id="personal-details-arrow"
+                            class="fas fa-chevron-down text-text-secondary text-xs transition-transform"></i>
+                    </div>
+                    <!-- Personal Details Content -->
+                    <div id="personal-details-content"
+                        class="hidden bg-midnight/50 p-4 space-y-3 border-b border-divider">
+                        <div class="flex justify-between items-center">
+                            <span class="text-text-secondary text-xs" data-key="nameLabel">Full Name (EN)</span>
+                            <span class="text-text-primary text-sm font-medium" id="profile-fullname-en">-</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-text-secondary text-xs" data-key="nameBnLabel">Full Name (BN)</span>
+                            <span class="text-text-primary text-sm font-medium" id="profile-fullname-bn">-</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-text-secondary text-xs" data-key="nickLabel">Nickname (EN)</span>
+                            <span class="text-text-primary text-sm font-medium" id="profile-nickname-en">-</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-text-secondary text-xs" data-key="nickBnLabel">Nickname (BN)</span>
+                            <span class="text-text-primary text-sm font-medium" id="profile-nickname-bn">-</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-text-secondary text-xs" data-key="emailLabel">Email</span>
+                            <span class="text-text-primary text-sm font-medium" id="profile-email">-</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-text-secondary text-xs" data-key="classLabel">Class</span>
+                            <span class="text-text-primary text-sm font-medium" id="profile-class">-</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-text-secondary text-xs" data-key="groupLabel">Group</span>
+                            <span class="text-text-primary text-sm font-medium" id="profile-group">-</span>
+                        </div>
+                    </div>
+                    <div
+                        class="p-4 flex items-center justify-between border-b border-divider cursor-pointer hover:bg-white/5 active:bg-white/10 transition-colors">
+                        <div class="flex items-center gap-3">
+                            <i class="fas fa-bell text-text-secondary w-5"></i>
+                            <span class="text-text-primary text-sm font-medium"
+                                data-key="notifications">Notifications</span>
+                        </div>
+                        <i class="fas fa-chevron-right text-text-secondary text-xs"></i>
+                    </div>
+                    <div
+                        class="p-4 flex items-center justify-between cursor-pointer hover:bg-white/5 active:bg-white/10 transition-colors">
+                        <div class="flex items-center gap-3">
+                            <i class="fas fa-shield-alt text-text-secondary w-5"></i>
+                            <span class="text-text-primary text-sm font-medium" data-key="privacy">Privacy &
+                                Security</span>
+                        </div>
+                        <i class="fas fa-chevron-right text-text-secondary text-xs"></i>
+                    </div>
+                </div>
+
+                <button onclick="logout()"
+                    class="w-full mt-6 py-3 rounded-xl border border-rose/30 text-rose text-sm font-bold bg-rose/5 hover:bg-rose/10 transition-colors hover:scale-[1.02] active:scale-[0.98] transition-transform"
+                    data-key="logOut">
+                    Log Out
+                </button>
+            </div>
+        </div>
 
     </main>
 
