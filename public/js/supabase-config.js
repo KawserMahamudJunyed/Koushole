@@ -38,4 +38,5 @@ function initSupabase() {
 }
 
 // Initialize on load to ensure script is parsed
-window.addEventListener('load', initSupabase);
+// Initialize immediately - script is blocking so lib should be ready
+initSupabase();
