@@ -103,12 +103,14 @@ function toggleAuthMode(mode) {
 
 async function handleAuth(e) {
     e.preventDefault();
+    console.log("handleAuth triggered");
     const formData = new FormData(e.target);
     const data = Object.fromEntries(formData.entries());
 
     // Check Supabase Client
     if (!window.supabaseClient) {
-        alert("Supabase not configured!");
+        alert("System Error: Supabase client is missing. Please refresh.");
+        console.error("Supabase client missing in handleAuth");
         return;
     }
 
@@ -120,7 +122,9 @@ async function handleAuth(e) {
 
     try {
         if (authMode === 'signup') {
-            // Supabase Sign Up
+            console.log("Attempting Signup for:", email);
+
+            // Supabase Sign Up - Storing metadata is CRITICAL for the nickname requirement
             const { data: { user, session }, error } = await window.supabaseClient.auth.signUp({
                 email,
                 password,
@@ -128,7 +132,7 @@ async function handleAuth(e) {
                     data: {
                         name: data.name,
                         nameBn: data.nameBn,
-                        nickname: data.nickname,
+                        nickname: data.nickname, // Priority 1: Save this!
                         nicknameBn: data.nicknameBn,
                         class: data.classLevel,
                         group: data.group
@@ -136,26 +140,45 @@ async function handleAuth(e) {
                 }
             });
 
-            if (error) throw error;
-            alert("Signup successful! Check email for verification if enabled.");
+            if (error) {
+                console.error("Signup Supabase Error:", error);
+                throw error;
+            }
+
+            console.log("Signup Successful. User:", user);
+            alert("Signup successful! Please Log In.");
+
+            // UX: Switch to Login mode automatically so they can sign in
+            toggleAuthMode('login');
 
         } else {
+            console.log("Attempting Login for:", email);
             // Supabase Sign In
             const { data: { user, session }, error } = await window.supabaseClient.auth.signInWithPassword({
                 email,
                 password
             });
 
-            if (error) throw error;
-            // Listener handles state update
+            if (error) {
+                console.error("Login Supabase Error:", error);
+                throw error;
+            }
+
+            console.log("Login Successful. Session:", session);
+            // Listener handles state update, but let's force a check to be sure
+            if (session) {
+                isAuthenticated = true;
+                userProfile = session.user.user_metadata || {};
+                checkAuth();
+            }
         }
     } catch (err) {
-        console.error("Auth Error:", err);
-        alert(err.message);
+        console.error("Auth Exception:", err);
+        alert("Authentication Failed: " + err.message);
     } finally {
         submitBtn.innerText = originalText;
         submitBtn.disabled = false;
-        e.target.reset();
+        if (authMode === 'signup') e.target.reset(); // Only reset on signup, keep email for login retry
     }
 }
 
