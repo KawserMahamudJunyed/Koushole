@@ -99,6 +99,15 @@ async function loadUserData(userId) {
             await saveMemory(); // Create the row
         }
 
+        // Refresh UI with loaded data
+        updateUI();
+        updateProfileUI();
+
+        // Refresh chart with quiz history
+        if (typeof initLearningChart === 'function') {
+            initLearningChart();
+        }
+
     } catch (err) {
         console.error("loadUserData error:", err);
     }
@@ -392,7 +401,10 @@ async function handleAuth(e) {
         console.error("Auth Exception:", err);
         alert("Authentication Failed: " + err.message);
     } finally {
-        submitBtn.innerText = originalText;
+        // Only restore button text on error - on success, toggleAuthMode handles it
+        if (submitBtn.innerText === "Processing...") {
+            submitBtn.innerText = authMode === 'login' ? t('loginBtn') : t('signupBtn');
+        }
         submitBtn.disabled = false;
         if (authMode === 'signup') e.target.reset(); // Only reset on signup, keep email for login retry
     }
@@ -865,6 +877,12 @@ async function init() {
 let learningChart = null;
 
 async function initLearningChart() {
+    // Destroy existing chart to prevent duplicates
+    if (learningChart) {
+        learningChart.destroy();
+        learningChart = null;
+    }
+
     const ctx = document.getElementById('growthChart').getContext('2d');
     const gradient = ctx.createLinearGradient(0, 0, 0, 400);
     gradient.addColorStop(0, 'rgba(245, 158, 11, 0.5)');
