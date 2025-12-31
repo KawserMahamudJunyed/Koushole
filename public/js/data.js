@@ -252,6 +252,150 @@ const translations = {
     }
 };
 
+// --- NCTB CURRICULUM DATA (Class 9-10) ---
+const nctbCurriculum = {
+    science: [
+        {
+            id: 'physics',
+            nameEn: "Physics",
+            nameBn: "পদার্থবিজ্ঞান",
+            chapters: [
+                { id: 'motion', en: "Motion", bn: "গতি" },
+                { id: 'force', en: "Force", bn: "বল" },
+                { id: 'work_power', en: "Work, Power & Energy", bn: "কাজ, ক্ষমতা ও শক্তি" },
+                { id: 'matter', en: "State of Matter & Pressure", bn: "পদার্থের অবস্থা ও চাপ" },
+                { id: 'heat', en: "Effect of Heat on Matter", bn: "বস্তুর ওপর তাপের প্রভাব" },
+                { id: 'sound', en: "Waves & Sound", bn: "তরঙ্গ ও শব্দ" },
+                { id: 'light_ref', en: "Reflection of Light", bn: "আলোর প্রতিফলন" },
+                { id: 'light_refrac', en: "Refraction of Light", bn: "আলোর প্রতিসরণ" },
+                { id: 'electricity', en: "Current Electricity", bn: "চল বিদ্যুৎ" },
+                { id: 'magnet', en: "Magnetic Effect of Current", bn: "বিদ্যুতের চৌম্বক ক্রিয়া" }
+            ]
+        },
+        {
+            id: 'chemistry',
+            nameEn: "Chemistry",
+            nameBn: "রসায়ন",
+            chapters: [
+                { id: 'concept', en: "Concepts of Chemistry", bn: "রসায়নের ধারণা" },
+                { id: 'matter_state', en: "States of Matter", bn: "পদার্থের অবস্থা" },
+                { id: 'atom', en: "Structure of Matter", bn: "পদার্থের গঠন" },
+                { id: 'periodic', en: "Periodic Table", bn: "পর্যায় সারণি" },
+                { id: 'bond', en: "Chemical Bond", bn: "রাসায়নিক বন্ধন" },
+                { id: 'mole', en: "Mole & Chemical Equation", bn: "মোল ও রাসায়নিক গণনা" },
+                { id: 'reaction', en: "Chemical Reaction", bn: "রাসায়নিক বিক্রিয়া" },
+                { id: 'energy', en: "Chemistry & Energy", bn: "রসায়ন ও শক্তি" },
+                { id: 'acid_base', en: "Acid-Base Balance", bn: "এসিড-ক্ষার সমতা" },
+                { id: 'minerals', en: "Mineral Resources: Metal-Nonmetal", bn: "খনিজ সম্পদ: ধাতু-অধাতু" },
+                { id: 'fossil', en: "Mineral Resources: Fossils", bn: "খনিজ সম্পদ: জীবাশ্ম" },
+                { id: 'life', en: "Chemistry in Our Life", bn: "আমাদের জীবনে রসায়ন" }
+            ]
+        },
+        {
+            id: 'biology',
+            nameEn: "Biology",
+            nameBn: "জীববিজ্ঞান",
+            chapters: [
+                { id: 'life_lesson', en: "Life Lessons", bn: "জীবন পাঠ" },
+                { id: 'cell', en: "Cells & Tissues", bn: "জীবকোষ ও টিস্যু" },
+                { id: 'division', en: "Cell Division", bn: "কোষ বিভাজন" },
+                { id: 'bioenergetics', en: "Bioenergetics", bn: "জীবনীশক্তি" },
+                { id: 'nutrition', en: "Food, Nutrition & Digestion", bn: "খাদ্য, পুষ্টি এবং পরিপাক" },
+                { id: 'transport', en: "Transport in Organisms", bn: "জীবে পরিবহন" },
+                { id: 'exchange', en: "Gas Exchange", bn: "গ্যাসীয় বিনিময়" },
+                { id: 'excretion', en: "Excretion in Human", bn: "রেচন প্রক্রিয়া" },
+                { id: 'movement', en: "Firmness & Locomotion", bn: "দৃঢ়তা প্রদান ও চলন" },
+                { id: 'coordination', en: "Coordination", bn: "সমন্বয়" },
+                { id: 'repro', en: "Reproduction in Organisms", bn: "জীবের প্রজনন" },
+                { id: 'heredity', en: "Heredity & Evolution", bn: "বংশগতি ও বিবর্তন" },
+                { id: 'environment', en: "Organism & Environment", bn: "জীবের পরিবেশ" },
+                { id: 'biotech', en: "Biotechnology", bn: "জীবপ্রযুক্তি" }
+            ]
+        },
+        {
+            id: 'hm',
+            nameEn: "Higher Math",
+            nameBn: "উচ্চতর গণিত",
+            chapters: [
+                { id: 'set', en: "Set & Function", bn: "সেট ও ফাংশন" },
+                { id: 'algebra', en: "Algebraic Expressions", bn: "বীজগাণিতিক রাশি" },
+                { id: 'geometry', en: "Geometry", bn: "জ্যামিতি" },
+                { id: 'drawing', en: "Geometric Drawing", bn: "জ্যামিতিক অঙ্কন" },
+                { id: 'equation', en: "Equation", bn: "সমীকরণ" },
+                { id: 'inequality', en: "Inequality", bn: "অসমতা" },
+                { id: 'infinite', en: "Infinite Series", bn: "অসীম ধারা" },
+                { id: 'trig', en: "Trigonometry", bn: "ত্রিকোণমিতি" },
+                { id: 'expo', en: "Exponent & Logarithm", bn: "সূচকীয় ও লগারিদমীয় ফাংশন" },
+                { id: 'binomial', en: "Binomial Expansion", bn: "দ্বিপদী বিস্তৃতি" },
+                { id: 'coord', en: "Coordinate Geometry", bn: "স্থানাঙ্ক জ্যামিতি" },
+                { id: 'vector', en: "Planar Vector", bn: "সমতলীয় ভেক্টর" },
+                { id: 'solid', en: "Solid Geometry", bn: "ঘন জ্যামিতি" },
+                { id: 'prop', en: "Probability", bn: "সম্ভাবনা" }
+            ]
+        }
+    ],
+    common: [
+        {
+            id: 'math',
+            nameEn: "Mathematics",
+            nameBn: "গণিত",
+            chapters: [
+                { id: 'real', en: "Real Numbers", bn: "বাস্তব সংখ্যা" },
+                { id: 'sets', en: "Sets & Functions", bn: "সেট ও ফাংশন" },
+                { id: 'algebra', en: "Algebraic Expressions", bn: "বীজগাণিতিক রাশি" },
+                { id: 'exponents', en: "Exponents & Logarithms", bn: "সূচক ও লগারিদম" },
+                { id: 'equations_one', en: "Equations in One Variable", bn: "এক চলক বিশিষ্ট সমীকরণ" },
+                { id: 'lines', en: "Lines, Angles & Triangles", bn: "রেখা, কোণ ও ত্রিভুজ" },
+                { id: 'practical', en: "Practical Geometry", bn: "ব্যবহারিক জ্যামিতি" },
+                { id: 'circle', en: "Circle", bn: "বৃত্ত" },
+                { id: 'trig_ratio', en: "Trigonometric Ratio", bn: "ত্রিকোণমিতিক অনুপাত" },
+                { id: 'distance', en: "Distance & Elevation", bn: "দূরত্ব ও উচ্চতা" },
+                { id: 'ratio', en: "Algebraic Ratio & Proportion", bn: "বীজগাণিতিক অনুপাত ও সমানুপাত" },
+                { id: 'two_var', en: "Equations in Two Variables", bn: "দুই চলক বিশিষ্ট সরল সহসমীকরণ" },
+                { id: 'series', en: "Finite Series", bn: "সসীম ধারা" },
+                { id: 'ratio_sim', en: "Ratio, Similarity & Symmetry", bn: "অনুপাত, সদৃশতা ও প্রতিসমতা" },
+                { id: 'area', en: "Area Related Theorems", bn: "ক্ষেত্রফল সম্পর্কিত উপপাদ্য ও সম্পাদ্য" },
+                { id: 'mensuration', en: "Mensuration", bn: "পরিমিতি" },
+                { id: 'stats', en: "Statistics", bn: "পরিসংখ্যান" }
+            ]
+        },
+        {
+            id: 'ict',
+            nameEn: "ICT",
+            nameBn: "তথ্য ও যোগাযোগ প্রযুক্তি",
+            chapters: [
+                { id: 'ict_world', en: "ICT & Our Bangladesh", bn: "তথ্য ও যোগাযোগ প্রযুক্তি এবং আমাদের বাংলাদেশ" },
+                { id: 'computer', en: "Computer & User Safety", bn: "কম্পিউটার ও কম্পিউটার ব্যবহারকারীর নিরাপত্তা" },
+                { id: 'internet', en: "Internet in Education", bn: "আমার শিক্ষায় ইন্টারনেট" },
+                { id: 'word', en: "Word Processing & Spreadsheet", bn: "আমার লেখালেখি ও হিসাব" },
+                { id: 'multimedia', en: "Multimedia & Graphics", bn: "মাল্টিমিডিয়া ও গ্রাফিক্স" },
+                { id: 'db', en: "Database usage", bn: "ডেটাবেজ-এর ব্যবহার" }
+            ]
+        },
+        {
+            id: 'english',
+            nameEn: "English",
+            nameBn: "ইংরেজি",
+            chapters: [
+                { id: 'father', en: "Father of the Nation", bn: "Father of the Nation" },
+                { id: 'pastime', en: "Pastimes", bn: "Pastimes" },
+                { id: 'events', en: "Events & Festivals", bn: "Events & Festivals" },
+                { id: 'population', en: "Are We Too Many?", bn: "Are We Too Many?" },
+                { id: 'nature', en: "Nature and Environment", bn: "Nature and Environment" },
+                { id: 'neighbours', en: "Our Neighbours", bn: "Our Neighbours" },
+                { id: 'people', en: "People Who Stand Out", bn: "People Who Stand Out" },
+                { id: 'heritage', en: "World Heritage", bn: "World Heritage" },
+                { id: 'life', en: "Unconventional Jobs", bn: "Unconventional Jobs" },
+                { id: 'dreams', en: "Dreams", bn: "Dreams" },
+                { id: 'energy', en: "Renewable Energy", bn: "Renewable Energy" },
+                { id: 'roots', en: "Roots", bn: "Roots" },
+                { id: 'media', en: "Media and Modes of e-communication", bn: "Media and Modes of e-communication" },
+                { id: 'pleasure', en: "Pleasure and Purpose", bn: "Pleasure and Purpose" }
+            ]
+        }
+    ]
+};
+
 // Mock Chapters Data
 const subjectChapters = {
     "Physics": ["Motion", "Force", "Work, Power & Energy", "State of Matter", "Heat & Temperature", "Waves", "Sound", "Light"],

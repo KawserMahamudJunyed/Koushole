@@ -150,33 +150,11 @@ function switchTab(viewName) {
         console.log(`Switching to tab: ${viewName}`);
 
         // Special handling for Quiz Tab: Show Config if no quiz running
+        /* Removed auto-open to allow "Ready to Learn" screen to show.
         if (viewName === 'quiz') {
-            const quizContent = document.getElementById('quiz-content');
-            const quizResults = document.getElementById('quiz-results');
-
-            // Check if ANY required element is missing
-            if (!quizContent) {
-                console.error("Critical: #quiz-content not found!");
-                return;
-            }
-            // If quiz results missing, just log but continue if possible (or stop if critical)
-            if (!quizResults) {
-                console.error("Critical: #quiz-results not found!");
-                // Assuming we fixed HTML, this shouldn't happen, but safety first
-            }
-
-            // Check if hidden or empty and NO results showing
-            if (quizContent && quizResults) {
-                if ((quizContent.classList.contains('hidden') || quizContent.innerHTML.trim() === '') && quizResults.classList.contains('hidden')) {
-                    if (typeof openQuizConfig === 'function') {
-                        openQuizConfig();
-                    } else {
-                        console.error("openQuizConfig function not found!");
-                    }
-                    // Continue to show the view!
-                }
-            }
+           // ...
         }
+        */
 
         const tabs = ['dashboard', 'quiz', 'chat', 'profile', 'library'];
         tabs.forEach(v => {

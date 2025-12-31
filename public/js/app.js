@@ -195,6 +195,7 @@ function goToAuth() {
 
 let authMode = 'login';
 
+
 function toggleAuthMode(mode) {
     if (mode) authMode = mode;
     else authMode = authMode === 'login' ? 'signup' : 'login';
@@ -206,6 +207,7 @@ function toggleAuthMode(mode) {
     const switchText = document.getElementById('auth-switch-text');
     const inputs = signupFields.querySelectorAll('input, select');
     const title = document.getElementById('auth-title');
+    const loginExtras = document.getElementById('login-extras');
 
     // Reset styles
     loginTab.style.color = '';
@@ -222,13 +224,14 @@ function toggleAuthMode(mode) {
         signupFields.classList.remove('hidden');
         inputs.forEach(el => { el.disabled = false; el.required = true; });
 
-        // Hide login-only elements
-        const loginExtras = document.getElementById('login-extras');
         if (loginExtras) loginExtras.classList.add('hidden');
 
+        title.setAttribute('data-key', 'signupTitle');
         title.innerText = t('signupTitle');
+        submitBtn.setAttribute('data-key', 'signupBtn');
         submitBtn.innerText = t('signupBtn');
-        switchText.innerHTML = `${t('haveAccount')} <b class="text-amber cursor-pointer" onclick="toggleAuthMode('login')">${t('loginBtn')}</b>`;
+
+        switchText.innerHTML = `<span data-key="haveAccount">${t('haveAccount')}</span> <b class="text-amber cursor-pointer" onclick="toggleAuthMode('login')" data-key="loginToggle">${t('loginToggle')}</b>`;
 
     } else {
         signupTab.classList.remove('bg-amber', 'text-black', '!text-black', 'shadow-sm');
@@ -241,13 +244,14 @@ function toggleAuthMode(mode) {
         signupFields.classList.add('hidden');
         inputs.forEach(el => { el.disabled = true; el.required = false; });
 
-        // Show login-only elements
-        const loginExtras = document.getElementById('login-extras');
         if (loginExtras) loginExtras.classList.remove('hidden');
 
+        title.setAttribute('data-key', 'loginTitle');
         title.innerText = t('loginTitle');
+        submitBtn.setAttribute('data-key', 'loginBtn');
         submitBtn.innerText = t('loginBtn');
-        switchText.innerHTML = `${t('noAccount')} <b class="text-amber cursor-pointer" onclick="toggleAuthMode('signup')">${t('signupBtn')}</b>`;
+
+        switchText.innerHTML = `<span data-key="noAccount">${t('noAccount')}</span> <b class="text-amber cursor-pointer" onclick="toggleAuthMode('signup')" data-key="signupToggle">${t('signupToggle')}</b>`;
     }
 }
 
@@ -1001,3 +1005,55 @@ function updateUI() {
 }
 
 init();
+
+// --- UPDATE CHAPTERS FROM NCTB DATA ---
+function updateChapters() {
+    const subjectSelect = document.getElementById('quiz-subject');
+    const chapterSelect = document.getElementById('quiz-chapter');
+
+    if (!subjectSelect || !chapterSelect) return;
+
+    // Clear existing
+    subjectSelect.innerHTML = '';
+    chapterSelect.innerHTML = '<option value="all" data-key="allChapters">All Chapters</option>';
+
+    // Determine Group
+    const group = (userProfile.group || 'Science').toLowerCase(); 
+    
+    // Combine group-specific subjects and common subjects
+    let subjects = [];
+    if (nctbCurriculum[group]) {
+        subjects = [...nctbCurriculum[group], ...nctbCurriculum.common];
+    } else {
+        subjects = [...nctbCurriculum.science, ...nctbCurriculum.common];
+    }
+
+    // Populate Subjects
+    subjects.forEach(sub => {
+        const option = document.createElement('option');
+        option.value = sub.id;
+        option.innerText = currentLang === 'bn' ? sub.nameBn : sub.nameEn;
+        subjectSelect.appendChild(option);
+    });
+
+    // Handle Change
+    subjectSelect.onchange = () => {
+        const selectedSubId = subjectSelect.value;
+        const subData = subjects.find(s => s.id === selectedSubId);
+        
+        chapterSelect.innerHTML = '<option value="all" data-key="allChapters">All Chapters</option>'; // Reset
+        
+        if (subData && subData.chapters) {
+            subData.chapters.forEach(chap => {
+                const opt = document.createElement('option');
+                opt.value = chap.id;
+                opt.innerText = currentLang === 'bn' ? chap.bn : chap.en;
+                chapterSelect.appendChild(opt);
+            });
+        }
+    };
+
+    // Trigger initial population
+    subjectSelect.dispatchEvent(new Event('change'));
+}
+
