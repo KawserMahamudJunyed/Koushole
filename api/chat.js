@@ -58,6 +58,6 @@ Your Mission: Guide the student to understanding through questioning and "Peak-t
 
     } catch (error) {
         console.error("Groq API Error:", error);
-        return res.status(500).json({ error: 'Failed to generate content' });
+        return res.status(500).json({ error: error.message || 'Failed to generate content' });
     }
 }
