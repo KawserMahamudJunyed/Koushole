@@ -598,13 +598,19 @@ async function fetchLibraryBooks() {
 
     try {
         const { data: { user } } = await window.supabaseClient.auth.getUser();
-        if (!user) return;
+        if (!user) {
+            console.log('Library: No user logged in');
+            return;
+        }
+        console.log('Library: Fetching for user', user.id);
 
         const { data, error } = await window.supabaseClient
             .from('library_books')
             .select('*')
             .eq('user_id', user.id)
             .order('created_at', { ascending: false });
+
+        console.log('Library query result:', data?.length || 0, 'books, error:', error);
 
         if (error) {
             console.error('Library fetch error:', error);
