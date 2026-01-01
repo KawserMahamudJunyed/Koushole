@@ -682,16 +682,17 @@
 
                     <div class="relative flex-1">
                         <input type="text" id="chat-input" placeholder="Ask about Physics, Math..."
-                            class="w-full bg-midnight border border-divider rounded-full py-3 pl-5 pr-12 text-text-primary focus:outline-none focus:border-amber focus:ring-1 focus:ring-amber transition-all placeholder:text-text-secondary/50 body-font">
-
-                        <button id="mic-btn" onclick="toggleVoiceRecording('chat-input')"
-                            class="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center text-text-secondary hover:text-amber transition-colors rounded-full">
-                            <i class="fas fa-microphone"></i>
-                        </button>
+                            class="w-full bg-midnight border border-divider rounded-full py-3 px-5 text-text-primary focus:outline-none focus:border-amber focus:ring-1 focus:ring-amber transition-all placeholder:text-text-secondary/50 body-font">
                     </div>
 
+                    <button id="mic-btn" onclick="toggleVoiceRecording('chat-input')"
+                        class="w-10 h-10 rounded-full bg-surface border border-divider flex items-center justify-center text-text-secondary hover:text-amber transition-colors shrink-0"
+                        title="Voice Input">
+                        <i class="fas fa-microphone"></i>
+                    </button>
+
                     <button onclick="sendMessage()"
-                        class="group h-10 w-10 bg-amber rounded-full flex items-center justify-center text-black hover:bg-amber-deep transition-colors shadow-lg hover:-translate-y-1 hover:translate-x-1 transition-transform shrink-0">
+                        class="group h-10 w-10 bg-amber rounded-full flex items-center justify-center text-black hover:bg-amber-deep transition-colors shadow-lg shrink-0">
                         <i class="fas fa-paper-plane text-xs"></i>
                     </button>
                 </div>

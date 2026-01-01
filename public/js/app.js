@@ -768,9 +768,26 @@ document.getElementById('book-upload-input').addEventListener('change', async fu
 
             if (insertError) throw insertError;
 
-            // Refresh List
-            document.getElementById(tempId)?.remove();
-            await fetchLibraryBooks();
+            // Instant UI update (no waiting for DB refetch)
+            const tempEl = document.getElementById(tempId);
+            if (tempEl) {
+                tempEl.classList.remove('opacity-50');
+                tempEl.innerHTML = `
+                    <div class="flex items-center gap-4">
+                        <div class="w-10 h-10 rounded-lg bg-sky/10 flex items-center justify-center">
+                            <i class="fas fa-file-pdf text-sky"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-text-primary font-bold text-sm">${file.name}</h4>
+                            <p class="text-text-secondary text-xs">${new Date().toLocaleDateString()} • Ready</p>
+                        </div>
+                    </div>
+                    <span class="text-sky text-xs font-medium px-2 py-1 rounded-full bg-sky/10">Ready</span>
+                `;
+            }
+
+            // Background refresh (non-blocking)
+            fetchLibraryBooks();
 
         } catch (err) {
             console.error("Upload failed:", err);
