@@ -48,7 +48,7 @@ Your Mission: Guide the student to understanding through questioning and "Peak-t
                     content: message
                 }
             ],
-            model: 'llama-3.3-70b-versatile',
+            model: 'meta-llama/llama-4-scout-17b-16e-instruct',
             temperature: 0.7,
             max_tokens: 1024,
         });
