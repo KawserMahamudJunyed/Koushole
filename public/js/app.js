@@ -733,16 +733,24 @@ document.getElementById('book-upload-input').addEventListener('change', async fu
     if (e.target.files && e.target.files[0]) {
         const file = e.target.files[0];
 
-        // Sanitize file name: replace non-ascii chars, spaces, etc for storage safety
+        // 1. File Size Check (Limit to 50MB)
+        const maxSize = 50 * 1024 * 1024; // 50MB
+        if (file.size > maxSize) {
+            alert("File is too large! Please upload a file smaller than 50MB.");
+            return;
+        }
+
+        // Sanitize file name
         const timestamp = Date.now();
         const safeName = `${timestamp}_${file.name.replace(/[^a-zA-Z0-9.-]/g, '_')}`;
 
         // Show Loading State
         const list = document.getElementById('library-list');
-        // If empty state exists, remove it
         if (list.querySelector('.text-center')) list.innerHTML = '';
 
         const tempId = 'temp-' + timestamp;
+        const sizeMB = (file.size / (1024 * 1024)).toFixed(2);
+
         list.insertAdjacentHTML('afterbegin', `
             <div id="${tempId}" class="bg-surface border border-divider rounded-xl p-4 flex items-center justify-between opacity-75">
                 <div class="flex items-center gap-4">
@@ -751,33 +759,40 @@ document.getElementById('book-upload-input').addEventListener('change', async fu
                     </div>
                     <div>
                         <h4 class="text-text-primary font-bold text-sm">Uploading ${file.name}...</h4>
-                        <p class="text-text-secondary text-xs">Please wait, this may take a moment.</p>
+                        <p class="text-text-secondary text-xs">Size: ${sizeMB} MB. Please wait...</p>
                     </div>
                 </div>
             </div>
         `);
 
         try {
+            console.log("Starting upload for:", file.name, "Size:", sizeMB, "MB");
             const { data: { user } } = await window.supabaseClient.auth.getUser();
             if (!user) throw new Error("User not logged in");
 
             // 1. Upload to Supabase Storage ('books' bucket)
-            const { data, error: uploadError } = await window.supabaseClient.storage
+            const { data: uploadData, error: uploadError } = await window.supabaseClient.storage
                 .from('books')
                 .upload(`${user.id}/${safeName}`, file, {
                     cacheControl: '3600',
                     upsert: false
                 });
 
-            if (uploadError) throw uploadError;
+            if (uploadError) {
+                console.error("Storage Upload Error:", uploadError);
+                throw uploadError;
+            }
+            console.log("Upload successful:", uploadData);
 
             // 2. Get Public URL
             const { data: { publicUrl } } = window.supabaseClient.storage
                 .from('books')
                 .getPublicUrl(`${user.id}/${safeName}`);
 
+            console.log("Public URL generated:", publicUrl);
+
             // 3. Insert metadata into DB
-            const { error: insertError } = await window.supabaseClient
+            const { data: insertData, error: insertError } = await window.supabaseClient
                 .from('library_books')
                 .insert({
                     user_id: user.id,
@@ -785,10 +800,15 @@ document.getElementById('book-upload-input').addEventListener('change', async fu
                     file_type: file.type.includes('pdf') ? 'pdf' : (file.type.includes('epub') ? 'epub' : 'txt'),
                     file_size_bytes: file.size,
                     file_url: publicUrl,
-                    index_status: 'done' // Assuming client-side parsing not needed for now, or handled elsewhere
-                });
+                    index_status: 'done'
+                })
+                .select(); // Return inserted data to confirm
 
-            if (insertError) throw insertError;
+            if (insertError) {
+                console.error("Database Insert Error:", insertError);
+                throw insertError;
+            }
+            console.log("Database Insert Success:", insertData);
 
             // Success UI Update
             const tempEl = document.getElementById(tempId);
@@ -814,11 +834,11 @@ document.getElementById('book-upload-input').addEventListener('change', async fu
                 `;
             }
 
-            // Background refresh to ensure sync
-            fetchLibraryBooks();
+            // Force refresh library list from DB to be sure
+            await fetchLibraryBooks();
 
         } catch (err) {
-            console.error("Upload failed:", err);
+            console.error("Full Upload Process Failed:", err);
             const tempEl = document.getElementById(tempId);
             if (tempEl) {
                 tempEl.className = "bg-surface border border-rose/30 rounded-xl p-4 flex items-center justify-between";
