@@ -2,9 +2,30 @@
 async function fetchOfficialResources() {
     if (!window.supabaseClient) return;
     try {
+        const { data: { user } } = await window.supabaseClient.auth.getUser();
+        let userClass = '10'; // Default
+
+        if (user) {
+            const { data: profile } = await window.supabaseClient
+                .from('profiles')
+                .select('class')
+                .eq('user_id', user.id)
+                .single();
+            if (profile) userClass = profile.class;
+        }
+
+        // Determine target classes based on user class
+        let targetClasses = [userClass];
+        if (['9', '10'].includes(userClass)) {
+            targetClasses.push('9-10');
+        } else if (['11', '12'].includes(userClass)) {
+            targetClasses.push('11-12');
+        }
+
         const { data, error } = await window.supabaseClient
             .from('official_resources')
             .select('*')
+            .in('class_level', targetClasses) // Fetch user's class AND shared class
             .order('created_at', { ascending: false });
 
         if (error) throw error;
