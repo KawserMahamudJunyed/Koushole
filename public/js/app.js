@@ -733,20 +733,25 @@ document.getElementById('book-upload-input').addEventListener('change', async fu
     if (e.target.files && e.target.files[0]) {
         const file = e.target.files[0];
 
-        // Show immediate optimistic UI or loading state
+        // Sanitize file name: replace non-ascii chars, spaces, etc for storage safety
+        const timestamp = Date.now();
+        const safeName = `${timestamp}_${file.name.replace(/[^a-zA-Z0-9.-]/g, '_')}`;
+
+        // Show Loading State
         const list = document.getElementById('library-list');
         // If empty state exists, remove it
         if (list.querySelector('.text-center')) list.innerHTML = '';
 
-        const tempId = 'temp-' + Date.now();
+        const tempId = 'temp-' + timestamp;
         list.insertAdjacentHTML('afterbegin', `
-            <div id="${tempId}" class="bg-surface border border-divider rounded-xl p-4 flex items-center justify-between opacity-50">
+            <div id="${tempId}" class="bg-surface border border-divider rounded-xl p-4 flex items-center justify-between opacity-75">
                 <div class="flex items-center gap-4">
                     <div class="w-10 h-10 rounded-lg bg-amber/10 flex items-center justify-center">
                         <i class="fas fa-spinner fa-spin text-amber"></i>
                     </div>
                     <div>
                         <h4 class="text-text-primary font-bold text-sm">Uploading ${file.name}...</h4>
+                        <p class="text-text-secondary text-xs">Please wait, this may take a moment.</p>
                     </div>
                 </div>
             </div>
@@ -756,7 +761,22 @@ document.getElementById('book-upload-input').addEventListener('change', async fu
             const { data: { user } } = await window.supabaseClient.auth.getUser();
             if (!user) throw new Error("User not logged in");
 
-            // Insert directly into DB (skip storage upload for speed)
+            // 1. Upload to Supabase Storage ('books' bucket)
+            const { data, error: uploadError } = await window.supabaseClient.storage
+                .from('books')
+                .upload(`${user.id}/${safeName}`, file, {
+                    cacheControl: '3600',
+                    upsert: false
+                });
+
+            if (uploadError) throw uploadError;
+
+            // 2. Get Public URL
+            const { data: { publicUrl } } = window.supabaseClient.storage
+                .from('books')
+                .getPublicUrl(`${user.id}/${safeName}`);
+
+            // 3. Insert metadata into DB
             const { error: insertError } = await window.supabaseClient
                 .from('library_books')
                 .insert({
@@ -764,16 +784,16 @@ document.getElementById('book-upload-input').addEventListener('change', async fu
                     title: file.name,
                     file_type: file.type.includes('pdf') ? 'pdf' : (file.type.includes('epub') ? 'epub' : 'txt'),
                     file_size_bytes: file.size,
-                    file_url: null, // Storage upload skipped for speed
-                    index_status: 'done'
+                    file_url: publicUrl,
+                    index_status: 'done' // Assuming client-side parsing not needed for now, or handled elsewhere
                 });
 
             if (insertError) throw insertError;
 
-            // Instant UI update (no waiting for DB refetch)
+            // Success UI Update
             const tempEl = document.getElementById(tempId);
             if (tempEl) {
-                tempEl.classList.remove('opacity-50');
+                tempEl.className = "bg-surface border border-divider rounded-xl p-4 flex items-center justify-between group hover:border-amber/50 transition-colors";
                 tempEl.innerHTML = `
                     <div class="flex items-center gap-4">
                         <div class="w-10 h-10 rounded-lg bg-sky/10 flex items-center justify-center">
@@ -781,20 +801,40 @@ document.getElementById('book-upload-input').addEventListener('change', async fu
                         </div>
                         <div>
                             <h4 class="text-text-primary font-bold text-sm">${file.name}</h4>
-                            <p class="text-text-secondary text-xs">${new Date().toLocaleDateString()} • Ready</p>
+                            <p class="text-text-secondary text-[10px] flex items-center gap-2">
+                                <span>${new Date().toLocaleDateString()}</span>
+                                <span class="text-emerald font-bold">• Ready</span>
+                            </p>
                         </div>
                     </div>
-                    <span class="text-sky text-xs font-medium px-2 py-1 rounded-full bg-sky/10">Ready</span>
+                    <button class="w-8 h-8 rounded-full bg-amber text-black hover:scale-110 cursor-pointer shadow-amber-glow flex items-center justify-center transition-transform" 
+                        onclick="window.open('${publicUrl}', '_blank')">
+                        <i class="fas fa-play text-xs"></i>
+                    </button>
                 `;
             }
 
-            // Background refresh (non-blocking)
+            // Background refresh to ensure sync
             fetchLibraryBooks();
 
         } catch (err) {
             console.error("Upload failed:", err);
-            document.getElementById(tempId)?.remove();
-            alert("Upload failed: " + err.message);
+            const tempEl = document.getElementById(tempId);
+            if (tempEl) {
+                tempEl.className = "bg-surface border border-rose/30 rounded-xl p-4 flex items-center justify-between";
+                tempEl.innerHTML = `
+                   <div class="flex items-center gap-4">
+                        <div class="w-10 h-10 rounded-lg bg-rose/10 flex items-center justify-center">
+                            <i class="fas fa-exclamation-triangle text-rose"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-text-primary font-bold text-sm">Upload Failed</h4>
+                            <p class="text-rose text-xs max-w-[200px] truncate">${err.message}</p>
+                        </div>
+                    </div>
+                    <i class="fas fa-times text-text-secondary cursor-pointer hover:text-white" onclick="this.parentElement.remove()"></i>
+                `;
+            }
         }
     }
 });
