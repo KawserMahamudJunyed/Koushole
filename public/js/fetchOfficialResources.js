@@ -1,11 +1,25 @@
 
+
 async function fetchOfficialResources() {
     if (!window.supabaseClient) return;
+
+    console.log("📚 Fetching Official Resources...");
+    const container = document.getElementById('official-books-list');
+    if (!container) return; // Should not happen if UI is loaded
+
     try {
         const { data: { user } } = await window.supabaseClient.auth.getUser();
-        let userClass = '10'; // Default
 
-        if (user) {
+        // 1. Determine User Class (Priority: LocalStorage -> User Metadata -> DB Profile -> Default)
+        let userClass = localStorage.getItem('userClass');
+
+        if (!userClass && user) {
+            // Try Metadata
+            userClass = user.user_metadata?.class;
+        }
+
+        if (!userClass && user) {
+            // Try DB Profile as last resort
             const { data: profile } = await window.supabaseClient
                 .from('profiles')
                 .select('class')
@@ -14,25 +28,41 @@ async function fetchOfficialResources() {
             if (profile) userClass = profile.class;
         }
 
-        // Determine target classes based on user class
+        // Default if still nothing
+        if (!userClass) {
+            console.warn("⚠️ User class not found, defaulting to '10'");
+            userClass = '10';
+        }
+
+        console.log(`👤 User Class identified as: ${userClass}`);
+
+        // 2. Determine Target Classes (Logic: specific class + shared ranges)
         let targetClasses = [userClass];
+
+        // Add ranges
         if (['9', '10'].includes(userClass)) {
             targetClasses.push('9-10');
         } else if (['11', '12'].includes(userClass)) {
             targetClasses.push('11-12');
         }
 
+        // University/Other handling
+        if (userClass === 'University') targetClasses.push('University');
+
+        console.log(`🎯 Querying books for classes: ${JSON.stringify(targetClasses)}`);
+
+        // 3. Execute Query
         const { data, error } = await window.supabaseClient
             .from('official_resources')
             .select('*')
-            .in('class_level', targetClasses) // Fetch user's class AND shared class
+            .in('class_level', targetClasses)
             .order('created_at', { ascending: false });
 
         if (error) throw error;
 
-        const container = document.getElementById('official-books-list');
-        if (!container) return;
+        console.log(`✅ Found ${data ? data.length : 0} books.`);
 
+        // 4. Render
         if (data && data.length > 0) {
             container.innerHTML = data.map(book => `
                 <div class="flex items-center gap-4 bg-surface p-3 rounded-xl border border-divider hover:border-amber/50 transition-colors group cursor-pointer" onclick="window.open('${book.file_url}', '_blank')">
@@ -49,11 +79,14 @@ async function fetchOfficialResources() {
                 </div>
             `).join('');
         } else {
-            container.innerHTML = `<div class="text-center text-text-secondary text-xs py-4 opacity-50">No official resources available yet.</div>`;
+            container.innerHTML = `
+                <div class="text-center text-text-secondary text-xs py-4 opacity-50">
+                    No official books found for Class ${userClass}. <br>
+                    (Try uploading some in Admin panel!)
+                </div>`;
         }
     } catch (err) {
-        console.error("Error fetching official resources:", err);
-        const container = document.getElementById('official-books-list');
-        if (container) container.innerHTML = `<div class="text-center text-rose text-xs py-4">Failed to load resources.</div>`;
+        console.error("❌ Error fetching official resources:", err);
+        container.innerHTML = `<div class="text-center text-rose text-xs py-4">Failed to load resources: ${err.message}</div>`;
     }
 }
