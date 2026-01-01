@@ -1,6 +1,6 @@
 # Koushole (কৌশলে) 🚀
 > **Study Smarter, Not Harder (পড়া হবে কৌশলে)**  
-> *Your Personal AI-Powered Study Companion for the Bangladeshi Curriculum.*
+> *Your Personal AI-Powered Study Companion.*
 
 ![License: MIT](https://img.shields.io/badge/License-MIT-amber.svg)
 ![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)

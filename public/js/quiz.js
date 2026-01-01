@@ -568,17 +568,29 @@ function renderQuestion() {
     else if (q.type === 'order') {
         orderedItems = [];
         const itemsHtml = q.items.map((item, idx) =>
-            `<button id="order-item-${idx}" onclick="addToOrder('${item}', ${idx})" class="order-word px-3 py-2 bg-surface border border-divider rounded-lg font-bold hover:border-amber transition-all">${item}</button>`
+            `<button id="order-item-${idx}" onclick="addToOrder('${item.replace(/'/g, "\\'")}', ${idx})" 
+            class="order-word px-4 py-3 bg-surface border border-divider rounded-xl font-bold text-lg hover:border-amber hover:scale-105 transition-all shadow-sm">${item}</button>`
         ).join(' ');
 
         container.innerHTML = `
-            <div id="order-drop-zone" class="w-full min-h-[60px] bg-midnight border-2 border-dashed border-divider rounded-xl flex flex-wrap items-center gap-2 p-3 mb-4 text-text-primary font-bold text-lg"></div>
-            <div class="flex flex-wrap gap-2 justify-center">
+            <div class="text-center mb-6">
+                <p class="text-text-secondary text-xs uppercase tracking-widest mb-2 font-bold">Build the correct answer</p>
+                <div id="order-drop-zone" class="w-full min-h-[80px] bg-midnight/50 border-2 border-dashed border-divider rounded-2xl flex flex-wrap items-center justify-center gap-2 p-4 transition-all hover:border-amber/30 group relative">
+                    <span class="text-text-secondary text-sm opacity-50 absolute pointer-events-none group-hover:opacity-0 transition-opacity">Tap blocks below to arrange here</span>
+                </div>
+            </div>
+
+            <div class="flex flex-wrap gap-3 justify-center mb-8">
                 ${itemsHtml}
             </div>
-            <div class="flex justify-between w-full mt-2">
-                <button onclick="resetOrder()" class="text-xs text-rose uppercase font-bold tracking-widest">Reset</button>
-                <button onclick="checkAnswer('order')" class="bg-amber text-black text-xs font-bold px-4 py-2 rounded-full">Submit</button>
+
+            <div class="grid grid-cols-2 gap-4">
+                <button onclick="resetOrder()" class="flex items-center justify-center gap-2 py-3 rounded-xl border border-divider text-text-secondary font-bold hover:bg-rose/10 hover:text-rose hover:border-rose transition-all">
+                    <i class="fas fa-undo"></i> Reset
+                </button>
+                <button onclick="checkAnswer('order')" class="flex items-center justify-center gap-2 py-3 rounded-xl bg-amber text-black font-bold shadow-amber-glow hover:scale-[1.02] active:scale-[0.98] transition-all">
+                    Submit <i class="fas fa-check"></i>
+                </button>
             </div>
         `;
     }
@@ -716,17 +728,34 @@ function checkAnswer(type, selectedIdx = null) {
     } else if (type === 'order') {
         // Check if order matches the correct answer
         const q = currentQuizQuestions[currentQuestionIndex];
-        if (orderedItems.length === q.correctOrder.length) {
-            isCorrect = orderedItems.every((item, idx) => item === q.correctOrder[idx]);
+        const userSentence = orderedItems.join(' ').trim();
+
+        // Handle both string answer and array correctOrder (legacy/fallback)
+        let correctSentence = "";
+        if (q.answer) {
+            correctSentence = q.answer.trim();
+        } else if (Array.isArray(q.correctOrder)) {
+            correctSentence = q.correctOrder.join(' ').trim();
         }
+
+        // Compare case-insensitive to be safe, though usually exact match matters
+        isCorrect = userSentence.replace(/\s+/g, ' ').toLowerCase() === correctSentence.replace(/\s+/g, ' ').toLowerCase();
+
         // Show feedback on words
         const dropZone = document.getElementById('order-drop-zone');
         if (isCorrect) {
-            dropZone.classList.add('border-emerald', 'bg-emerald/10');
+            dropZone.classList.remove('border-divider', 'bg-midnight/50');
+            dropZone.classList.add('border-emerald', 'bg-emerald/10', 'text-emerald');
         } else {
-            dropZone.classList.add('border-rose', 'bg-rose/10');
+            dropZone.classList.remove('border-divider', 'bg-midnight/50');
+            dropZone.classList.add('border-rose', 'bg-rose/10', 'text-rose');
+
             // Show correct order
-            dropZone.innerHTML += `<div class="w-full mt-2 text-xs text-emerald">Correct: ${q.correctOrder.join(' ')}</div>`;
+            dropZone.innerHTML += `
+                <div class="w-full mt-3 pt-3 border-t border-rose/20 text-center">
+                    <span class="text-xs text-text-secondary uppercase tracking-widest block mb-1">Correct Answer</span>
+                    <span class="text-emerald font-bold text-lg">${correctSentence}</span>
+                </div>`;
         }
     } else {
         // Voice/text answer - compare with correct answer
