@@ -481,7 +481,7 @@ async function loadChatHistory() {
 
     try {
         const { data, error } = await window.supabaseClient
-            .from('chat_messages')
+            .from('chat_history')
             .select('*')
             .eq('user_id', currentUserId)
             .order('created_at', { ascending: false })
@@ -513,7 +513,7 @@ async function saveChatMessage(role, content) {
 
     try {
         await window.supabaseClient
-            .from('chat_messages')
+            .from('chat_history')
             .insert([{ user_id: currentUserId, role, content }]);
     } catch (error) {
         console.error('Failed to save message:', error);
@@ -527,7 +527,7 @@ async function clearChatHistory() {
 
     try {
         await window.supabaseClient
-            .from('chat_messages')
+            .from('chat_history')
             .delete()
             .eq('user_id', currentUserId);
 
