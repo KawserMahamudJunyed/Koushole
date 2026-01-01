@@ -745,38 +745,23 @@ document.getElementById('book-upload-input').addEventListener('change', async fu
             const { data: { user } } = await window.supabaseClient.auth.getUser();
             if (!user) throw new Error("User not logged in");
 
-            // 1. Upload file to Storage (optional/try-catch)
-            let fileUrl = null;
-            try {
-                const filePath = `${user.id}/${Date.now()}_${file.name}`;
-                const { data: uploadData, error: uploadError } = await window.supabaseClient.storage
-                    .from('books')
-                    .upload(filePath, file);
-
-                if (!uploadError && uploadData) {
-                    fileUrl = uploadData.path; // Or public URL
-                }
-            } catch (storageErr) {
-                console.warn("Storage upload failed (bucket might be missing), skipping file upload:", storageErr);
-            }
-
-            // 2. Insert into DB
+            // Insert directly into DB (skip storage upload for speed)
             const { error: insertError } = await window.supabaseClient
                 .from('library_books')
                 .insert({
                     user_id: user.id,
                     title: file.name,
-                    file_type: file.type.includes('pdf') ? 'pdf' : 'epub',
+                    file_type: file.type.includes('pdf') ? 'pdf' : (file.type.includes('epub') ? 'epub' : 'txt'),
                     file_size_bytes: file.size,
-                    file_url: fileUrl,
-                    index_status: 'done' // Auto-complete for now since no backend processor
+                    file_url: null, // Storage upload skipped for speed
+                    index_status: 'done'
                 });
 
             if (insertError) throw insertError;
 
-            // 3. Refresh List
+            // Refresh List
+            document.getElementById(tempId)?.remove();
             await fetchLibraryBooks();
-            alert(t("bookProcessed"));
 
         } catch (err) {
             console.error("Upload failed:", err);
