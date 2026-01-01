@@ -36,7 +36,8 @@ export default async function handler(req, res) {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                    inputs: `Educational diagram: ${prompt}. Clean, professional style with labels and annotations. White background.`,
+                    inputs: `A clear, professional mathematical diagram showing: ${prompt}. 
+Style: Clean educational illustration, textbook quality, geometric shapes with clear labels, mathematical notation visible, black lines on white background, simple and accurate, no decorations, technical drawing style.`,
                 }),
             }
         );
