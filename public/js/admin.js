@@ -19,11 +19,24 @@ document.addEventListener('DOMContentLoaded', async () => {
         submitBtn.disabled = true;
         submitBtn.style.opacity = '0.5';
 
-        const title = document.getElementById('title').value;
+        const titleInput = document.getElementById('title').value;
+        const version = document.getElementById('version').value;
         const subject = document.getElementById('subject').value;
         const classLevel = document.getElementById('class-level').value;
         const fileInput = document.getElementById('file');
         const file = fileInput.files[0];
+
+        // Auto-append version to title if not already present
+        let finalTitle = titleInput;
+        if (version === 'English' && !finalTitle.toLowerCase().includes('english')) {
+            finalTitle += ' (English Version)';
+        } else if (version === 'Bangla' && !finalTitle.toLowerCase().includes('bangla') && !finalTitle.match(/[\u0980-\u09FF]/)) {
+            // Optional: Don't append if it already looks like Bangla text, but simple is better
+            // finalTitle += ' (Bangla)'; 
+            // Actually, usually Bangla is default, so maybe only mark English?
+            // User asked "Should we mention this?". Let's be explicit.
+            finalTitle += ' (Bangla Medium)';
+        }
 
         if (!file) {
             showStatus('Please select a PDF file.', 'text-red-500');
@@ -35,7 +48,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         try {
             // 1. Upload File to Storage
             const fileExt = file.name.split('.').pop();
-            const fileName = `${classLevel}_${subject}_${Date.now()}.${fileExt}`;
+            const fileName = `${classLevel}_${subject}_${version}_${Date.now()}.${fileExt}`;
             const filePath = `${fileName}`;
 
             const { data: uploadData, error: uploadError } = await window.supabaseClient
@@ -55,11 +68,11 @@ document.addEventListener('DOMContentLoaded', async () => {
             const { error: dbError } = await window.supabaseClient
                 .from('official_resources')
                 .insert({
-                    title: title,
+                    title: finalTitle, // Use the version-appended title
                     subject: subject,
                     class_level: classLevel,
                     file_url: publicUrl,
-                    cover_url: null // Can add cover upload later if needed
+                    cover_url: null
                 });
 
             if (dbError) throw dbError;
