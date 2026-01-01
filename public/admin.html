@@ -38,14 +38,17 @@
         <h1 class="text-2xl font-bold text-primary mb-6 text-center">Upload NCTB Book</h1>
 
         <form id="upload-form" class="space-y-4">
-            <div>
-                <label class="block text-sm text-gray-400 mb-1">Book Title</label>
-                <input type="text" id="title"
-                    class="w-full bg-black border border-white/10 rounded-lg p-3 focus:outline-none focus:border-primary transition-colors text-white"
-                    placeholder="e.g. Physics Class 9" required>
-            </div>
-
             <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm text-gray-400 mb-1">Group</label>
+                    <select id="group"
+                        class="w-full bg-black border border-white/10 rounded-lg p-3 focus:outline-none focus:border-primary transition-colors text-white">
+                        <option value="Common">Common</option>
+                        <option value="Science">Science</option>
+                        <option value="Commerce">Commerce</option>
+                        <option value="Humanities">Humanities</option>
+                    </select>
+                </div>
                 <div>
                     <label class="block text-sm text-gray-400 mb-1">Version</label>
                     <select id="version"
@@ -54,78 +57,53 @@
                         <option value="English">English Version</option>
                     </select>
                 </div>
-                <div>
-                    <label class="block text-sm text-gray-400 mb-1">Subject</label>
-                    <select id="subject"
-                        class="w-full bg-black border border-white/10 rounded-lg p-3 focus:outline-none focus:border-primary transition-colors text-white"
-                        required>
-                        <optgroup label="Common">
-                            <option value="Bangla">Bangla</option>
-                            <option value="English">English</option>
-                            <option value="ICT">ICT</option>
-                            <option value="Religion">Religion</option>
-                        </optgroup>
-                        <optgroup label="Science">
-                            <option value="Physics">Physics</option>
-                            <option value="Chemistry">Chemistry</option>
-                            <option value="Math">Math</option>
-                            <option value="Higher Math">Higher Math</option>
-                            <option value="Biology">Biology</option>
-                        </optgroup>
-                        <optgroup label="Commerce">
-                            <option value="Accounting">Accounting</option>
-                            <option value="Finance">Finance & Banking</option>
-                            <option value="Management">Business Org & Mgt</option>
-                            <option value="Marketing">Marketing</option>
-                        </optgroup>
-                        <optgroup label="Humanities">
-                            <option value="Economics">Economics</option>
-                            <option value="Civics">Civics & Good Governance</option>
-                            <option value="History">History</option>
-                            <option value="Geography">Geography</option>
-                            <option value="Sociology">Sociology</option>
-                            <option value="Logic">Logic</option>
-                            <option value="Agriculture">Agriculture Studies</option>
-                        </optgroup>
-                    </select>
-                </div>
-                <div>
-                    <label class="block text-sm text-gray-400 mb-1">Class</label>
-                    <select id="class-level"
-                        class="w-full bg-black border border-white/10 rounded-lg p-3 focus:outline-none focus:border-primary transition-colors text-white"
-                        required>
-                        <option value="9">Class 9</option>
-                        <option value="10">Class 10</option>
-                        <option value="9-10">Class 9-10 (Both)</option>
-                        <option value="11">HSC 11</option>
-                        <option value="12">HSC 12</option>
-                        <option value="11-12">HSC 11-12 (Both)</option>
-                    </select>
-                </div>
             </div>
-
             <div>
-                <label class="block text-sm text-gray-400 mb-1">PDF File</label>
-                <input type="file" id="file" accept="application/pdf"
-                    class="w-full bg-black border border-white/10 rounded-lg p-3 text-sm file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-black hover:file:bg-secondary cursor-pointer text-gray-300"
+                <label class="block text-sm text-gray-400 mb-1">Subject</label>
+                <select id="subject"
+                    class="w-full bg-black border border-white/10 rounded-lg p-3 focus:outline-none focus:border-primary transition-colors text-white"
                     required>
+                    <!-- Options populated by JS -->
+                </select>
             </div>
-
-            <div id="status-msg" class="text-center text-sm min-h-[20px]"></div>
-
-            <button type="submit" id="submit-btn"
-                class="w-full bg-gradient-to-r from-primary to-secondary text-black font-bold py-3 rounded-xl hover:opacity-90 transition-opacity">
-                Upload Book
-            </button>
-        </form>
-
-        <div class="mt-6 text-center">
-            <a href="/" class="text-xs text-gray-500 hover:text-primary transition-colors">← Back to Home</a>
-        </div>
+            <div>
+                <label class="block text-sm text-gray-400 mb-1">Class</label>
+                <select id="class-level"
+                    class="w-full bg-black border border-white/10 rounded-lg p-3 focus:outline-none focus:border-primary transition-colors text-white"
+                    required>
+                    <option value="9">Class 9</option>
+                    <option value="10">Class 10</option>
+                    <option value="9-10">Class 9-10 (Both)</option>
+                    <option value="11">HSC 11</option>
+                    <option value="12">HSC 12</option>
+                    <option value="11-12">HSC 11-12 (Both)</option>
+                </select>
+            </div>
     </div>
 
-    <!-- Load Config First -->
+    <div>
+        <label class="block text-sm text-gray-400 mb-1">PDF File</label>
+        <input type="file" id="file" accept="application/pdf"
+            class="w-full bg-black border border-white/10 rounded-lg p-3 text-sm file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-black hover:file:bg-secondary cursor-pointer text-gray-300"
+            required>
+    </div>
+
+    <div id="status-msg" class="text-center text-sm min-h-[20px]"></div>
+
+    <button type="submit" id="submit-btn"
+        class="w-full bg-gradient-to-r from-primary to-secondary text-black font-bold py-3 rounded-xl hover:opacity-90 transition-opacity">
+        Upload Book
+    </button>
+    </form>
+
+    <div class="mt-6 text-center">
+        <a href="/" class="text-xs text-gray-500 hover:text-primary transition-colors">← Back to Home</a>
+    </div>
+    </div>
+
+    <!-- Load Config & Shared Logic -->
     <script src="js/supabase-config.js"></script>
+    <script src="js/subjects.js"></script>
     <script src="js/admin.js"></script>
 </body>
 

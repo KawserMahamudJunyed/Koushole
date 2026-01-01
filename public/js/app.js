@@ -1454,6 +1454,10 @@ function updateUI() {
     setTxt('profile-class', userProfile.class);
     setTxt('profile-group', userProfile.group);
 
+    // Save for Quiz Config usage
+    if (userProfile.group) localStorage.setItem('userGroup', userProfile.group);
+    if (userProfile.class) localStorage.setItem('userClass', userProfile.class);
+
     // 7. Weakness Cloud
     const weaknessCloud = document.getElementById('weakness-cloud');
     if (weaknessCloud) {

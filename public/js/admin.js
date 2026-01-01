@@ -10,6 +10,33 @@ document.addEventListener('DOMContentLoaded', async () => {
     const form = document.getElementById('upload-form');
     const statusMsg = document.getElementById('status-msg');
     const submitBtn = document.getElementById('submit-btn');
+    const groupSelect = document.getElementById('group');
+    const classSelect = document.getElementById('class-level');
+    const subjectSelect = document.getElementById('subject');
+
+    // Use global getSubjects helper
+    function updateSubjects() {
+        const group = groupSelect.value;
+        const className = classSelect ? classSelect.value : '9';
+
+        // Use the smart helper from subjects.js
+        // If script hasn't loaded yet, default to empty
+        const subjects = window.getSubjects ? window.getSubjects(group, className) : [];
+
+        // Fallback for debugging if script fails (optional)
+        if (!window.getSubjects && window.subjectsByGroup) {
+            const s = window.subjectsByGroup[group] || [];
+            subjectSelect.innerHTML = s.map(sub => `<option value="${sub}">${sub}</option>`).join('');
+            return;
+        }
+
+        subjectSelect.innerHTML = subjects.map(sub => `<option value="${sub}">${sub}</option>`).join('');
+    }
+
+    // Initial populate & Event Listeners
+    if (groupSelect) groupSelect.addEventListener('change', updateSubjects);
+    if (classSelect) classSelect.addEventListener('change', updateSubjects);
+    updateSubjects();
 
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
@@ -19,22 +46,22 @@ document.addEventListener('DOMContentLoaded', async () => {
         submitBtn.disabled = true;
         submitBtn.style.opacity = '0.5';
 
-        const titleInput = document.getElementById('title').value;
         const version = document.getElementById('version').value;
+        const group = document.getElementById('group').value;
         const subject = document.getElementById('subject').value;
         const classLevel = document.getElementById('class-level').value;
         const fileInput = document.getElementById('file');
         const file = fileInput.files[0];
 
-        // Auto-append version to title if not already present
-        let finalTitle = titleInput;
-        if (version === 'English' && !finalTitle.toLowerCase().includes('english')) {
+        // Construct Title automatically
+        let finalTitle = `${subject} - Class ${classLevel}`;
+        if (group !== 'Common') {
+            finalTitle += ` [${group}]`;
+        }
+
+        if (version === 'English') {
             finalTitle += ' (English Version)';
-        } else if (version === 'Bangla' && !finalTitle.toLowerCase().includes('bangla') && !finalTitle.match(/[\u0980-\u09FF]/)) {
-            // Optional: Don't append if it already looks like Bangla text, but simple is better
-            // finalTitle += ' (Bangla)'; 
-            // Actually, usually Bangla is default, so maybe only mark English?
-            // User asked "Should we mention this?". Let's be explicit.
+        } else {
             finalTitle += ' (Bangla Medium)';
         }
 
@@ -48,7 +75,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         try {
             // 1. Upload File to Storage
             const fileExt = file.name.split('.').pop();
-            const fileName = `${classLevel}_${subject}_${version}_${Date.now()}.${fileExt}`;
+            const fileName = `${classLevel}_${subject}_${group}_${version}_${Date.now()}.${fileExt}`;
             const filePath = `${fileName}`;
 
             const { data: uploadData, error: uploadError } = await window.supabaseClient
@@ -68,7 +95,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             const { error: dbError } = await window.supabaseClient
                 .from('official_resources')
                 .insert({
-                    title: finalTitle, // Use the version-appended title
+                    title: finalTitle,
                     subject: subject,
                     class_level: classLevel,
                     file_url: publicUrl,
