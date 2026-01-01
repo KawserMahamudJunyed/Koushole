@@ -464,11 +464,11 @@ function toggleChatHistory() {
 
     if (content.classList.contains('hidden')) {
         content.classList.remove('hidden');
-        arrow.classList.add('rotate-180');
+        arrow.classList.add('rotate-90');
         loadChatHistory();
     } else {
         content.classList.add('hidden');
-        arrow.classList.remove('rotate-180');
+        arrow.classList.remove('rotate-90');
     }
 }
 
