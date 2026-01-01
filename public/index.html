@@ -361,88 +361,90 @@
                         <option value="12">Class 12 (HSC)</option>
                         <option value="University">University</option>
                     </select>
+
+                    <div id="group-container" class="space-y-1.5">
+                        <label class="text-[11px] uppercase font-bold text-text-secondary tracking-wider pl-1"
+                            data-key="groupLabel">Group</label>
+                        <select id="signup-group" name="group"
+                            class="w-full bg-surface border border-divider rounded-lg px-4 h-12 text-text-primary text-sm focus:border-amber outline-none transition-colors appearance-none"
+                            required disabled>
+                            <option value="" disabled selected>Select Group</option>
+                            <option value="Science">Science</option>
+                            <option value="Humanities">Humanities</option>
+                            <option value="Business Studies">Business Studies</option>
+                        </select>
+                    </div>
+
+                    <div id="dept-container" class="space-y-1.5 hidden">
+                        <label
+                            class="text-[11px] uppercase font-bold text-text-secondary tracking-wider pl-1">Department</label>
+                        <select id="signup-dept" name="department"
+                            class="w-full bg-surface border border-divider rounded-lg px-4 h-12 text-text-primary text-sm focus:border-amber outline-none transition-colors appearance-none"
+                            required disabled>
+                            <option value="" disabled selected>Select Department</option>
+                            <option value="CSE">CSE</option>
+                            <option value="EEE">EEE</option>
+                            <option value="BBA">BBA</option>
+                            <option value="English">English</option>
+                            <option value="Economics">Economics</option>
+                            <option value="Medical">Medical</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+
+                    <div id="custom-dept-container" class="space-y-1.5 hidden">
+                        <label class="text-[11px] uppercase font-bold text-text-secondary tracking-wider pl-1">Enter
+                            Department
+                            Name</label>
+                        <input type="text" id="signup-custom-dept" name="customDepartment"
+                            class="w-full bg-surface border border-divider rounded-lg px-4 h-12 text-text-primary text-sm focus:border-amber outline-none transition-colors"
+                            placeholder="e.g. Architecture" disabled>
+                    </div>
                 </div>
+
+                <!-- Common Fields -->
                 <div class="space-y-1.5">
                     <label class="text-[11px] uppercase font-bold text-text-secondary tracking-wider pl-1"
-                        data-key="groupLabel">Group</label>
-                    <select id="signup-group" name="group"
-                        class="w-full bg-surface border border-divider rounded-lg px-4 h-12 text-text-primary text-sm focus:border-amber outline-none transition-colors appearance-none"
-                        required disabled>
-                        <option value="" disabled selected>Select Group</option>
-                        <option value="Science">Science</option>
-                        <option value="Humanities">Humanities</option>
-                        <option value="Business Studies">Business Studies</option>
-                    </select>
+                        data-key="emailLabel">Email</label>
+                    <input type="email" name="email"
+                        class="w-full bg-surface border border-divider rounded-lg px-4 h-12 text-text-primary text-sm focus:border-amber outline-none transition-colors"
+                        placeholder="hello@example.com" required>
                 </div>
-        </div>
 
-        <div id="dept-container" class="space-y-1.5 hidden">
-            <label class="text-[11px] uppercase font-bold text-text-secondary tracking-wider pl-1">Department</label>
-            <select id="signup-dept" name="department"
-                class="w-full bg-surface border border-divider rounded-lg px-4 h-12 text-text-primary text-sm focus:border-amber outline-none transition-colors appearance-none"
-                required disabled>
-                <option value="" disabled selected>Select Department</option>
-                <option value="CSE">CSE</option>
-                <option value="EEE">EEE</option>
-                <option value="BBA">BBA</option>
-                <option value="English">English</option>
-                <option value="Economics">Economics</option>
-                <option value="Medical">Medical</option>
-                <option value="Other">Other</option>
-            </select>
-        </div>
+                <div class="space-y-1.5">
+                    <label class="text-[11px] uppercase font-bold text-text-secondary tracking-wider pl-1"
+                        data-key="passwordLabel">Password</label>
+                    <input type="password" name="password"
+                        class="w-full bg-surface border border-divider rounded-lg px-4 h-12 text-text-primary text-sm focus:border-amber outline-none transition-colors"
+                        placeholder="••••••••" required>
+                </div>
 
-        <div id="custom-dept-container" class="space-y-1.5 hidden">
-            <label class="text-[11px] uppercase font-bold text-text-secondary tracking-wider pl-1">Enter Department
-                Name</label>
-            <input type="text" id="signup-custom-dept" name="customDepartment"
-                class="w-full bg-surface border border-divider rounded-lg px-4 h-12 text-text-primary text-sm focus:border-amber outline-none transition-colors"
-                placeholder="e.g. Architecture" disabled>
-        </div>
-        </div>
+                <!-- Remember Me & Forgot Password (Login Only) -->
+                <div id="login-extras" class="flex justify-between items-center text-sm">
+                    <label
+                        class="flex items-center gap-2 cursor-pointer text-text-secondary hover:text-text-primary transition-colors">
+                        <input type="checkbox" name="rememberMe" class="w-4 h-4 accent-amber rounded">
+                        <span data-key="rememberMe">Remember me</span>
+                    </label>
+                    <button type="button" onclick="showForgotPassword()"
+                        class="text-amber hover:underline text-sm font-medium" data-key="forgotPassword">
+                        Forgot Password?
+                    </button>
+                </div>
 
-        <!-- Common Fields -->
-        <div class="space-y-1.5">
-            <label class="text-[11px] uppercase font-bold text-text-secondary tracking-wider pl-1"
-                data-key="emailLabel">Email</label>
-            <input type="email" name="email"
-                class="w-full bg-surface border border-divider rounded-lg px-4 h-12 text-text-primary text-sm focus:border-amber outline-none transition-colors"
-                placeholder="hello@example.com" required>
-        </div>
+                <button type="submit" id="auth-submit-btn"
+                    class="w-full bg-amber text-black font-bold h-12 flex items-center justify-center rounded-lg shadow-md hover:shadow-lg hover:scale-[1.01] active:scale-[0.99] transition-all mt-4"
+                    data-key="loginBtn">
+                    Log In
+                </button>
+            </form>
 
-        <div class="space-y-1.5">
-            <label class="text-[11px] uppercase font-bold text-text-secondary tracking-wider pl-1"
-                data-key="passwordLabel">Password</label>
-            <input type="password" name="password"
-                class="w-full bg-surface border border-divider rounded-lg px-4 h-12 text-text-primary text-sm focus:border-amber outline-none transition-colors"
-                placeholder="••••••••" required>
-        </div>
-
-        <!-- Remember Me & Forgot Password (Login Only) -->
-        <div id="login-extras" class="flex justify-between items-center text-sm">
-            <label
-                class="flex items-center gap-2 cursor-pointer text-text-secondary hover:text-text-primary transition-colors">
-                <input type="checkbox" name="rememberMe" class="w-4 h-4 accent-amber rounded">
-                <span data-key="rememberMe">Remember me</span>
-            </label>
-            <button type="button" onclick="showForgotPassword()" class="text-amber hover:underline text-sm font-medium"
-                data-key="forgotPassword">
-                Forgot Password?
+            <button onclick="toggleAuthMode()"
+                class="mt-8 text-xs text-text-secondary hover:text-amber transition-colors body-font"
+                id="auth-switch-text">
+                <span data-key="noAccount">Don't have an account?</span> <b class="text-amber" data-key="signupBtn">Sign
+                    Up</b>
             </button>
-        </div>
-
-        <button type="submit" id="auth-submit-btn"
-            class="w-full bg-amber text-black font-bold h-12 flex items-center justify-center rounded-lg shadow-md hover:shadow-lg hover:scale-[1.01] active:scale-[0.99] transition-all mt-4"
-            data-key="loginBtn">
-            Log In
-        </button>
-        </form>
-
-        <button onclick="toggleAuthMode()"
-            class="mt-8 text-xs text-text-secondary hover:text-amber transition-colors body-font" id="auth-switch-text">
-            <span data-key="noAccount">Don't have an account?</span> <b class="text-amber" data-key="signupBtn">Sign
-                Up</b>
-        </button>
         </div>
 
         <div id="view-dashboard" class="hidden p-5 space-y-8 fade-in">
