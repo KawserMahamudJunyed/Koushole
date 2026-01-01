@@ -585,6 +585,9 @@ let libraryBooks = [];
 async function fetchLibraryBooks() {
     if (!window.supabaseClient) return;
 
+    // Fetch official resources in parallel
+    fetchOfficialResources();
+
     try {
         const { data: { user } } = await window.supabaseClient.auth.getUser();
         if (!user) {
