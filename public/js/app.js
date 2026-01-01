@@ -509,12 +509,21 @@ async function loadChatHistory() {
 
 // Save chat message to Supabase
 async function saveChatMessage(role, content) {
-    if (!window.supabaseClient || !currentUserId) return;
+    if (!window.supabaseClient || !currentUserId) {
+        console.warn('Cannot save chat: missing client or user');
+        return;
+    }
 
     try {
-        await window.supabaseClient
+        const { error } = await window.supabaseClient
             .from('chat_history')
-            .insert([{ user_id: currentUserId, role, content }]);
+            .insert({ user_id: currentUserId, role, content });
+
+        if (error) {
+            console.error('Chat save error:', error.message);
+        } else {
+            console.log('Chat saved:', role);
+        }
     } catch (error) {
         console.error('Failed to save message:', error);
     }
