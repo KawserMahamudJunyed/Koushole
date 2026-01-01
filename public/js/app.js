@@ -164,34 +164,7 @@ async function saveMemory() {
         console.error("saveMemory error:", err);
     }
 }
-// Time-based greeting with user nickname
-function updateGreeting() {
-    const hour = new Date().getHours();
-    let timeGreeting;
-
-    if (currentLang === 'bn') {
-        if (hour < 12) timeGreeting = 'শুভ সকাল';
-        else if (hour < 17) timeGreeting = 'শুভ দুপুর';
-        else if (hour < 20) timeGreeting = 'শুভ সন্ধ্যা';
-        else timeGreeting = 'শুভ রাত্রি';
-    } else {
-        if (hour < 12) timeGreeting = 'Good Morning';
-        else if (hour < 17) timeGreeting = 'Good Afternoon';
-        else if (hour < 20) timeGreeting = 'Good Evening';
-        else timeGreeting = 'Good Night';
-    }
-
-    // Get nickname based on language
-    const nick = currentLang === 'bn'
-        ? (userProfile.nicknameBn || userProfile.nickname || '')
-        : (userProfile.nickname || userProfile.name || '');
-
-    const fullGreeting = nick ? `${timeGreeting}, ${nick}! 🚀` : `${timeGreeting}! 🚀`;
-
-    // Update greeting element
-    const greetingEl = document.querySelector('[data-key="greeting"]');
-    if (greetingEl) greetingEl.innerText = fullGreeting;
-}
+// function updateGreeting() removed (duplicate)
 
 // Init
 function checkAuth() {
@@ -1609,18 +1582,7 @@ function getNotificationHTML(n) {
     `;
 }
 
-function togglePersonalDetails() {
-    const content = document.getElementById('personal-details-content');
-    const arrow = document.getElementById('personal-details-arrow');
-
-    if (content.classList.contains('hidden')) {
-        content.classList.remove('hidden');
-        arrow.style.transform = 'rotate(90deg)';
-    } else {
-        content.classList.add('hidden');
-        arrow.style.transform = 'rotate(0deg)';
-    }
-}
+// function togglePersonalDetails() removed (duplicate)
 
 function toggleProfileNotifications() {
     const content = document.getElementById('profile-notifications-content');
