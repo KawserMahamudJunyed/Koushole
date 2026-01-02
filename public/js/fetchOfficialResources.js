@@ -5,21 +5,19 @@ async function fetchOfficialResources() {
 
     console.log("📚 Fetching Official Resources...");
     const container = document.getElementById('official-books-list');
-    if (!container) return; // Should not happen if UI is loaded
+    if (!container) return;
 
     try {
         const { data: { user } } = await window.supabaseClient.auth.getUser();
 
-        // 1. Determine User Class (Priority: LocalStorage -> User Metadata -> DB Profile -> Default)
+        // 1. Get User Class (Priority: LocalStorage -> User Metadata -> DB Profile -> Default)
         let userClass = localStorage.getItem('userClass');
 
         if (!userClass && user) {
-            // Try Metadata
             userClass = user.user_metadata?.class;
         }
 
         if (!userClass && user) {
-            // Try DB Profile as last resort
             const { data: profile } = await window.supabaseClient
                 .from('profiles')
                 .select('class')
@@ -28,30 +26,30 @@ async function fetchOfficialResources() {
             if (profile) userClass = profile.class;
         }
 
-        // Default if still nothing
         if (!userClass) {
             console.warn("⚠️ User class not found, defaulting to '10'");
             userClass = '10';
         }
 
-        console.log(`👤 User Class identified as: ${userClass}`);
+        // 2. Get User Group (Priority: LocalStorage -> Default)
+        let userGroup = localStorage.getItem('userGroup') || 'Science';
 
-        // 2. Determine Target Classes (Logic: specific class + shared ranges)
+        console.log(`👤 User Class: ${userClass}, Group: ${userGroup}`);
+
+        // 3. Determine Target Classes
         let targetClasses = [userClass];
 
-        // Add ranges
         if (['9', '10'].includes(userClass)) {
             targetClasses.push('9-10');
         } else if (['11', '12'].includes(userClass)) {
             targetClasses.push('11-12');
         }
 
-        // University/Other handling
         if (userClass === 'University') targetClasses.push('University');
 
-        console.log(`🎯 Querying books for classes: ${JSON.stringify(targetClasses)}`);
+        console.log(`🎯 Querying books for classes: ${JSON.stringify(targetClasses)}, group: ${userGroup}`);
 
-        // 3. Execute Query
+        // 4. Execute Query - Get all books for these classes
         const { data, error } = await window.supabaseClient
             .from('official_resources')
             .select('*')
@@ -60,17 +58,26 @@ async function fetchOfficialResources() {
 
         if (error) throw error;
 
-        console.log(`✅ Found ${data ? data.length : 0} books.`);
+        // 5. Filter by Group (client-side since title contains group info)
+        // Show Common books AND user's group books
+        const filteredData = data ? data.filter(book => {
+            const title = book.title.toLowerCase();
+            const isCommon = title.includes('[common]') || !title.includes('[');
+            const isUserGroup = title.toLowerCase().includes(`[${userGroup.toLowerCase()}]`);
+            return isCommon || isUserGroup;
+        }) : [];
 
-        // 4. Render
-        if (data && data.length > 0) {
-            container.innerHTML = data.map(book => `
+        console.log(`✅ Found ${filteredData.length} books (filtered from ${data?.length || 0} total).`);
+
+        // 6. Render
+        if (filteredData.length > 0) {
+            container.innerHTML = filteredData.map(book => `
                 <div class="flex items-center gap-4 bg-surface p-3 rounded-xl border border-divider hover:border-amber/50 transition-colors group cursor-pointer" onclick="window.open('${book.file_url}', '_blank')">
                     <div class="w-10 h-10 rounded-lg bg-amber/10 flex items-center justify-center text-amber text-lg shrink-0 group-hover:scale-110 transition-transform">
                         <i class="fas fa-book"></i>
                     </div>
                     <div class="flex-1 min-w-0">
-                        <h4 class="text-text-primary font-bold text-sm truncate">${book.title}</h4>
+                        <h4 class="text-text-primary font-bold text-sm truncate max-w-[180px] sm:max-w-[280px] md:max-w-[400px]" title="${book.title}">${book.title}</h4>
                         <p class="text-text-secondary text-xs truncate">${book.subject} • Class ${book.class_level}</p>
                     </div>
                     <div class="w-8 h-8 rounded-full bg-surface border border-divider flex items-center justify-center text-text-secondary group-hover:text-amber group-hover:border-amber transition-all">
@@ -81,8 +88,8 @@ async function fetchOfficialResources() {
         } else {
             container.innerHTML = `
                 <div class="text-center text-text-secondary text-xs py-4 opacity-50">
-                    No official books found for Class ${userClass}. <br>
-                    (Try uploading some in Admin panel!)
+                    No official books found for Class ${userClass} (${userGroup}).<br>
+                    <span class="text-text-tertiary">Admins can upload books in the Admin panel.</span>
                 </div>`;
         }
     } catch (err) {
