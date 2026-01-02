@@ -20,7 +20,7 @@ const subjects_9_10 = {
     'Science': [
         'Physics',
         'Chemistry',
-        'Higher Math',
+        'Higher Mathematics',
         'Biology',
         'Agriculture Studies',
         'Bangladesh & Global Studies'
@@ -58,8 +58,8 @@ const subjects_11_12 = {
         'Physics 2nd Paper',
         'Chemistry 1st Paper',
         'Chemistry 2nd Paper',
-        'Higher Math 1st Paper',
-        'Higher Math 2nd Paper',
+        'Higher Mathematics 1st Paper',
+        'Higher Mathematics 2nd Paper',
         'Biology 1st Paper',
         'Biology 2nd Paper'
     ],

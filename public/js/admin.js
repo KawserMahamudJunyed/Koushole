@@ -13,14 +13,14 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     const FALLBACK_SUBJECTS_9_10 = {
         'Common': ['Bangla 1st Paper', 'Bangla 2nd Paper', 'English 1st Paper', 'English 2nd Paper', 'ICT', 'Religion (Islam)', 'Religion (Hindu)', 'Career Education', 'Physical Education', 'Arts & Crafts'],
-        'Science': ['Physics', 'Chemistry', 'Higher Math', 'Biology', 'Agriculture Studies', 'Bangladesh & Global Studies'],
+        'Science': ['Physics', 'Chemistry', 'Higher Mathematics', 'Biology', 'Agriculture Studies', 'Bangladesh & Global Studies'],
         'Commerce': ['Accounting', 'Finance & Banking', 'Business Org & Mgt', 'Marketing', 'Production Mgt', 'Statistics', 'Science (General)'],
         'Humanities': ['Economics', 'Civics & Good Governance', 'History', 'Geography', 'Sociology', 'Science (General)']
     };
 
     const FALLBACK_SUBJECTS_11_12 = {
         'Common': ['Bangla 1st Paper', 'Bangla 2nd Paper', 'English 1st Paper', 'English 2nd Paper', 'ICT'],
-        'Science': ['Physics 1st Paper', 'Physics 2nd Paper', 'Chemistry 1st Paper', 'Chemistry 2nd Paper', 'Higher Math 1st Paper', 'Higher Math 2nd Paper', 'Biology 1st Paper', 'Biology 2nd Paper'],
+        'Science': ['Physics 1st Paper', 'Physics 2nd Paper', 'Chemistry 1st Paper', 'Chemistry 2nd Paper', 'Higher Mathematics 1st Paper', 'Higher Mathematics 2nd Paper', 'Biology 1st Paper', 'Biology 2nd Paper'],
         'Commerce': ['Accounting 1st Paper', 'Accounting 2nd Paper', 'Finance, Banking & Ins 1st Paper', 'Finance, Banking & Ins 2nd Paper', 'Business Org & Mgt 1st Paper', 'Business Org & Mgt 2nd Paper', 'Marketing 1st Paper', 'Marketing 2nd Paper'],
         'Humanities': ['Economics 1st Paper', 'Economics 2nd Paper', 'Geography 1st Paper', 'Geography 2nd Paper', 'History 1st Paper', 'History 2nd Paper', 'Civics & Good Governance 1st Paper', 'Civics & Good Governance 2nd Paper', 'Sociology 1st Paper', 'Sociology 2nd Paper', 'Social Work 1st Paper', 'Social Work 2nd Paper']
     };

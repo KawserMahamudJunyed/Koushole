@@ -775,16 +775,24 @@ function renderLibrary() {
     });
 }
 
+// Helper: Detect file type from MIME type or extension
+function getFileType(mimeType, fileName) {
+    const mime = mimeType.toLowerCase();
+    const ext = fileName.split('.').pop().toLowerCase();
+
+    if (mime.includes('pdf') || ext === 'pdf') return 'pdf';
+    if (mime.includes('epub') || ext === 'epub') return 'epub';
+    if (mime.includes('image') || ['jpg', 'jpeg', 'png', 'gif', 'webp', 'heic'].includes(ext)) return 'image';
+    if (mime.includes('text') || ext === 'txt') return 'txt';
+    return 'other';
+}
+
 document.getElementById('book-upload-input').addEventListener('change', async function (e) {
     if (e.target.files && e.target.files[0]) {
         const file = e.target.files[0];
 
-        // 1. File Size Check (Limit to 50MB)
-        const maxSize = 50 * 1024 * 1024; // 50MB
-        if (file.size > maxSize) {
-            alert("File is too large! Please upload a file smaller than 50MB.");
-            return;
-        }
+        // File size limit removed - progress bar handles large files
+        // Supported: PDF, EPUB, TXT, Images (JPG, PNG, etc.)
 
         // Sanitize file name
         const timestamp = Date.now();
@@ -877,7 +885,7 @@ document.getElementById('book-upload-input').addEventListener('change', async fu
                 .insert({
                     user_id: user.id,
                     title: file.name,
-                    file_type: file.type.includes('pdf') ? 'pdf' : (file.type.includes('epub') ? 'epub' : 'txt'),
+                    file_type: getFileType(file.type, file.name),
                     file_size_bytes: file.size,
                     file_url: publicUrl,
                     index_status: 'done'
