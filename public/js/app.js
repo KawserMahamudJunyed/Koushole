@@ -759,8 +759,8 @@ function renderLibrary() {
                 <div class="w-10 h-10 rounded-lg bg-${book.color}/10 text-${book.color} flex items-center justify-center">
                     <i class="fas ${icon}"></i>
                 </div>
-                <div>
-                    <h4 class="text-text-primary font-bold text-sm">${book.name}</h4>
+                <div class="min-w-0 flex-1">
+                    <h4 class="text-text-primary font-bold text-sm truncate max-w-[200px]" title="${book.name}">${book.name}</h4>
                     <p class="text-text-secondary text-[10px] flex items-center gap-2">
                         <span>${book.date}</span>
                         <span class="${statusColor} font-bold">• ${book.status}</span>
@@ -906,8 +906,8 @@ document.getElementById('book-upload-input').addEventListener('change', async fu
                         <div class="w-10 h-10 rounded-lg bg-sky/10 flex items-center justify-center">
                             <i class="fas fa-file-pdf text-sky"></i>
                         </div>
-                        <div>
-                            <h4 class="text-text-primary font-bold text-sm">${file.name}</h4>
+                        <div class="min-w-0 flex-1">
+                            <h4 class="text-text-primary font-bold text-sm truncate max-w-[200px]" title="${file.name}">${file.name}</h4>
                             <p class="text-text-secondary text-[10px] flex items-center gap-2">
                                 <span>${new Date().toLocaleDateString()}</span>
                                 <span class="text-emerald font-bold">• Ready</span>
