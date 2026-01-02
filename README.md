@@ -47,7 +47,7 @@ Koushole employs a sophisticated **Agentic AI Architecture** to deliver real-tim
 ### 📝 Smart Assessment
 - **Adaptive Quizzes**: MCQ, Fill-in-the-Blank, Matching, and Reordering
 - **Subject-Specific**: Dynamically filters subjects based on your group/class
-- **Remedial Loops**: One-click **Khan Academy** video lessons for weak topics
+- **Remedial Loops**: Khan Academy video suggestions *(🚧 Coming Soon)*
 
 ### 🎮 Gamification
 - **XP & Leaderboards**: Earn experience for every correct answer
