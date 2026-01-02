@@ -25,7 +25,7 @@ const subjects_9_10 = {
         'Agriculture Studies',
         'Bangladesh & Global Studies'
     ],
-    'Commerce': [
+    'Business Studies': [
         'Accounting',
         'Finance & Banking',
         'Business Org & Mgt',
@@ -63,7 +63,7 @@ const subjects_11_12 = {
         'Biology 1st Paper',
         'Biology 2nd Paper'
     ],
-    'Commerce': [
+    'Business Studies': [
         'Accounting 1st Paper',
         'Accounting 2nd Paper',
         'Finance, Banking & Ins 1st Paper',
